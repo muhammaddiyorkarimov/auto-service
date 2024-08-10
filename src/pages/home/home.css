@@ -1,0 +1,13 @@
+.home {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+main {
+    background-color: var(--primary-background-color);
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+}
