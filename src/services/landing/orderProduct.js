@@ -1,16 +1,17 @@
 import axios from '../api';
 
-const OrdersService = {
+const OrderProducts = {
     async getOrders(page = 1, pageSize = 10) {
         try {
-            const response = await axios.get(`/stats/orders/`, {
+            const response = await axios.get(`/stats/order-products/`, {
                 params: {
                     page: page,
                     page_size: pageSize
                 }
             });
+            console.log(response.data)
             return {
-                results: response.data.results,
+                results: response.data,
                 count: response.data.count
             };
         } catch (error) {
@@ -21,7 +22,7 @@ const OrdersService = {
     // qolgan metodlar o'sha-o'sha...
     async deleteOrders(id) {
         try {
-            const response = await axios.delete(`/stats/orders/${id}/`)
+            const response = await axios.delete(`/stats/order-products/${id}/`)
             return response.data
         } catch (error) {
             throw error.response || new Error('Unknown error')
@@ -30,7 +31,7 @@ const OrdersService = {
 
     async postOrders(item) {
         try {
-            const { data } = await axios.post('/stats/orders/', item);
+            const { data } = await axios.post('/stats/order-products/', item);
             return data;
         } catch (error) {
             throw error;
@@ -39,7 +40,7 @@ const OrdersService = {
 
     async getOrdersById(id) {
         try {
-            const { data } = await axios.get(`/stats/orders/${id}/`);
+            const { data } = await axios.get(`/stats/order-products/${id}/`);
             return data;
         } catch (error) {
             throw error;
@@ -49,7 +50,7 @@ const OrdersService = {
     async putOrdersById(id, item) {
         console.log(item)
         try {
-            const { data } = await axios.patch(`/stats/orders/${id}/`, item);
+            const { data } = await axios.patch(`/stats/order-products/${id}/`, item);
             return data;
         } catch (error) {
             throw error;
@@ -57,4 +58,4 @@ const OrdersService = {
     },
 }
 
-export default OrdersService;
+export default OrderProducts;

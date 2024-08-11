@@ -36,7 +36,6 @@ const ImportProduct = {
         }
     },
     async putImportProduct(id, item) {
-        console.log(item, id)
         try {
             const { data } = await axios.patch(`/main/import-products/${id}/`, item);
             console.log(item, id);

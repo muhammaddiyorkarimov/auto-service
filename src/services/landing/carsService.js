@@ -1,9 +1,9 @@
 import axios from '../api'
 
-const CustomersService = {
-    async getCustomers(page = 1, pageSize = 1) {
+const CarsService = {
+    async getCars(page = 1, pageSize = 1) {
         try {
-            const response = await axios.get(`/main/customers/`, {
+            const response = await axios.get(`/main/cars/`, {
                 params: {
                     page: page,
                     page_size: pageSize
@@ -17,33 +17,33 @@ const CustomersService = {
             throw error.response || new Error('Unknown error');
         }
     },
-    async deleteCustomers(id) {
+    async deleteCars(id) {
         try {
-            const response = await axios.delete(`/main/customers/${id}/`)
+            const response = await axios.delete(`/main/cars/${id}/`)
             return response.data
         } catch (error) {
             throw error.response || new Error('Unknow error')
         }
     },
-    async postCustomers(item) {
+    async postCars(item) {
         try {
-            const { data } = await axios.post('/main/customers/', item);
+            const { data } = await axios.post('/main/cars/', item);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async getCustomersById(id) {
+    async getCarsById(id) {
         try {
-            const { data } = await axios.get(`/main/customers/${id}/`);
+            const { data } = await axios.get(`/main/cars/${id}/`);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async putCustomersById(id, item) {
+    async putCarsById(id, item) {
         try {
-            const { data } = await axios.patch(`/main/customers/${id}/`, item);
+            const { data } = await axios.patch(`/main/cars/${id}/`, item);
             return data;
         } catch (error) {
             throw error;
@@ -51,4 +51,4 @@ const CustomersService = {
     },
 }
 
-export default CustomersService
+export default CarsService

@@ -6,7 +6,7 @@ function DeleteProduct({ open, itemName, onClose, onConfirm }) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Maxsulotni o'chirish</DialogTitle>
       <DialogContent>
-        <Typography>Haqiqatan ham {itemName} nomli maxsulotni o'chirmoqchimisiz?</Typography>
+        <Typography>Haqiqatan ham {itemName ? 'nomli' : 'ushbu'} maxsulotni o'chirmoqchimisiz?</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Bekor qilish</Button>

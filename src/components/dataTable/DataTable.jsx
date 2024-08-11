@@ -3,6 +3,7 @@ import NotAvailable from '../../helpers/notAvailable/NotAvailale';
 import './DataTable.css';
 import { Delete, Edit } from '@mui/icons-material';
 import Loader from '../../helpers/loader/Loader';
+import { FaEye } from 'react-icons/fa';
 
 function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick }) {
 
@@ -32,7 +33,7 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={index} onClick={() => onRowClick(item)}>
+                        <tr key={index}>
                             {item.row}
                             <td style={{ display: 'flex', alignItems: 'center' }} >
                                 <IconButton onClick={() => onEdit(item)}>
@@ -40,6 +41,9 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                                 </IconButton>
                                 <IconButton onClick={() => onDelete(item)}>
                                     <Delete style={{ color: 'red' }} />
+                                </IconButton>
+                                <IconButton onClick={() => onRowClick(item)}>
+                                    <FaEye style={{ color: '#425BDD' }} />
                                 </IconButton>
                             </td>
                         </tr>

@@ -6,11 +6,10 @@ import {
   DialogActions,
   Button,
   TextField,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
 } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 
 function EditItem({ open, onClose, onSave, formConfig, initialData }) {
   const [formData, setFormData] = useState(initialData || {});
@@ -38,7 +37,6 @@ function EditItem({ open, onClose, onSave, formConfig, initialData }) {
   };
 
   const handleSave = () => {
-    // Handle form submission, call onSave prop
     onSave(formData);
     onClose(); // Close the dialog after saving
   };
@@ -78,17 +76,25 @@ function EditItem({ open, onClose, onSave, formConfig, initialData }) {
           return (
             <FormControl key={index} fullWidth margin="dense">
               <InputLabel>{field.label}</InputLabel>
-              <Select
-                name={field.name}
-                value={formData[field.name]?.id || formData[field.name] || ''}
-                onChange={handleChange}
-              >
-                {field.options.map((option, idx) => (
-                  <MenuItem key={idx} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
+              <Autocomplete
+                options={field.options}
+                getOptionLabel={(option) => option.label}
+                value={field.options.find(option => option.value === formData[field.name]) || null}
+                onChange={(event, newValue) => {
+                  setFormData({
+                    ...formData,
+                    [field.name]: newValue ? newValue.value : '',
+                  });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={field.label}
+                    variant="outlined"
+                    fullWidth
+                  />
+                )}
+              />
             </FormControl>
           );
         case 'file':
@@ -108,6 +114,7 @@ function EditItem({ open, onClose, onSave, formConfig, initialData }) {
       }
     });
   };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Maxsulotni tahrirlash</DialogTitle>

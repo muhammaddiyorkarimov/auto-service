@@ -28,7 +28,7 @@ function SideBar() {
               <div className="li-items">
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/income'>
+                  <NavLink to='/product'>
                     <span>Tovarlar</span>
                   </NavLink>
                 </div>
@@ -51,13 +51,13 @@ function SideBar() {
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
-                    <span>Servislar</span>
+                  <NavLink to='/order-services'>
+                    <span>Xizmatlar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/order-products'>
                     <span>Maxsulotlar</span>
                   </NavLink>
                 </div>
@@ -68,31 +68,31 @@ function SideBar() {
               <div className="li-items">
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/auto-services'>
                     <span>Xizmatlar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/customers'>
                     <span>Mijozlar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/cars'>
                     <span>Avtomobillar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/employees'>
                     <span>Xodimlar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/'>
+                  <NavLink to='/expenses'>
                     <span>Xarajatlar</span>
                   </NavLink>
                 </div>

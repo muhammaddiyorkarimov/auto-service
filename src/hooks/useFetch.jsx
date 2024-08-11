@@ -10,7 +10,9 @@ const useFetch = (fetchData, query) => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const result = await fetchData(query);
+        const queryString = new URLSearchParams(query).toString();
+        console.log("Query string:", queryString);
+        const result = await fetchData(queryString);
         setData(result);
         setLoading(false);
         hasFetched.current = true;
@@ -21,7 +23,7 @@ const useFetch = (fetchData, query) => {
     };
 
     loadData();
-  }, [fetchData, query]);
+  }, [fetchData, JSON.stringify(query)]);
 
   return { data, loading, error };
 };

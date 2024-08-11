@@ -15,7 +15,7 @@ const Filter = ({ selectedFilter, onFilterChange, options }) => {
         label="Sortlash"
         size='small'
       >
-        {options.map(option => (
+        {options?.map(option => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>

@@ -38,7 +38,6 @@ function Income() {
   ]
 
   const { data, loading, error } = useFetch(OurProduct.getProduct, searchQuery);
-  console.log(data)
 
   const { data: providers, loading: providersLoading, error: providersError } = useFetch(Provider.getProvider);
   const [income, setIncome] = useState(data || []);
@@ -116,7 +115,6 @@ function Income() {
 
   // handle save and edit
   const handleSave = async (formData, file) => {
-    console.log(formData)
 
     try {
       const data = new FormData();
@@ -134,6 +132,7 @@ function Income() {
       }
 
       if (dialog.type === 'edit') {
+
         await OurProduct.putProductById(dialog.item.id, data);
 
         const updatedItem = await OurProduct.getProductById(dialog.item.id);
@@ -192,6 +191,11 @@ function Income() {
 
 
   // handle delete
+  const handleDelete = (item) => {
+    setCurrentIncome(item.id);
+    setProductName(item.name);
+    setDeleteOpen(true);
+  };
   const handleConfirmDelete = async () => {
     try {
       await OurProduct.deleteProduct(currentIncome);
@@ -203,12 +207,6 @@ function Income() {
     } finally {
       setDeleteOpen(false);
     }
-  };
-
-  const handleDelete = (item) => {
-    setCurrentIncome(item.id);
-    setProductName(item.name);
-    setDeleteOpen(true);
   };
 
   const handlePageChange = (event, value) => {
@@ -231,6 +229,7 @@ function Income() {
         <td>{item.max_discount}%</td>
         <td>{item.export_price * item.max_discount / 100}</td>
         <td>{item.provider ? item.provider.name : '0'}</td>
+        <td>{item.total_benefit ? item.total_benefit : '0'}</td>
       </>
     )
   }));

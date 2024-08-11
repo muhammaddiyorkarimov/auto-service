@@ -1,9 +1,9 @@
-import axios from '../api'
+import axios from '../api';
 
-const CustomersService = {
-    async getCustomers(page = 1, pageSize = 1) {
+const OrderService = {
+    async getOrders(page = 1, pageSize = 10) {
         try {
-            const response = await axios.get(`/main/customers/`, {
+            const response = await axios.get(`/stats/order-services/`, {
                 params: {
                     page: page,
                     page_size: pageSize
@@ -17,33 +17,39 @@ const CustomersService = {
             throw error.response || new Error('Unknown error');
         }
     },
-    async deleteCustomers(id) {
+
+    // qolgan metodlar o'sha-o'sha...
+    async deleteOrders(id) {
         try {
-            const response = await axios.delete(`/main/customers/${id}/`)
+            const response = await axios.delete(`/stats/order-services/${id}/`)
             return response.data
         } catch (error) {
-            throw error.response || new Error('Unknow error')
+            throw error.response || new Error('Unknown error')
         }
     },
-    async postCustomers(item) {
+
+    async postOrders(item) {
         try {
-            const { data } = await axios.post('/main/customers/', item);
+            const { data } = await axios.post('/stats/order-services/', item);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async getCustomersById(id) {
+
+    async getOrdersById(id) {
         try {
-            const { data } = await axios.get(`/main/customers/${id}/`);
+            const { data } = await axios.get(`/stats/order-services/${id}/`);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async putCustomersById(id, item) {
+
+    async putOrdersById(id, item) {
+        console.log(item)
         try {
-            const { data } = await axios.patch(`/main/customers/${id}/`, item);
+            const { data } = await axios.patch(`/stats/order-services/${id}/`, item);
             return data;
         } catch (error) {
             throw error;
@@ -51,4 +57,4 @@ const CustomersService = {
     },
 }
 
-export default CustomersService
+export default OrderService;

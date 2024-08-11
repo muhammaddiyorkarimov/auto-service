@@ -1,15 +1,24 @@
 import axios from '../api'
 
 const OurProduct = {
-    async getProduct(query = '', orderBy = 'name') {
+    async getProduct(query = '', orderBy = 'name', page = 1, pageSize = 10) {
         try {
-            // Parametrlarni URL-encode qilib, so'rov yuborish
-            const response = await axios.get(`/main/products/?search=${encodeURIComponent(query)}&order_by=${encodeURIComponent(orderBy)}`);
-            return response.data.results;
+            const response = await axios.get('/main/products/', {
+                params: {
+                    search: query, // query to'g'ri qiymat oladi
+                    order_by: orderBy, // orderBy to'g'ri qiymat oladi
+                    page: page,
+                    page_size: pageSize
+                }
+            });
+            return {
+                results: response.data.results,
+                count: response.data.count
+            };
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }
-    },
+    },    
     async deleteProduct(id) {
         try {
             const response = await axios.delete(`/main/products/${id}/`)
@@ -35,10 +44,11 @@ const OurProduct = {
         }
     },
     async putProductById(id, item) {
+        console.log(item, id);
         try {
             const { data } = await axios.patch(`/main/products/${id}/`, item);
             console.log(item, id);
-            
+
             return data;
         } catch (error) {
             throw error;

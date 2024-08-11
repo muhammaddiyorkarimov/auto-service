@@ -11,3 +11,41 @@ main {
     margin: 0 auto;
     overflow: hidden;
 }
+
+.home main .navbar {
+    padding: 12px 0;
+}
+
+.home main {
+    padding: 0 20px;
+}
+
+.home main .extra-items {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+    padding: 20px;
+}
+
+.home main .extra-items .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.home main .extra-items .main .active-reports {
+    height: 250px !important;
+    border-radius: 8px;
+    background-color: aliceblue;
+    flex: 1;
+}
+
+.home main .extra-items .main .pie-chart {
+    flex: 1;
+    height: 250px !important;
+    border-radius: 8px;
+    background-color: aliceblue;
+}

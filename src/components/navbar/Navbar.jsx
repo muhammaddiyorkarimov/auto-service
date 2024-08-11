@@ -19,8 +19,8 @@ function Navbar({ title, name, adminType }) {
           <CiUser />
         </div>
         <div className="user-info">
-          <p>{name}</p>
-          <span>{adminType}</span>
+          <p>User</p>
+          <span>Super Admin</span>
         </div>
       </div>
     </div>

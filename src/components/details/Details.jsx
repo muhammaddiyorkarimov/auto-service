@@ -6,9 +6,10 @@ export const tableHeaders = {
     "Birlik",
     "Kelish summasi",
     "Sotilish summasi",
-    "Foiz%",
+    "Chegirma",
     "Skidka summasi",
     "Yetkazib berish",
+    "Umumiy foyda"
   ],
   importProduct: [
     "Miqdor",
@@ -24,5 +25,25 @@ export const tableHeaders = {
     "Qarz",
     "Xaridor",
     "Umumiy"
+  ],
+  orderService: [
+
+  ],
+  orderProduct: [
+    'Miqdor',
+    'Chegirma',
+    'Umumiy',
+    'Buyurtmachi',
+    'Maxsulot',
+  ],
+  autoService: [
+    'Xizmat turi',
+    'Narxi'
+  ],
+  customers: [
+    'Ism familiya',
+    'Telefon raqam',
+    'Qarz',
+    'Manzil'
   ]
 }
