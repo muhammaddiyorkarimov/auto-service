@@ -2,15 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import Navbar from '../../components/navbar/Navbar';
 import SideBar from '../../components/sidebar/SideBar';
 import useFetch from '../../hooks/useFetch';
-import ImportProduct from '../../services/landing/importProduct';
-import './brand.css';
+import AddProvider from './../../components/addProvider/AddProvider';
+import './providerC.css';
 import DataTable from '../../components/dataTable/DataTable';
 import { tableHeaders } from '../../components/details/Details';
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct';
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material';
-import AddItemBtn from '../../components/addItemBtn/AddItemBtn';
 import AddItemModal from '../../components/addItemModal/AddItemModal';
-import OurProduct from '../../services/landing/ourProduct';
 import Provider from './../../services/landing/provider';
 import EditItem from '../../components/editItem/EditItem';
 import { Close, Edit } from '@mui/icons-material';
@@ -20,8 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import useQueryParams from '../../helpers/useQueryParams';
 import CustomPagination from '../../helpers/CustomPagination';
 
-function Brand() {
-    const headers = tableHeaders['importProduct'];
+function ProviderC() {
+    const headers = tableHeaders['provider'];
     const navigate = useNavigate();
 
     const [errorMsg, setErrorMsg] = useState(null);
@@ -40,15 +38,13 @@ function Brand() {
     const [page, setPage] = useState(Number(params.get('page')) || 1);
     const [pageSize] = useState(10);
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
-    const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'created_at');
+    const [selectedFilter, setSelectedFilter] = useState(params.get('debt') || '');
 
     const fetchOrders = useCallback((query) => {
-        return ImportProduct.getImportProduct(query);
+        return Provider.getProvider(query);
     }, []);
 
-    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
-    const { data: ourProduct, loading: ourProductLoading, error: ourProductError } = useFetch(OurProduct.getProduct);
-    const { data: provider, loading: providerLoading, error: providerError } = useFetch(Provider.getProvider);
+    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery, debt: selectedFilter });
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -57,8 +53,8 @@ function Brand() {
         if (params.get('search') !== searchQuery) {
             setQueryParams({ search: searchQuery });
         }
-        if (params.get('order_by') !== selectedFilter) {
-            setQueryParams({ order_by: selectedFilter });
+        if (params.get('debt') !== selectedFilter) {
+            setQueryParams({ debt: selectedFilter });
         }
     }, [page, searchQuery, selectedFilter, params, setQueryParams]);
 
@@ -74,17 +70,14 @@ function Brand() {
 
     const handleFilterChange = (value) => {
         setSelectedFilter(value);
-        setQueryParams({ order_by: value });
+        setQueryParams({ debt: value });
         setPage(1);
     };
 
     const sortedOptions = [
-        { value: 'amount', label: 'Miqdor' },
-        { value: 'import_price', label: 'Kelish narxi' },
-        { value: 'total', label: 'Umumiy' },
-        { value: 'debt', label: 'Qarz' },
-        { value: 'created_at', label: 'Yaratilgan vaqti' },
-        { value: '-created_at', label: '-Yaratilgan vaqti' }
+        { value: '', label: 'Barchasi' },
+        { value: 'true', label: 'Qarzdor' },
+        { value: 'false', label: 'Qarz emas' },
     ]
 
     // Handle deleting a product
@@ -95,7 +88,7 @@ function Brand() {
 
     const handleDeleteConfirm = async () => {
         try {
-            await ImportProduct.deleteImportProduct(currentItem);
+            await Provider.deleteProvider(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
@@ -113,19 +106,16 @@ function Brand() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-            { type: 'number', label: 'Qarz', name: 'debt' },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'select', label: 'Yetkazib beruvchi', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true },
+            { type: 'text', label: 'Ism', name: 'name', required: true },
+            { type: 'number', label: 'Telefon raqam', name: 'phone_number', required: true },
+            { type: 'number', label: 'Qarz', name: 'debt', required: true },
         ]);
         setAddOpen(true);
     };
 
     const createProduct = async (item) => {
         try {
-            const newProduct = await ImportProduct.postImportProduct(item);
+            const newProduct = await Provider.postProvider(item);
             setProduct([...product, newProduct]);
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
@@ -145,31 +135,24 @@ function Brand() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setEditFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price },
-            { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id },
-            { type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })) },
-            { type: 'number', label: 'Umumiy', name: 'total', value: item.total },
+            { type: 'text', label: 'Ism', name: 'name', value: item.name },
+            { type: 'number', label: 'Telefon raqam', name: 'phone_number', value: item.phone_number },
+            { type: 'number', label: 'Qarz', name: 'debt', required: true, value: item.debt },
         ]);
         setEditOpen(true);
     };
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
-                amount: formData.amount,
-                import_price: formData.import_price,
-                total: formData.total,
+                name: formData.name,
+                phone_number: formData.phone_number,
                 debt: formData.debt,
-                product: formData.product.id,
-                provider: formData.provider
             };
 
-            await ImportProduct.putImportProduct(currentItem.id, updatedData);
+            await Provider.putProviderById(currentItem.id, updatedData);
 
-            const updatedItem = await ImportProduct.getImportProductById(currentItem.id);
+            const updatedItem = await Provider.getProviderById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
             setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
@@ -186,19 +169,16 @@ function Brand() {
     };
 
 
-    const formattedData = data?.results?.map((item, index) => {
+    const formattedData = data?.map((item, index) => {
         return (
             {
                 ...item,
                 row: (
                     <>
                         <td>{index + 1}</td>
-                        <td>{item.amount}</td>
-                        <td>{item.import_price}</td>
+                        <td>{item.name}</td>
+                        <td>{item.phone_number}</td>
                         <td>{item.debt}</td>
-                        <td>{item.product ? item.product.name : ''}</td>
-                        <td>{item.provider ? item.provider.name : ''}</td>
-                        <td>{item.total}</td>
                     </>
                 ),
             }
@@ -215,7 +195,7 @@ function Brand() {
         <div className='brand'>
             <SideBar />
             <main>
-                <Navbar title='Kirim Tovarlar' name='Muhammaddiyor' type='Super admin' />
+                <Navbar title="Ta'minlovchi" />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -224,13 +204,13 @@ function Brand() {
                                 onSearchChange={handleSearchChange}
                             />
                             <Filter
-                            selectedFilter={selectedFilter}
-                            onFilterChange={handleFilterChange}
-                            options={sortedOptions}
+                                selectedFilter={selectedFilter}
+                                onFilterChange={handleFilterChange}
+                                options={sortedOptions}
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
+                            <AddProvider />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -245,7 +225,7 @@ function Brand() {
                         />
                     </section>
                     <CustomPagination
-                        count={data?.count ? Math.ceil(data.count / pageSize) : 0}
+                        count={data?.length ? Math.ceil(data?.length / pageSize) : 0}
                         page={page}
                         onChange={handlePageChange}
                     />
@@ -324,12 +304,9 @@ function Brand() {
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Mahsulot Nomi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Miqdor:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {currentItem.import_price}</Typography>
-                        <Typography variant="body1"><strong>Qarz:</strong> {currentItem.debt}</Typography>
-                        <Typography variant="body1"><strong>Umumiy:</strong> {currentItem.total}</Typography>
-                        <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
+                        <Typography variant="body1"><strong>Ismi:</strong> {currentItem.name}</Typography>
+                        <Typography variant="body1"><strong>Telefon raqami:</strong> {currentItem.phone_number}</Typography>
+                        <Typography variant="body1"><strong>Qarzi:</strong> {currentItem.debt}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
@@ -346,4 +323,4 @@ function Brand() {
     );
 }
 
-export default Brand;
+export default ProviderC;

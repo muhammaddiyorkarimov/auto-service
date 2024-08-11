@@ -126,7 +126,7 @@ function AutoService() {
     const handleDeleteConfirm = async () => {
         try {
             await AutoServices.deleteAutoService(currentItem);
-            setAutoServiceItem(autoServiceItem.filter(o => o.id !== currentItem));
+            setAutoServiceItem(autoServiceItem?.filter(o => o.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
             setTimeout(() => {

@@ -1,28 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-import Navbar from '../../components/navbar/Navbar';
-import SideBar from '../../components/sidebar/SideBar';
-import useFetch from '../../hooks/useFetch';
-import ImportProduct from '../../services/landing/importProduct';
-import './brand.css';
-import DataTable from '../../components/dataTable/DataTable';
-import { tableHeaders } from '../../components/details/Details';
-import DeleteProduct from '../../components/deleteProduct/DeleteProduct';
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material';
-import AddItemBtn from '../../components/addItemBtn/AddItemBtn';
-import AddItemModal from '../../components/addItemModal/AddItemModal';
-import OurProduct from '../../services/landing/ourProduct';
-import Provider from './../../services/landing/provider';
-import EditItem from '../../components/editItem/EditItem';
-import { Close, Edit } from '@mui/icons-material';
-import SearchInput from './../../helpers/SearchInput';
-import Filter from './../../helpers/Filter';
-import { useNavigate } from 'react-router-dom';
-import useQueryParams from '../../helpers/useQueryParams';
-import CustomPagination from '../../helpers/CustomPagination';
+import { useCallback, useEffect, useState } from 'react'
+import AddItemBtn from '../../components/addItemBtn/AddItemBtn'
+import DataTable from '../../components/dataTable/DataTable'
+import { tableHeaders } from '../../components/details/Details'
+import Navbar from '../../components/navbar/Navbar'
+import SideBar from '../../components/sidebar/SideBar'
+import CustomPagination from '../../helpers/CustomPagination'
+import SearchInput from '../../helpers/SearchInput'
+import useQueryParams from '../../helpers/useQueryParams'
+import './expenses.css'
+import ExpensesService from './../../services/landing/expensesSerive';
+import ExpensesTypeService from './../../services/landing/expensesTypeSerive';
+import useFetch from '../../hooks/useFetch'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material'
+import { Close, Edit } from '@mui/icons-material'
+import ExpensesType from '../../components/expensesType/ExpensesType'
+import AddItemModal from '../../components/addItemModal/AddItemModal'
+import EditItem from '../../components/editItem/EditItem'
+import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 
-function Brand() {
-    const headers = tableHeaders['importProduct'];
-    const navigate = useNavigate();
+function Expenses() {
+
+    const headers = tableHeaders['expenses']
 
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
@@ -40,15 +38,13 @@ function Brand() {
     const [page, setPage] = useState(Number(params.get('page')) || 1);
     const [pageSize] = useState(10);
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
-    const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'created_at');
 
     const fetchOrders = useCallback((query) => {
-        return ImportProduct.getImportProduct(query);
+        return ExpensesService.getExpensesService(query);
     }, []);
 
-    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
-    const { data: ourProduct, loading: ourProductLoading, error: ourProductError } = useFetch(OurProduct.getProduct);
-    const { data: provider, loading: providerLoading, error: providerError } = useFetch(Provider.getProvider);
+    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
+    const { data: expensesType } = useFetch(ExpensesTypeService.getExpensesTypeService)
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -57,10 +53,7 @@ function Brand() {
         if (params.get('search') !== searchQuery) {
             setQueryParams({ search: searchQuery });
         }
-        if (params.get('order_by') !== selectedFilter) {
-            setQueryParams({ order_by: selectedFilter });
-        }
-    }, [page, searchQuery, selectedFilter, params, setQueryParams]);
+    }, [page, searchQuery, params, setQueryParams]);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -72,21 +65,6 @@ function Brand() {
         setPage(1);
     };
 
-    const handleFilterChange = (value) => {
-        setSelectedFilter(value);
-        setQueryParams({ order_by: value });
-        setPage(1);
-    };
-
-    const sortedOptions = [
-        { value: 'amount', label: 'Miqdor' },
-        { value: 'import_price', label: 'Kelish narxi' },
-        { value: 'total', label: 'Umumiy' },
-        { value: 'debt', label: 'Qarz' },
-        { value: 'created_at', label: 'Yaratilgan vaqti' },
-        { value: '-created_at', label: '-Yaratilgan vaqti' }
-    ]
-
     // Handle deleting a product
     const handleDelete = (item) => {
         setCurrentItem(item.id);
@@ -95,7 +73,7 @@ function Brand() {
 
     const handleDeleteConfirm = async () => {
         try {
-            await ImportProduct.deleteImportProduct(currentItem);
+            await ExpensesService.deleteExpensesService(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
@@ -113,19 +91,17 @@ function Brand() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-            { type: 'number', label: 'Qarz', name: 'debt' },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'select', label: 'Yetkazib beruvchi', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true },
+            { type: 'select', label: 'Xarajat turi', name: 'name', options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Narxi', name: 'price', required: true },
+            { type: 'text', label: 'Tavsif', name: 'description', required: true },
         ]);
         setAddOpen(true);
     };
 
     const createProduct = async (item) => {
+        console.log(item)
         try {
-            const newProduct = await ImportProduct.postImportProduct(item);
+            const newProduct = await ExpensesService.postExpensesService(item);
             setProduct([...product, newProduct]);
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
@@ -145,31 +121,24 @@ function Brand() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setEditFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price },
-            { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id },
-            { type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })) },
-            { type: 'number', label: 'Umumiy', name: 'total', value: item.total },
+            { type: 'select', label: 'Xarajat turi', name: 'name', value: item.name, options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Narxi', name: 'price', value: item.price, required: true },
+            { type: 'text', label: 'Tavsif', name: 'description', value: item.description, required: true },
         ]);
         setEditOpen(true);
     };
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
-                amount: formData.amount,
-                import_price: formData.import_price,
-                total: formData.total,
-                debt: formData.debt,
-                product: formData.product.id,
-                provider: formData.provider
+                name: formData.name,
+                price: formData.price,
+                description: formData.description,
             };
 
-            await ImportProduct.putImportProduct(currentItem.id, updatedData);
+            await ExpensesService.putExpensesService(currentItem.id, updatedData);
 
-            const updatedItem = await ImportProduct.getImportProductById(currentItem.id);
+            const updatedItem = await ExpensesService.getExpensesServiceById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
             setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
@@ -185,37 +154,36 @@ function Brand() {
         }
     };
 
-
     const formattedData = data?.results?.map((item, index) => {
-        return (
-            {
-                ...item,
-                row: (
-                    <>
-                        <td>{index + 1}</td>
-                        <td>{item.amount}</td>
-                        <td>{item.import_price}</td>
-                        <td>{item.debt}</td>
-                        <td>{item.product ? item.product.name : ''}</td>
-                        <td>{item.provider ? item.provider.name : ''}</td>
-                        <td>{item.total}</td>
-                    </>
-                ),
-            }
-        );
+        return {
+            ...item,
+            row: (
+                <>
+                    <td>{index + 1}</td>
+                    <td>{item.type?.name}</td>
+                    <td>{item.price}</td>
+                    <td>
+                        {item.description?.length > 30
+                            ? `${item.description?.slice(0, 30)}...`
+                            : item.description}
+                    </td>
+                </>
+            ),
+        };
     });
 
+
     const handleRowClick = (item) => {
+        console.log(item)
         setCurrentItem(item);
         setRowDetailOpen(true);
     };
 
-
     return (
-        <div className='brand'>
+        <div className='expenses'>
             <SideBar />
             <main>
-                <Navbar title='Kirim Tovarlar' name='Muhammaddiyor' type='Super admin' />
+                <Navbar title='Xarajat' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -223,14 +191,10 @@ function Brand() {
                                 searchValue={searchQuery}
                                 onSearchChange={handleSearchChange}
                             />
-                            <Filter
-                            selectedFilter={selectedFilter}
-                            onFilterChange={handleFilterChange}
-                            options={sortedOptions}
-                            />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
+                            <ExpensesType />
+                            <AddItemBtn name="Xarajat qo'shish" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -317,19 +281,16 @@ function Brand() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Mahsulot Tafsilotlari</Typography>
+                        <Typography variant="h6">Xarajat Tafsilotlari</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Mahsulot Nomi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Miqdor:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {currentItem.import_price}</Typography>
-                        <Typography variant="body1"><strong>Qarz:</strong> {currentItem.debt}</Typography>
-                        <Typography variant="body1"><strong>Umumiy:</strong> {currentItem.total}</Typography>
-                        <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
+                        <Typography variant="body1"><strong>Xarajat turi:</strong> {currentItem?.type?.name}</Typography>
+                        <Typography variant="body1"><strong>Narxi:</strong> {currentItem.price}</Typography>
+                        <Typography variant="body1"><strong>Tavsif:</strong> {currentItem.description}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
@@ -343,7 +304,8 @@ function Brand() {
                 </Dialog>
             )}
         </div>
-    );
+
+    )
 }
 
-export default Brand;
+export default Expenses

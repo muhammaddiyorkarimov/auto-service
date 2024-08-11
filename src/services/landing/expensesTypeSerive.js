@@ -1,9 +1,9 @@
 import axios from '../api'
 
-const ImportProduct = {
-    async getImportProduct(searchQuery = '') {
+const ExpensesTypeService = {
+    async getExpensesTypeService(searchQuery = '') {
         try {
-            const response = await axios.get(`/main/import-products/?${searchQuery}`);
+            const response = await axios.get(`/stats/expense-types/?${searchQuery}`);
             return {
                 results: response.data.results,
                 count: response.data.count
@@ -13,34 +13,34 @@ const ImportProduct = {
         }
     },    
 
-    async deleteImportProduct(id) {
+    async deleteExpensesTypeService(id) {
         try {
-            const response = await axios.delete(`/main/import-products/${id}/`)
+            const response = await axios.delete(`/stats/expense-types/${id}/`)
             return response.data
         } catch (error) {
             throw error.response || new Error('Unknow error')
         }
     },
-    async postImportProduct(item) {
+    async postExpensesTypeService(item) {
         try {
-            const { data } = await axios.post('/main/import-products/', item);
+            const { data } = await axios.post('/stats/expense-types/', item);
             console.log(item);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async getImportProductById(id) {
+    async getExpensesTypeServiceById(id) {
         try {
-            const { data } = await axios.get(`/main/import-products/${id}/`);
+            const { data } = await axios.get(`/stats/expense-types/${id}/`);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async putImportProduct(id, item) {
+    async putExpensesTypeService(id, item) {
         try {
-            const { data } = await axios.patch(`/main/import-products/${id}/`, item);
+            const { data } = await axios.patch(`/stats/expense-types/${id}/`, item);
             console.log(item, id);
 
             return data;
@@ -50,4 +50,4 @@ const ImportProduct = {
     },
 }
 
-export default ImportProduct
+export default ExpensesTypeService

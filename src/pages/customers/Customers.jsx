@@ -22,30 +22,7 @@ function Customers() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const headers = tableHeaders['customers'];
-
-    const [params, setQueryParams] = useQueryParams();
-    const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(1);
-
-    const fetchOrders = useCallback(() => {
-        return CustomersService.getCustomers(page, pageSize);
-    }, [page, pageSize]);
-
-    const { data, loading, error } = useFetch(fetchOrders);
-
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        setQueryParams({ page: value });
-    };
-
-    useEffect(() => {
-        if (params.get('page') !== page.toString()) {
-            setQueryParams({ page });
-        }
-    }, [page, params, setQueryParams]);
-
-    const [customersItem, setCustomersItem] = useState([])
+    const [customersItem, setCustomersItem] = useState([]);
     const [formConfig, setFormConfig] = useState([]);
     const [currentItem, setCurrentItem] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -55,14 +32,38 @@ function Customers() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState('');
 
-    const sortedOptions = [
-        { value: 'first_name', label: 'First Name' },
-        { value: 'last_name', label: 'Last Name' },
-        { value: 'phone_number', label: 'Phone Number' },
-        { value: 'created_at', label: 'Created At' },
-    ];
+    const headers = tableHeaders['customers']; // Jadval uchun sarlavhalar
+
+    const [params, setQueryParams] = useQueryParams();
+    const [page, setPage] = useState(Number(params.get('page')) || 1);
+    const [pageSize] = useState(10);
+    const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
+
+    const fetchOrders = useCallback((query) => {
+        return CustomersService.getCustomers(query);
+    }, []);
+
+    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
+
+    const handlePageChange = (event, value) => {
+        setPage(value);
+        setQueryParams({ page: value });
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchQuery(value);
+        setPage(1); // Qidiruv amalga oshirilganda sahifa birinchi sahifaga qaytariladi
+    };
+
+    useEffect(() => {
+        if (params.get('page') !== page.toString()) {
+            setQueryParams({ page });
+        }
+        if (params.get('search') !== searchQuery) {
+            setQueryParams({ search: searchQuery });
+        }
+    }, [page, searchQuery, params, setQueryParams]);
 
     const handleRowClick = (item) => {
         setCurrentItem(item);
@@ -182,18 +183,13 @@ function Customers() {
         <div className='customers'>
             <SideBar />
             <main>
-                <Navbar title='Customers' />
+                <Navbar title='Mijozlar' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
-                            <Filter
-                            // selectedFilter={selectedFilter}
-                            // onFilterChange={handleFilterChange}
-                            options={sortedOptions}
-                            />
                             <SearchInput
-                            // searchValue={searchQuery}
-                            // onSearchChange={handleSearchChange}
+                                searchValue={searchQuery}
+                                onSearchChange={handleSearchChange}
                             />
                         </div>
                         <div className="header-items-add">

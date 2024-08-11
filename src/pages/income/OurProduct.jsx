@@ -20,6 +20,7 @@ import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import Filter from '../../helpers/Filter'
 import { Close, Edit } from '@mui/icons-material'
+import useSearch from '../../hooks/useSearch'
 
 function OurProduct() {
     const headers = tableHeaders['ourProduct'];
@@ -43,20 +44,16 @@ function OurProduct() {
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(10);
-
-    const fetchOrderProduct = useCallback(() => {
-        return OurProductService.getProduct();
-    }, [searchQuery, selectedFilter, page, pageSize]);    
-
-    const { data, loading, error } = useFetch(fetchOrderProduct)
-    console.log(data)
+    const [pageSize] = useState(6);
+    const fetchOrderProduct = useCallback((query) => {
+        const { search, orderBy, page, pageSize } = query;
+        return OurProductService.getProduct(search, orderBy, page, pageSize);
+    }, []);
+    
+    const { data, loading, error } = useSearch(fetchOrderProduct, { search: searchQuery, orderBy: selectedFilter, page, pageSize }, [searchQuery, selectedFilter, page]);
+    
+    
     const { data: providers, loading: providersLoading, error: providersError } = useFetch(Provider.getProvider);
-
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        setQueryParams({ page: value });
-    }
 
     const sortedOptions = [
         { value: 'name', label: 'Nomi' },
@@ -64,53 +61,6 @@ function OurProduct() {
         { value: 'amount', label: 'Miqdori' },
         { value: 'max_discount', label: 'Chegirma' }
     ]
-
-    const handleSearchChange = (value) => {
-        setSearchQuery(value);
-        setPage(1);
-        navigate(`?search=${value}`);
-    };
-
-    const handleFilterChange = (filter) => {
-        setSelectedFilter(filter);
-        navigate(`?search=${searchQuery}&order_by=${filter}`);
-    };
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const query = params.get('search') || '';
-        const orderBy = params.get('order_by') || 'name';
-        setSearchQuery(query);
-        setSelectedFilter(orderBy);
-    }, [location.search]);
-
-    useEffect(() => {
-        if (searchQuery === '') {
-            setFilteredProducts(ourProduct);
-        } else {
-            const filtered = ourProduct.filter(item =>
-                item.name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-            setFilteredProducts(filtered);
-        }
-    }, [searchQuery, ourProduct]);
-
-    useEffect(() => {
-        setOurProduct(data);
-        setFilteredProducts(data);
-    }, [data]);
-
-    useEffect(() => {
-        if (selectedFilter && ourProduct.length) {
-            const sorted = [...filteredProducts].sort((a, b) => {
-                if (a[selectedFilter] < b[selectedFilter]) return -1;
-                if (a[selectedFilter] > b[selectedFilter]) return 1;
-                return 0;
-            });
-            setFilteredProducts(sorted);
-        }
-    }, [selectedFilter, ourProduct]);
-
     useEffect(() => {
         if (data?.results) {
             const sortedData = [...data.results].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -121,6 +71,42 @@ function OurProduct() {
             setFilteredProducts([]);
         }
     }, [data]);
+    
+    const handlePageChange = (event, value) => {
+        setPage(value);
+        navigate(`?page=${value}`);
+    };
+    
+    const handleSearchChange = (value) => {
+        setSearchQuery(value);
+        setPage(1);
+        navigate(`?search=${value}&page=1`);
+    };
+    
+    const handleFilterChange = (filter) => {
+        setSelectedFilter(filter);
+        navigate(`?search=${searchQuery}&order_by=${filter}&page=1`);
+    };
+    
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get('search') || '';
+        const orderBy = params.get('order_by') || 'name';
+        setSearchQuery(query);
+        setSelectedFilter(orderBy);
+    }, [location.search]);
+    
+    useEffect(() => {
+        const filtered = searchQuery
+            ? ourProduct.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            : ourProduct;
+    
+        const sorted = selectedFilter
+            ? [...filtered].sort((a, b) => (a[selectedFilter] < b[selectedFilter] ? -1 : 1))
+            : filtered;
+    
+        setFilteredProducts(sorted);
+    }, [searchQuery, selectedFilter, ourProduct]);
     
 
     const handleAdd = () => {

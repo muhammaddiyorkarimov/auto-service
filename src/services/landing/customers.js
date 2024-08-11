@@ -1,14 +1,9 @@
 import axios from '../api'
 
 const CustomersService = {
-    async getCustomers(page = 1, pageSize = 1) {
+    async getCustomers(searchQuery = '') {
         try {
-            const response = await axios.get(`/main/customers/`, {
-                params: {
-                    page: page,
-                    page_size: pageSize
-                }
-            });
+            const response = await axios.get(`/main/customers/?${searchQuery}&order_by=-debt`);
             return {
                 results: response.data.results,
                 count: response.data.count

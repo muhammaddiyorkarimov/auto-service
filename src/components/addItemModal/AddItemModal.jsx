@@ -82,9 +82,9 @@ function AddItemModal({ open, onClose, onSave, formConfig }) {
           return (
             <FormControl key={index} fullWidth margin="dense" size="small" error={!!validationErrors[field.name]}>
               <Autocomplete
-                options={field.options}
+                options={field.options || []} // Default to empty array if undefined
                 getOptionLabel={(option) => option.label}
-                value={field.options.find(option => option.value === formData[field.name]) || null}
+                value={field?.options?.find(option => option.value === formData[field.name]) || null}
                 onChange={(event, newValue) => {
                   setFormData({ ...formData, [field.name]: newValue ? newValue.value : '' });
                 }}
@@ -117,6 +117,7 @@ function AddItemModal({ open, onClose, onSave, formConfig }) {
       }
     });
   };
+  
 
   return (
     <Dialog open={open} onClose={onClose}>

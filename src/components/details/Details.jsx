@@ -45,5 +45,33 @@ export const tableHeaders = {
     'Telefon raqam',
     'Qarz',
     'Manzil'
+  ],
+  cars: [
+    'Kod',
+    'Nomi',
+    'Brand',
+    'Rangi',
+    'Davlat raqami',
+    'Xaridor'
+  ],
+  expenses: [
+    'Xarajat turi',
+    'Narxi',
+    'Tavsif',
+  ],
+  provider: [
+    'Ism',
+    'Telefon raqam',
+    'Qarz',
+  ],
+  employees: [
+    'Turi',
+    'Ism',
+    'Familiya',
+    'Telefon raqam',
+    'Position',
+    'Maosh',
+    'Part',
+    'Role',
   ]
 }

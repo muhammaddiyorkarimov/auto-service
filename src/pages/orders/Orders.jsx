@@ -15,12 +15,13 @@ import DeleteProduct from '../../components/deleteProduct/DeleteProduct';
 import EditItem from '../../components/editItem/EditItem';
 import useQueryParams from './../../helpers/useQueryParams';
 import CustomPagination from '../../helpers/CustomPagination';
+import SearchInput from './../../helpers/SearchInput';
 
 function Orders() {
     const navigate = useNavigate();
     const headers = tableHeaders['orders'];
 
-    const [orders, setOrders] = useState([]);
+    const [ordersC, setOrdersC] = useState([]);
     const [formConfig, setFormConfig] = useState([]);
     const [currentItem, setCurrentItem] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -33,12 +34,13 @@ function Orders() {
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
     const [pageSize] = useState(10);
+    const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
 
-    const fetchOrders = useCallback(() => {
-        return OrdersSerivce.getOrders(page, pageSize);
-    }, [page, pageSize]);
+    const fetchOrders = useCallback((query) => {
+        return OrdersSerivce.getOrders(query);
+    }, []);
 
-    const { data, loading, error } = useFetch(fetchOrders);
+    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
     const { data: customersData, loading: customersLoading, error: customersError } = useFetch(CustomerService.getCustomers);
 
     const handlePageChange = (event, value) => {
@@ -50,17 +52,25 @@ function Orders() {
         if (params.get('page') !== page.toString()) {
             setQueryParams({ page });
         }
-    }, [page, params, setQueryParams]);
+        if (params.get('search') !== searchQuery) {
+            setQueryParams({ search: searchQuery });
+        }
+    }, [page, searchQuery, params, setQueryParams]);
 
     const handleRowClick = (item) => {
         navigate(`/orders/${item.id}`);
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handleAdd = () => {
         setFormConfig([
             { type: 'number', label: "To'langan", name: 'paid', required: true },
             { type: 'number', label: 'Qarz', name: 'debt', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true },
         ]);
         setAddOpen(true);
@@ -69,7 +79,7 @@ function Orders() {
     const createProduct = async (item) => {
         try {
             const newOrder = await OrdersSerivce.postOrders(item);
-            setOrders([...orders, newOrder]);
+            setOrdersC([...ordersC, newOrder]);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
             setTimeout(() => {
@@ -95,16 +105,17 @@ function Orders() {
     };
 
     const updateProduct = async (updatedData) => {
+        console.log(updatedData)
         const formattedData = {
             total: updatedData.total,
             paid: updatedData.paid,
             debt: updatedData.debt,
-            customer: updatedData.customer.id
+            customer: updatedData.customer
         };
 
         try {
             const updatedOrder = await OrdersSerivce.putOrdersById(currentItem.id, formattedData);
-            setOrders(orders.map(o => o.id === currentItem.id ? updatedOrder : o));
+            setOrdersC(ordersC.map(o => o.id === currentItem.id ? updatedOrder : o));
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
             setTimeout(() => {
@@ -127,7 +138,7 @@ function Orders() {
     const handleDeleteConfirm = async (item) => {
         try {
             await OrdersSerivce.deleteOrders(currentItem);
-            setOrders(orders.filter(o => o.id !== currentItem));
+            setOrdersC(ordersC?.filter(o => o.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
             setTimeout(() => {
@@ -162,11 +173,12 @@ function Orders() {
                 <Navbar title="Buyurtmalar" name="Muhammaddiyor" adminType="Super admin" />
                 <div className="extra-items">
                     <div className="header-items">
+                        <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange}/>
                         <AddItemBtn name="Buyurtma qo'shish" onClick={handleAdd} />
                     </div>
                     <section className="details-wrapper">
                         <DataTable
-                        error={error}
+                            error={error}
                             loading={loading}
                             tableHead={headers}
                             data={formattedData}

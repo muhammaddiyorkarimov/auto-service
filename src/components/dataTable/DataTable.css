@@ -23,10 +23,6 @@
     text-align: center;
 }
 
-.data-table td {
-    padding: 5px;
-}
-
 .data-table thead th {
     color: var(--text-color);
     font-weight: 600;
@@ -40,4 +36,5 @@
     justify-content: center;
     color: #333;
     font-size: 14px;
+    padding: 5px 0;
 }

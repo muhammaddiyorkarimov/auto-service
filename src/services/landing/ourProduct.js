@@ -3,9 +3,12 @@ import axios from '../api'
 const OurProduct = {
     async getProduct(query = '', orderBy = 'name', page = 1, pageSize = 10) {
         try {
+            // Query-ni encode qilish
+            const encodedQuery = encodeURIComponent(query);
+    
             const response = await axios.get('/main/products/', {
                 params: {
-                    search: query, // query to'g'ri qiymat oladi
+                    search: encodedQuery, // query to'g'ri encode qilinadi
                     order_by: orderBy, // orderBy to'g'ri qiymat oladi
                     page: page,
                     page_size: pageSize
@@ -18,7 +21,8 @@ const OurProduct = {
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }
-    },    
+    },
+    
     async deleteProduct(id) {
         try {
             const response = await axios.delete(`/main/products/${id}/`)

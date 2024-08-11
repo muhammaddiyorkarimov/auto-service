@@ -15,39 +15,15 @@ import useQueryParams from '../../helpers/useQueryParams';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import CarsService from './../../services/landing/carsService';
+import { tableHeaders } from '../../components/details/Details';
+import CustomersService from '../../services/landing/customers';
+import Filter from '../../helpers/Filter';
 
 function OurCars() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const headers = [
-        { label: "Code", key: "code" },
-        { label: "Name", key: "name" },
-        { label: "Brand", key: "brand" },
-        { label: "Color", key: "color" },
-        { label: "State Number", key: "state_number" },
-    ];
-
-    const [params, setQueryParams] = useQueryParams();
-    const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(1);
-
-    const fetchCars = useCallback(() => {
-        return CarsService.getCars(page, pageSize);
-    }, [page, pageSize]);
-
-    const { data, loading, error } = useFetch(fetchCars);
-
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        setQueryParams({ page: value });
-    };
-
-    useEffect(() => {
-        if (params.get('page') !== page.toString()) {
-            setQueryParams({ page });
-        }
-    }, [page, params, setQueryParams]);
+    const headers = tableHeaders['cars']; // Jadval uchun sarlavhalar
 
     const [carsItem, setCarsItem] = useState([]);
     const [formConfig, setFormConfig] = useState([]);
@@ -60,12 +36,53 @@ function OurCars() {
     const [successMsg, setSuccessMsg] = useState(null);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
+    const [params, setQueryParams] = useQueryParams();
+    const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'name');
+
     const sortedOptions = [
-        { value: 'code', label: 'Code' },
-        { value: 'name', label: 'Name' },
-        { value: 'brand', label: 'Brand' },
-        { value: 'color', label: 'Color' },
+        { label: "Kod", value: "code" },
+        { label: "Nomi", value: "name" },
+        { label: "Davlat raqami", value: "state_number" },
     ];
+
+    const [page, setPage] = useState(Number(params.get('page')) || 1);
+    const [pageSize] = useState(10);
+    const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
+
+    const fetchCars = useCallback((query) => {
+        return CarsService.getCars(query);
+    }, []);
+
+    const { data, loading, error } = useFetch(fetchCars, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
+    const { data: customersData } = useFetch(CustomersService.getCustomers);
+
+    const handlePageChange = (event, value) => {
+        setPage(value);
+        setQueryParams({ page: value });
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchQuery(value);
+        setPage(1); 
+    };
+
+    const handleFilterChange = (value) => {
+        setSelectedFilter(value);
+        setQueryParams({ order_by: value });
+        setPage(1); 
+    };
+
+    useEffect(() => {
+        if (params.get('page') !== page.toString()) {
+            setQueryParams({ page });
+        }
+        if (params.get('search') !== searchQuery) {
+            setQueryParams({ search: searchQuery });
+        }
+        if (params.get('order_by') !== selectedFilter) {
+            setQueryParams({ order_by: selectedFilter });
+        }
+    }, [page, searchQuery, selectedFilter, params, setQueryParams]);
 
     const handleRowClick = (item) => {
         setCurrentItem(item);
@@ -80,6 +97,7 @@ function OurCars() {
             { type: 'text', label: 'Brand', name: 'brand', required: true },
             { type: 'text', label: 'Color', name: 'color', required: true },
             { type: 'text', label: 'State Number', name: 'state_number', required: true },
+            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
         ]);
         setAddOpen(true);
     };
@@ -109,6 +127,7 @@ function OurCars() {
             { type: 'text', label: 'Brand', name: 'brand', value: item.brand },
             { type: 'text', label: 'Color', name: 'color', value: item.color },
             { type: 'text', label: 'State Number', name: 'state_number', value: item.state_number },
+            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
         ]);
         setEditOpen(true);
     };
@@ -169,6 +188,7 @@ function OurCars() {
                 <td>{item.brand}</td>
                 <td>{item.color}</td>
                 <td>{item.state_number}</td>
+                <td>{item.customer ? item.customer.first_name + ' ' + item.customer.last_name : '0'}</td>
             </>
         )
     }));
@@ -177,21 +197,32 @@ function OurCars() {
         <div className='customers'>
             <SideBar />
             <main>
-                <Navbar title='Our Cars' />
+                <Navbar title='Mashinalar' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
-                            <SearchInput />
+                            {/* Search komponenti */}
+                            <SearchInput
+                                searchValue={searchQuery}
+                                onSearchChange={handleSearchChange}
+                            />
+
+                            {/* Filter komponenti */}
+                            <Filter
+                                selectedFilter={selectedFilter}
+                                onFilterChange={handleFilterChange}
+                                options={sortedOptions}
+                            />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Add Car" onClick={handleAdd} />
+                            <AddItemBtn name="Mashina qo'shish" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
                         <DataTable
                             error={error}
                             loading={loading}
-                            // tableHead={headers}
+                            tableHead={headers}
                             data={formattedData}
                             onEdit={handleEdit}
                             onDelete={handleDelete}

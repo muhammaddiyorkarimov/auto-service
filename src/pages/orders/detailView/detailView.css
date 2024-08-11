@@ -29,3 +29,11 @@
     overflow: hidden;
     padding: 20px;
 }
+
+.card-item {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+    margin-top: 10px;
+  }

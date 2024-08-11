@@ -14,6 +14,9 @@ import AutoService from './pages/autoService/AutoService';
 import Customers from './pages/customers/Customers';
 import OurProduct from './pages/income/OurProduct';
 import OurCars from './pages/ourCars/OurCars';
+import Employees from './pages/employees/Employees';
+import Expenses from './pages/expenses/Expenses';
+import ProviderC from './pages/provider/ProviderC';
 
 function App() {
     const routes = createBrowserRouter(
@@ -27,11 +30,14 @@ function App() {
                     <Route path="/warehouse" element={<WareHousePage />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/orders/:id" element={<DetailView />} />
-                    <Route path="/order-services" element={<OrderService />} />
-                    <Route path="/order-products" element={<OrderProduct />} />
+                    {/* <Route path="/order-services" element={<OrderService />} /> */}
+                    {/* <Route path="/order-products" element={<OrderProduct />} /> */}
                     <Route path="/auto-services" element={<AutoService />} />
                     <Route path="/customers" element={<Customers />} />
                     <Route path="/cars" element={<OurCars />} />
+                    <Route path="/employees" element={<Employees />} />
+                    <Route path="/expenses" element={<Expenses />} />
+                    <Route path="/provider" element={<ProviderC />} />
                 </Route>
             </>
         )

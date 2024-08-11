@@ -1,9 +1,9 @@
 import axios from '../api'
 
-const CarsService = {
-    async getCars(searchQuery = '') {
+const ExpensesService = {
+    async getExpensesService(searchQuery = '') {
         try {
-            const response = await axios.get(`/main/cars/?${searchQuery}`);
+            const response = await axios.get(`/stats/expenses/?${searchQuery}`);
             return {
                 results: response.data.results,
                 count: response.data.count
@@ -11,34 +11,38 @@ const CarsService = {
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }
-    },
-    async deleteCars(id) {
+    },    
+
+    async deleteExpensesService(id) {
         try {
-            const response = await axios.delete(`/main/cars/${id}/`)
+            const response = await axios.delete(`/stats/expenses/${id}/`)
             return response.data
         } catch (error) {
             throw error.response || new Error('Unknow error')
         }
     },
-    async postCars(item) {
+    async postExpensesService(item) {
         try {
-            const { data } = await axios.post('/main/cars/', item);
+            const { data } = await axios.post('/stats/expenses/', item);
+            console.log(item);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async getCarsById(id) {
+    async getExpensesServiceById(id) {
         try {
-            const { data } = await axios.get(`/main/cars/${id}/`);
+            const { data } = await axios.get(`/stats/expenses/${id}/`);
             return data;
         } catch (error) {
             throw error;
         }
     },
-    async putCarsById(id, item) {
+    async putExpensesService(id, item) {
         try {
-            const { data } = await axios.patch(`/main/cars/${id}/`, item);
+            const { data } = await axios.patch(`/stats/expenses/${id}/`, item);
+            console.log(item, id);
+
             return data;
         } catch (error) {
             throw error;
@@ -46,4 +50,4 @@ const CarsService = {
     },
 }
 
-export default CarsService
+export default ExpensesService

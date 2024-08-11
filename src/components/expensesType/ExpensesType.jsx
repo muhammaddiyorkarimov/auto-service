@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import AddItemBtn from '../addItemBtn/AddItemBtn';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Alert, AlertTitle } from '@mui/material';
-import Provider from '../../services/landing/provider';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Alert, AlertTitle, Snackbar } from '@mui/material';
+import ExpensesTypeService from '../../services/landing/expensesTypeSerive';
 
-function AddProvider() {
+function ExpensesType() {
     const [open, setOpen] = useState(false);
     const [formConfig] = useState([
         { type: 'text', label: 'Nomi', name: 'name' },
-        { type: 'text', label: 'Telefon raqam', name: 'phone_number' },
-        { type: 'number', label: 'Debt', name: 'debt' },
     ]);
     const [formData, setFormData] = useState({
         name: '',
-        phone_number: '',
-        debt: ''
     });
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,9 +33,6 @@ function AddProvider() {
         if (!formData.name) {
             errors.name = 'Ushbu maydoni to\'ldirilishi shart';
         }
-        if (!formData.debt) {
-            errors.debt = 'Ushbu maydoni to\'ldirilishi shart';
-        }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -49,14 +43,16 @@ function AddProvider() {
         }
 
         try {
-            const response = await Provider.postProvider(formData);
+            const response = await ExpensesTypeService.postExpensesTypeService(formData);
             setSuccess(true);
             setOpen(false);
+            setSnackbarOpen(true)
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
         } catch (error) {
             setError(true);
+
         }
     };
 
@@ -81,19 +77,26 @@ function AddProvider() {
     return (
         <div>
             {success && (
-                <Alert severity="success" onClose={() => setSuccess(false)}>
-                    <AlertTitle>Muvaffaqiyatli</AlertTitle>
-                </Alert>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={() => setSnackbarOpen(false)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert onClose={() => setSnackbarOpen(false)} severity={success ? "success" : "error"} sx={{ width: '100%' }}>
+                        Muvaffaqiyatli qo'shildi
+                    </Alert>
+                </Snackbar>
             )}
             {error && (
                 <Alert severity="error" onClose={() => setError(false)}>
                     <AlertTitle>{error}</AlertTitle>
                 </Alert>
             )}
-            <AddItemBtn name="Provider qo'shish" onClick={() => setOpen(true)} />
+            <AddItemBtn name="Xarajat turi qo'shish" onClick={() => setOpen(true)} />
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
-                    <DialogTitle>Yangi maxsulot qo'shish</DialogTitle>
+                    <DialogTitle>Xarajat turi qo'shish</DialogTitle>
                     <DialogContent className="dialog-content">{renderFields()}</DialogContent>
                     <DialogActions>
                         <Button onClick={() => setOpen(false)}>Bekor qilish</Button>
@@ -105,4 +108,4 @@ function AddProvider() {
     );
 }
 
-export default AddProvider;
+export default ExpensesType;
