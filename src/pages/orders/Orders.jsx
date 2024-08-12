@@ -70,7 +70,7 @@ function Orders() {
         setFormConfig([
             { type: 'number', label: "To'langan", name: 'paid', required: true },
             { type: 'number', label: 'Qarz', name: 'debt', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true },
         ]);
         setAddOpen(true);

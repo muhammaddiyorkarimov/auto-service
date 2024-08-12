@@ -1,19 +1,9 @@
 import axios from '../api'
 
 const OurProduct = {
-    async getProduct(query = '', orderBy = 'name', page = 1, pageSize = 10) {
-        try {
-            // Query-ni encode qilish
-            const encodedQuery = encodeURIComponent(query);
-    
-            const response = await axios.get('/main/products/', {
-                params: {
-                    search: encodedQuery, // query to'g'ri encode qilinadi
-                    order_by: orderBy, // orderBy to'g'ri qiymat oladi
-                    page: page,
-                    page_size: pageSize
-                }
-            });
+    async getProduct(searchQuery = '') {
+        try {    
+            const response = await axios.get(`/main/products/?${searchQuery}`);
             return {
                 results: response.data.results,
                 count: response.data.count

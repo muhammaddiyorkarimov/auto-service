@@ -3,7 +3,6 @@ import './income.css'
 import AddProvider from '../../components/addProvider/AddProvider'
 import AddItemBtn from '../../components/addItemBtn/AddItemBtn'
 import { useLocation, useNavigate } from 'react-router-dom'
-import OrderProducts from '../../services/landing/orderProduct'
 import { useCallback, useEffect, useState } from 'react'
 import useQueryParams from '../../helpers/useQueryParams'
 import useFetch from '../../hooks/useFetch'
@@ -20,12 +19,9 @@ import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import Filter from '../../helpers/Filter'
 import { Close, Edit } from '@mui/icons-material'
-import useSearch from '../../hooks/useSearch'
 
 function OurProduct() {
     const headers = tableHeaders['ourProduct'];
-    const location = useLocation();
-    const navigate = useNavigate();
 
     const [ourProduct, setOurProduct] = useState([])
     const [formConfig, setFormConfig] = useState([]);
@@ -38,22 +34,19 @@ function OurProduct() {
     const [successMsg, setSuccessMsg] = useState(null);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([])
-    const [selectedFilter, setSelectedFilter] = useState('')
-
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
     const [pageSize] = useState(6);
+
+    const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
+    const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'name');
+
     const fetchOrderProduct = useCallback((query) => {
-        const { search, orderBy, page, pageSize } = query;
-        return OurProductService.getProduct(search, orderBy, page, pageSize);
+        return OurProductService.getProduct(query);
     }, []);
-    
-    const { data, loading, error } = useSearch(fetchOrderProduct, { search: searchQuery, orderBy: selectedFilter, page, pageSize }, [searchQuery, selectedFilter, page]);
-    
-    
-    const { data: providers, loading: providersLoading, error: providersError } = useFetch(Provider.getProvider);
+
+    const { data, loading, error } = useFetch(fetchOrderProduct, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
+    const { data: providers } = useFetch(Provider.getProvider);
 
     const sortedOptions = [
         { value: 'name', label: 'Nomi' },
@@ -62,52 +55,33 @@ function OurProduct() {
         { value: 'max_discount', label: 'Chegirma' }
     ]
     useEffect(() => {
-        if (data?.results) {
-            const sortedData = [...data.results].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            setOurProduct(sortedData);
-            setFilteredProducts(sortedData);
-        } else {
-            setOurProduct([]);
-            setFilteredProducts([]);
+        if (params.get('page') !== page.toString()) {
+            setQueryParams({ page });
         }
-    }, [data]);
-    
+        if (params.get('search') !== searchQuery) {
+            setQueryParams({ search: searchQuery });
+        }
+        if (params.get('order_by') !== selectedFilter) {
+            setQueryParams({ order_by: selectedFilter });
+        }
+    }, [page, searchQuery, selectedFilter, params, setQueryParams]);
+
     const handlePageChange = (event, value) => {
         setPage(value);
-        navigate(`?page=${value}`);
+        setQueryParams({ page: value });
     };
-    
+
     const handleSearchChange = (value) => {
         setSearchQuery(value);
         setPage(1);
-        navigate(`?search=${value}&page=1`);
     };
-    
-    const handleFilterChange = (filter) => {
-        setSelectedFilter(filter);
-        navigate(`?search=${searchQuery}&order_by=${filter}&page=1`);
+
+    const handleFilterChange = (value) => {
+        setSelectedFilter(value);
+        setQueryParams({ order_by: value });
+        setPage(1);
     };
-    
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const query = params.get('search') || '';
-        const orderBy = params.get('order_by') || 'name';
-        setSearchQuery(query);
-        setSelectedFilter(orderBy);
-    }, [location.search]);
-    
-    useEffect(() => {
-        const filtered = searchQuery
-            ? ourProduct.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
-            : ourProduct;
-    
-        const sorted = selectedFilter
-            ? [...filtered].sort((a, b) => (a[selectedFilter] < b[selectedFilter] ? -1 : 1))
-            : filtered;
-    
-        setFilteredProducts(sorted);
-    }, [searchQuery, selectedFilter, ourProduct]);
-    
+
 
     const handleAdd = () => {
         setFormConfig([
@@ -120,7 +94,7 @@ function OurProduct() {
             { type: 'number', label: 'Eksport narxi', name: 'export_price' },
             { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: providers && providers.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: providers?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setAddOpen(true);
@@ -144,6 +118,7 @@ function OurProduct() {
     };
 
     const handleEdit = (item) => {
+        console.log(item);
         setCurrentItem(item);
         setFormConfig([
             { type: 'text', label: 'Kod', name: 'code', value: item.code },
@@ -155,7 +130,7 @@ function OurProduct() {
             { type: 'number', label: 'Eksport narxi', name: 'export_price', value: item.export_price },
             { type: 'number', label: 'Chegirma', name: 'max_discount', value: item.max_discount },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: providers.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: providers?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setEditOpen(true);
@@ -171,7 +146,7 @@ function OurProduct() {
             import_price: updatedData.import_price,
             export_price: updatedData.export_price,
             max_discount: updatedData.max_discount,
-            provider: updatedData.provider
+            provider: updatedData?.provider
         }
         console.log(formattedData, updatedData)
         try {
@@ -242,8 +217,11 @@ function OurProduct() {
     return (
         <div className='income'>
             <SideBar />
+            {providers?.map(provider => {
+                // console.log(provider)
+            })}
             <main>
-                <Navbar title='Avto xizmatlar' />
+                <Navbar title='Tovarlar' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
