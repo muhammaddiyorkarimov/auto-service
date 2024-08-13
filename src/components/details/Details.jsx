@@ -4,10 +4,10 @@ export const tableHeaders = {
     "Artikul",
     "Miqdori",
     "Birlik",
-    "Kelish summasi",
-    "Sotilish summasi",
+    "ставка",
+    "выручка",
     "Chegirma",
-    "Skidka summasi",
+    "скидка",
     "Yetkazib berish",
     "Umumiy foyda"
   ],
@@ -20,7 +20,6 @@ export const tableHeaders = {
     "Umumiy",
   ],
   orders: [
-    // "Export narxi",
     "To'langan",
     "Qarz",
     "Xaridor",
@@ -32,9 +31,9 @@ export const tableHeaders = {
   orderProduct: [
     'Miqdor',
     'Chegirma',
-    'Umumiy',
     'Buyurtmachi',
     'Maxsulot',
+    'Umumiy',
   ],
   autoService: [
     'Xizmat turi',

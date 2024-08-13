@@ -24,6 +24,7 @@
 }
 
 .data-table thead th {
+    font-size: 14px;
     color: var(--text-color);
     font-weight: 600;
 }

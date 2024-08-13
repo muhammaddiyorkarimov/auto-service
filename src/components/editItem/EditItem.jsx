@@ -14,6 +14,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 function EditItem({ open, onClose, onSave, formConfig, initialData }) {
   const [formData, setFormData] = useState(initialData || {});
   const [file, setFile] = useState(null);
+  console.log(formConfig)
 
   useEffect(() => {
     setFormData(initialData || {});

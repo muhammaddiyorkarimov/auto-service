@@ -31,7 +31,7 @@ function App() {
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/orders/:id" element={<DetailView />} />
                     {/* <Route path="/order-services" element={<OrderService />} /> */}
-                    {/* <Route path="/order-products" element={<OrderProduct />} /> */}
+                    <Route path="/order-products" element={<OrderProduct />} />
                     <Route path="/auto-services" element={<AutoService />} />
                     <Route path="/customers" element={<Customers />} />
                     <Route path="/cars" element={<OurCars />} />

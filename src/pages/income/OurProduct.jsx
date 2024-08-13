@@ -24,6 +24,7 @@ function OurProduct() {
     const headers = tableHeaders['ourProduct'];
 
     const [ourProduct, setOurProduct] = useState([])
+    const [provider, setProvider] = useState([])
     const [formConfig, setFormConfig] = useState([]);
     const [addOpen, setAddOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -40,19 +41,34 @@ function OurProduct() {
 
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
     const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'name');
+    const [availableFilter, setAvailableFilter] = useState(params.get('import_required') || 'false');
 
     const fetchOrderProduct = useCallback((query) => {
         return OurProductService.getProduct(query);
     }, []);
 
-    const { data, loading, error } = useFetch(fetchOrderProduct, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
-    const { data: providers } = useFetch(Provider.getProvider);
+    const { data, loading, error } = useFetch(fetchOrderProduct, { page, page_size: pageSize, search: searchQuery, import_required: availableFilter, order_by: selectedFilter });
+    const { data: providersData } = useFetch(Provider.getProvider);
+
+    useEffect(() => {
+        if (data) {
+            setOurProduct(data.results);
+        } 
+        if (providersData) {
+            setProvider(providersData);
+        }
+    }, [data, providersData]);
 
     const sortedOptions = [
         { value: 'name', label: 'Nomi' },
         { value: 'code', label: 'Kod' },
         { value: 'amount', label: 'Miqdori' },
         { value: 'max_discount', label: 'Chegirma' }
+    ]
+
+    const debtOptions = [
+        { value: 'true', label: 'Kam qolgan maxsulotlar' },
+        { value: 'false', label: 'Maxsulot' },
     ]
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -64,7 +80,10 @@ function OurProduct() {
         if (params.get('order_by') !== selectedFilter) {
             setQueryParams({ order_by: selectedFilter });
         }
-    }, [page, searchQuery, selectedFilter, params, setQueryParams]);
+        if (params.get('import_required') !== availableFilter) {
+            setQueryParams({ import_required: availableFilter });
+        }
+    }, [page, searchQuery, selectedFilter, params, setQueryParams, availableFilter]);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -81,6 +100,11 @@ function OurProduct() {
         setQueryParams({ order_by: value });
         setPage(1);
     };
+    const handleFilterChange2 = (value) => {
+        setAvailableFilter(value)
+        setQueryParams({ import_required: value });
+        setPage(1);
+    };
 
 
     const handleAdd = () => {
@@ -94,7 +118,7 @@ function OurProduct() {
             { type: 'number', label: 'Eksport narxi', name: 'export_price' },
             { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: providers?.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: provider?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setAddOpen(true);
@@ -104,6 +128,8 @@ function OurProduct() {
         try {
             const newProduct = await OurProductService.postProduct(item);
             setOurProduct([...ourProduct, newProduct]);
+            const updatedProvider = await Provider.getProvider(); // Yangi ma'lumotlarni olish
+            setProvider(updatedProvider);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
             setTimeout(() => {
@@ -116,6 +142,8 @@ function OurProduct() {
             setAddOpen(false);
         }
     };
+    
+    
 
     const handleEdit = (item) => {
         console.log(item);
@@ -130,7 +158,7 @@ function OurProduct() {
             { type: 'number', label: 'Eksport narxi', name: 'export_price', value: item.export_price },
             { type: 'number', label: 'Chegirma', name: 'max_discount', value: item.max_discount },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: providers?.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider?.id, options: provider?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setEditOpen(true);
@@ -146,17 +174,18 @@ function OurProduct() {
             import_price: updatedData.import_price,
             export_price: updatedData.export_price,
             max_discount: updatedData.max_discount,
-            provider: updatedData?.provider
+            provider: updatedData?.provider.id ? updatedData.provider.id : updatedData.provider
         }
-        console.log(formattedData, updatedData)
         try {
             const updatedProduct = await OurProductService.putProductById(currentItem.id, formattedData);
             setOurProduct(ourProduct.map(o => o.id === currentItem.id ? updatedProduct : o));
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
             setTimeout(() => {
-                // window.location.reload();
+                window.location.reload();
             }, 1000);
+            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSnackbarOpen(true);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -177,9 +206,6 @@ function OurProduct() {
             setOurProduct(ourProduct.filter(o => o.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -188,12 +214,14 @@ function OurProduct() {
         }
     };
 
-    const formattedData = data?.results?.map((item, index) => ({
+    console.log(ourProduct)
+
+    const formattedData = ourProduct?.map((item, index) => ({
         ...item,
         row: (
             <>
                 <td>{index + 1}</td>
-                <td style={{ color: item.min_amount < 10 ? 'red' : 'inherit' }}>
+                <td style={{ color: item.amount < item.min_amount ? 'red' : 'inherit' }}>
                     {item.name}
                 </td>
                 <td>{item.code}</td>
@@ -204,7 +232,7 @@ function OurProduct() {
                 <td>{item.max_discount}%</td>
                 <td>{item.export_price * item.max_discount / 100}</td>
                 <td>{item.provider ? item.provider.name : '0'}</td>
-                <td>{item.total_benefit ? item.total_benefit : '0'}</td>
+                <td>{item.total_benefit ? item.total_benefit : '0'  }</td>
             </>
         )
     }));
@@ -217,9 +245,6 @@ function OurProduct() {
     return (
         <div className='income'>
             <SideBar />
-            {providers?.map(provider => {
-                // console.log(provider)
-            })}
             <main>
                 <Navbar title='Tovarlar' />
                 <div className="extra-items">
@@ -227,6 +252,7 @@ function OurProduct() {
                         <div>
                             <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} />
                             <Filter selectedFilter={selectedFilter} onFilterChange={handleFilterChange} options={sortedOptions} />
+                            <Filter selectedFilter={selectedFilter} onFilterChange={handleFilterChange2} options={debtOptions} />
                         </div>
                         <div className="header-items-add">
                             <AddProvider />

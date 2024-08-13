@@ -1,9 +1,7 @@
 import { IconButton } from '@mui/material';
 import NotAvailable from '../../helpers/notAvailable/NotAvailale';
 import './DataTable.css';
-import { Delete, Edit } from '@mui/icons-material';
 import Loader from '../../helpers/loader/Loader';
-import { FaEye } from 'react-icons/fa';
 
 function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick }) {
 
@@ -35,15 +33,15 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                     {data.map((item, index) => (
                         <tr key={index}>
                             {item.row}
-                            <td style={{ display: 'flex', alignItems: 'center' }} >
+                            <td className='table-actions'>
                                 <IconButton onClick={() => onEdit(item)}>
-                                    <Edit style={{ color: 'orange' }} />
+                                    <i className="fa-regular fa-pen-to-square" style={{ color: 'orange', fontSize: '18px' }}></i>
                                 </IconButton>
                                 <IconButton onClick={() => onDelete(item)}>
-                                    <Delete style={{ color: 'red' }} />
+                                    <i className="fa-regular fa-trash-can" style={{ color: 'red', fontSize: '18px' }}></i>
                                 </IconButton>
                                 <IconButton onClick={() => onRowClick(item)}>
-                                    <FaEye style={{ color: '#425BDD' }} />
+                                    <i className="fa-regular fa-eye" style={{ color: '#425BDD', fontSize: '18px' }}></i>
                                 </IconButton>
                             </td>
                         </tr>

@@ -70,7 +70,7 @@ function Orders() {
         setFormConfig([
             { type: 'number', label: "To'langan", name: 'paid', required: true },
             { type: 'number', label: 'Qarz', name: 'debt', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true },
         ]);
         setAddOpen(true);
@@ -98,7 +98,7 @@ function Orders() {
         setFormConfig([
             { type: 'number', label: "To'langan", name: 'paid', value: item.paid },
             { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
             { type: 'number', label: 'Umumiy', name: 'total', value: item.total },
         ]);
         setEditOpen(true);

@@ -51,6 +51,12 @@ function Brand() {
     const { data: provider, loading: providerLoading, error: providerError } = useFetch(Provider.getProvider);
 
     useEffect(() => {
+        if (data) {
+            setProduct(data.results);
+        }
+    }, [data]);    
+
+    useEffect(() => {
         if (params.get('page') !== page.toString()) {
             setQueryParams({ page });
         }
@@ -99,9 +105,6 @@ function Brand() {
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -163,8 +166,8 @@ function Brand() {
                 import_price: formData.import_price,
                 total: formData.total,
                 debt: formData.debt,
-                product: formData.product.id,
-                provider: formData.provider
+                product: formData.product.id ? formData.product.id : formData.product,
+                provider: formData?.provider.id ? formData.provider.id : formData.provider
             };
 
             await ImportProduct.putImportProduct(currentItem.id, updatedData);
@@ -186,7 +189,7 @@ function Brand() {
     };
 
 
-    const formattedData = data?.results?.map((item, index) => {
+    const formattedData = product?.map((item, index) => {
         return (
             {
                 ...item,
