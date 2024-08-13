@@ -135,7 +135,7 @@ function Brand() {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -179,7 +179,7 @@ function Brand() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -218,7 +218,7 @@ function Brand() {
         <div className='brand'>
             <SideBar />
             <main>
-                <Navbar title='Kirim Tovarlar' name='Muhammaddiyor' type='Super admin' />
+                <Navbar title='Kirim Tovarlar' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>

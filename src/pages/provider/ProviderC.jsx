@@ -47,6 +47,12 @@ function ProviderC() {
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery, debt: selectedFilter });
 
     useEffect(() => {
+        if (data) {
+            setProduct(data);
+        }
+    }, [data]);
+
+    useEffect(() => {
         if (params.get('page') !== page.toString()) {
             setQueryParams({ page });
         }
@@ -92,9 +98,6 @@ function ProviderC() {
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -122,7 +125,7 @@ function ProviderC() {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -159,7 +162,7 @@ function ProviderC() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -169,7 +172,7 @@ function ProviderC() {
     };
 
 
-    const formattedData = data?.map((item, index) => {
+    const formattedData = product?.map((item, index) => {
         return (
             {
                 ...item,
@@ -235,16 +238,18 @@ function ProviderC() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
-                    open={addOpen}
-                    onClose={() => setAddOpen(false)}
-                    formConfig={formConfig}
-                    onSave={createProduct}
+                open={addOpen}
+                onClose={() => setAddOpen(false)}
+                formConfig={formConfig}
+                onSave={createProduct}
+                name="Ta'minlovchi qo'shish"
                 />
             }
 
             {/* Edit Item Modal */}
             {editOpen &&
                 <EditItem
+                    name="Ta'minlovchini tahrirlash"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={editFormConfig}
@@ -256,6 +261,7 @@ function ProviderC() {
             {/* Delete Confirmation Dialog */}
             {deleteOpen &&
                 <DeleteProduct
+                    name="ushbu ta'minlovchini"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

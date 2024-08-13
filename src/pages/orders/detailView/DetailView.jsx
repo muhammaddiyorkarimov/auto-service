@@ -265,7 +265,7 @@ console.log(data)
     <div className='order-detail-view'>
       <SideBar />
       <main>
-        <Navbar title="To'liq ma'lumotni ko'rish" adminType="Super Admin" name="Muhammaddiyor" />
+        <Navbar title="To'liq ma'lumotni ko'rish" />
         <section className="details-wrapper">
           {loading ? <Loader /> : error ? <p>{error}</p> : (
             <Card>

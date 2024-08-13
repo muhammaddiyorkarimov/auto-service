@@ -18,10 +18,10 @@ function Navbar({ title, name, adminType }) {
         <div className="user-image">
           <CiUser />
         </div>
-        <div className="user-info">
+        {/* <div className="user-info">
           <p>User</p>
           <span>Super Admin</span>
-        </div>
+        </div> */}
       </div>
     </div>
   )

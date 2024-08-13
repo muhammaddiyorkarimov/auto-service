@@ -171,7 +171,7 @@ function Orders() {
         <div className="orders">
             <SideBar />
             <main>
-                <Navbar title="Buyurtmalar" name="Muhammaddiyor" adminType="Super admin" />
+                <Navbar title="Buyurtmalar"/>
                 <div className="extra-items">
                     <div className="header-items">
                         <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} />

@@ -26,6 +26,7 @@ function OurCars() {
     const headers = tableHeaders['cars']; // Jadval uchun sarlavhalar
 
     const [carsItem, setCarsItem] = useState([]);
+    const [customerItem, setCustomerItem] = useState([]);
     const [formConfig, setFormConfig] = useState([]);
     const [currentItem, setCurrentItem] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -38,6 +39,7 @@ function OurCars() {
 
     const [params, setQueryParams] = useQueryParams();
     const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'name');
+
 
     const sortedOptions = [
         { label: "Kod", value: "code" },
@@ -56,6 +58,16 @@ function OurCars() {
     const { data, loading, error } = useFetch(fetchCars, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
     const { data: customersData } = useFetch(CustomersService.getCustomers);
 
+
+    useEffect(() => {
+        if (data) {
+            setCarsItem(data.results)
+        }
+        if (customersData) {
+            setCustomerItem(customersData.results)
+        }
+    }, [data])
+
     const handlePageChange = (event, value) => {
         setPage(value);
         setQueryParams({ page: value });
@@ -63,13 +75,13 @@ function OurCars() {
 
     const handleSearchChange = (value) => {
         setSearchQuery(value);
-        setPage(1); 
+        setPage(1);
     };
 
     const handleFilterChange = (value) => {
         setSelectedFilter(value);
         setQueryParams({ order_by: value });
-        setPage(1); 
+        setPage(1);
     };
 
     useEffect(() => {
@@ -97,7 +109,7 @@ function OurCars() {
             { type: 'text', label: 'Brand', name: 'brand', required: true },
             { type: 'text', label: 'Color', name: 'color', required: true },
             { type: 'text', label: 'State Number', name: 'state_number', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
         ]);
         setAddOpen(true);
     };
@@ -111,7 +123,7 @@ function OurCars() {
             setAddOpen(false);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || 'Error adding car!');
             setSnackbarOpen(true);
@@ -127,7 +139,7 @@ function OurCars() {
             { type: 'text', label: 'Brand', name: 'brand', value: item.brand },
             { type: 'text', label: 'Color', name: 'color', value: item.color },
             { type: 'text', label: 'State Number', name: 'state_number', value: item.state_number },
-            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
         ]);
         setEditOpen(true);
     };
@@ -139,6 +151,7 @@ function OurCars() {
             brand: updatedData.brand,
             color: updatedData.color,
             state_number: updatedData.state_number,
+            customer: updatedData.customer?.id ? updatedData.customer.id : updatedData.customer,
         };
 
         try {
@@ -149,7 +162,7 @@ function OurCars() {
             setEditOpen(false);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || 'Error updating car!');
             setSnackbarOpen(true);
@@ -169,16 +182,13 @@ function OurCars() {
             setSuccessMsg('Car successfully deleted!');
             setSnackbarOpen(true);
             setDeleteOpen(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Error deleting car!');
             setSnackbarOpen(true);
         }
     };
 
-    const formattedData = data?.results?.map((item, index) => ({
+    const formattedData = carsItem?.map((item, index) => ({
         ...item,
         row: (
             <>

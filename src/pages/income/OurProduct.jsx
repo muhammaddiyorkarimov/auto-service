@@ -134,7 +134,7 @@ function OurProduct() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -183,7 +183,7 @@ function OurProduct() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
         } catch (error) {

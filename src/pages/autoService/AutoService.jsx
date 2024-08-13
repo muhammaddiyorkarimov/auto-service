@@ -46,6 +46,12 @@ function AutoService() {
     ];
 
     useEffect(() => {
+        if (data) {
+            setAutoServiceItem(data);
+        }
+    }, [data]);
+
+    useEffect(() => {
         setSelectedFilter(orderBy);
     }, [orderBy]);
 
@@ -74,9 +80,6 @@ function AutoService() {
             setAutoServiceItem([...autoServiceItem, newService]);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -106,9 +109,6 @@ function AutoService() {
             setAutoServiceItem(autoServiceItem.map(o => o.id === currentItem.id ? updatedOrder : o));
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -129,9 +129,6 @@ function AutoService() {
             setAutoServiceItem(autoServiceItem?.filter(o => o.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -140,7 +137,7 @@ function AutoService() {
         }
     };
 
-    const formattedData = data?.map((item, index) => ({
+    const formattedData = autoServiceItem?.map((item, index) => ({
         ...item,
         row: (
             <>
@@ -189,6 +186,7 @@ function AutoService() {
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createProduct}
+                    name="Xizmat qo'shish"
                 />}
             {editOpen &&
                 <EditItem
@@ -197,12 +195,14 @@ function AutoService() {
                     formConfig={formConfig}
                     onSave={updateProduct}
                     initialData={currentItem}
+                    name="Xizmatni tahrirlash"
                 />}
             {deleteOpen &&
                 <DeleteProduct
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
+                    name="ushbu xizmatni"
                 />}
 
             {rowDetailOpen && (

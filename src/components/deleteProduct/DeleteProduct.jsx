@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 function DeleteProduct({ name, open, itemName, onClose, onConfirm }) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Maxsulotni o'chirish</DialogTitle>
+      <DialogTitle>{name} o'chirish</DialogTitle>
       <DialogContent>
         <Typography>Haqiqatan ham {name ? name : 'ushbu maxsulotni'} o'chirmoqchimisiz?</Typography>
       </DialogContent>

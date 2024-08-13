@@ -46,6 +46,12 @@ function Customers() {
 
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
 
+    useEffect(() => {
+        if (data) {
+            setCustomersItem(data.results)
+        }
+    }, [data])
+
     const handlePageChange = (event, value) => {
         setPage(value);
         setQueryParams({ page: value });
@@ -53,7 +59,7 @@ function Customers() {
 
     const handleSearchChange = (value) => {
         setSearchQuery(value);
-        setPage(1); // Qidiruv amalga oshirilganda sahifa birinchi sahifaga qaytariladi
+        setPage(1);
     };
 
     useEffect(() => {
@@ -92,9 +98,6 @@ function Customers() {
             setSuccessMsg('Customer successfully added!');
             setSnackbarOpen(true);
             setAddOpen(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Error adding customer!');
             setSnackbarOpen(true);
@@ -135,9 +138,6 @@ function Customers() {
             setSuccessMsg('Customer successfully updated!');
             setSnackbarOpen(true);
             setEditOpen(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Error updating customer!');
             setSnackbarOpen(true);
@@ -157,16 +157,13 @@ function Customers() {
             setSuccessMsg('Customer successfully deleted!');
             setSnackbarOpen(true);
             setDeleteOpen(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Error deleting customer!');
             setSnackbarOpen(true);
         }
     };
 
-    const formattedData = data?.results?.map((item, index) => ({
+    const formattedData = customersItem?.map((item, index) => ({
         ...item,
         row: (
             <>
@@ -221,6 +218,7 @@ function Customers() {
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createCustomer}
+                    name="Mijoz qo'shish"
                 />}
             {editOpen &&
                 <EditItem
@@ -229,12 +227,14 @@ function Customers() {
                     formConfig={formConfig}
                     onSave={updateCustomer}
                     initialData={currentItem}
+                    name="Mijozni tahrirlash"
                 />}
             {deleteOpen &&
                 <DeleteProduct
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
+                    name="Ushbu mijozni"
                 />}
 
             {rowDetailOpen && (

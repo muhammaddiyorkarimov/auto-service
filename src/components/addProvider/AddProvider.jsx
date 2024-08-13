@@ -54,7 +54,7 @@ function AddProvider() {
             setOpen(false);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setError(true);
         }
@@ -93,7 +93,7 @@ function AddProvider() {
             <AddItemBtn name="Provider qo'shish" onClick={() => setOpen(true)} />
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
-                    <DialogTitle>Yangi maxsulot qo'shish</DialogTitle>
+                    <DialogTitle>Ta'minlovchi qo'shish</DialogTitle>
                     <DialogContent className="dialog-content">{renderFields()}</DialogContent>
                     <DialogActions>
                         <Button onClick={() => setOpen(false)}>Bekor qilish</Button>

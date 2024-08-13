@@ -45,6 +45,12 @@ function Expenses() {
 
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
     const { data: expensesType } = useFetch(ExpensesTypeService.getExpensesTypeService)
+    console.log(data)
+    useEffect(() => {
+        if (data) {
+            setProduct(data.results)
+        }
+    }, [data])
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -77,9 +83,6 @@ function Expenses() {
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -108,7 +111,7 @@ function Expenses() {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -129,9 +132,10 @@ function Expenses() {
     };
 
     const updateProduct = async (formData) => {
+        console.log(formData)
         try {
             const updatedData = {
-                name: formData.name,
+                name: formData.name.id ? formData.name.id : formData.name,
                 price: formData.price,
                 description: formData.description,
             };
@@ -145,7 +149,7 @@ function Expenses() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -154,7 +158,7 @@ function Expenses() {
         }
     };
 
-    const formattedData = data?.results?.map((item, index) => {
+    const formattedData = product?.map((item, index) => {
         return {
             ...item,
             row: (

@@ -238,7 +238,7 @@ function Income() {
     <div className='income'>
       <SideBar />
       <main>
-        <Navbar title="Tovarlar" name="Muhammaddiyor" adminType="Super Admin" />
+        <Navbar title="Tovarlar"/>
         <div className="extra-items">
           <div className="header-items">
             <div>
