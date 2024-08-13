@@ -3,7 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, F
 import { AddPhotoAlternate } from '@mui/icons-material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function AddItemModal({ open, onClose, onSave, formConfig }) {
+function AddItemModal({ name, open, onClose, onSave, formConfig }) {
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
@@ -122,7 +122,7 @@ function AddItemModal({ open, onClose, onSave, formConfig }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="dialog-wrapper">
-        <DialogTitle>Yangi maxsulot qo'shish</DialogTitle>
+        <DialogTitle>{name ? name : 'Yangi maxsulot qo\'shish'}</DialogTitle>
         <DialogContent className='dialog-content'>{renderFields()}</DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Bekor qilish</Button>

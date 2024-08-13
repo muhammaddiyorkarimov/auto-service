@@ -110,7 +110,7 @@ function Orders() {
             total: updatedData.total,
             paid: updatedData.paid,
             debt: updatedData.debt,
-            customer: updatedData.customer
+            customer: updatedData.customer.id ? updatedData.customer.id : updatedData.customer
         };
 
         try {
@@ -173,7 +173,7 @@ function Orders() {
                 <Navbar title="Buyurtmalar" name="Muhammaddiyor" adminType="Super admin" />
                 <div className="extra-items">
                     <div className="header-items">
-                        <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange}/>
+                        <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} />
                         <AddItemBtn name="Buyurtma qo'shish" onClick={handleAdd} />
                     </div>
                     <section className="details-wrapper">
@@ -197,6 +197,7 @@ function Orders() {
 
             {addOpen &&
                 <AddItemModal
+                    name="Yangi buyurtma qo'shish"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -204,6 +205,7 @@ function Orders() {
                 />}
             {editOpen &&
                 <EditItem
+                    name="Buyurtmani tahrirlash"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={formConfig}
@@ -212,6 +214,7 @@ function Orders() {
                 />}
             {deleteOpen &&
                 <DeleteProduct
+                    name="Ushbu buyurtmani"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

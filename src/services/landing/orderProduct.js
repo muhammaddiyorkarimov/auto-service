@@ -1,25 +1,16 @@
 import axios from '../api';
 
 const OrderProducts = {
-    async getOrders(page = 1, pageSize = 10) {
+    async getOrders() {
         try {
-            const response = await axios.get(`/stats/order-products/`, {
-                params: {
-                    page: page,
-                    page_size: pageSize
-                }
-            });
-            console.log(response.data)
+            const response = await axios.get(`/stats/order-products/`);
             return {
                 results: response.data,
-                count: response.data.count
             };
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }
     },
-
-    // qolgan metodlar o'sha-o'sha...
     async deleteOrders(id) {
         try {
             const response = await axios.delete(`/stats/order-products/${id}/`)
@@ -30,6 +21,7 @@ const OrderProducts = {
     },
 
     async postOrders(item) {
+        console.log(item)
         try {
             const { data } = await axios.post('/stats/order-products/', item);
             return data;

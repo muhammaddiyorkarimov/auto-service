@@ -1,12 +1,12 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 
-function DeleteProduct({ open, itemName, onClose, onConfirm }) {
+function DeleteProduct({ name, open, itemName, onClose, onConfirm }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Maxsulotni o'chirish</DialogTitle>
       <DialogContent>
-        <Typography>Haqiqatan ham {itemName ? 'nomli' : 'ushbu'} maxsulotni o'chirmoqchimisiz?</Typography>
+        <Typography>Haqiqatan ham {name ? name : 'ushbu maxsulotni'} o'chirmoqchimisiz?</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Bekor qilish</Button>

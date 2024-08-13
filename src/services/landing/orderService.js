@@ -1,17 +1,11 @@
 import axios from '../api';
 
 const OrderService = {
-    async getOrders(page = 1, pageSize = 10) {
+    async getOrders() {
         try {
-            const response = await axios.get(`/stats/order-services/`, {
-                params: {
-                    page: page,
-                    page_size: pageSize
-                }
-            });
+            const response = await axios.get(`/stats/order-services/`);
             return {
-                results: response.data.results,
-                count: response.data.count
+                results: response.data
             };
         } catch (error) {
             throw error.response || new Error('Unknown error');

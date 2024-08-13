@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function EditItem({ open, onClose, onSave, formConfig, initialData }) {
+function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   const [formData, setFormData] = useState(initialData || {});
   const [file, setFile] = useState(null);
   console.log(formConfig)
@@ -118,7 +118,7 @@ function EditItem({ open, onClose, onSave, formConfig, initialData }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Maxsulotni tahrirlash</DialogTitle>
+      <DialogTitle>{name ? name : 'Maxsulotni tahrirlash'}</DialogTitle>
       <DialogContent>{renderFields()}</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Bekor qilish</Button>
