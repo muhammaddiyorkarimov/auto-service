@@ -43,6 +43,10 @@ function Orders() {
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
     const { data: customersData, loading: customersLoading, error: customersError } = useFetch(CustomerService.getCustomers);
 
+    useEffect(() => {
+        setOrdersC(data?.results || []);
+    }, [data]);
+
     const handlePageChange = (event, value) => {
         setPage(value);
         setQueryParams({ page: value });
@@ -84,7 +88,7 @@ function Orders() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -120,7 +124,7 @@ function Orders() {
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         } catch (error) {
             console.log(error);
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
@@ -141,9 +145,6 @@ function Orders() {
             setOrdersC(ordersC?.filter(o => o.id !== currentItem));
             setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
             setSnackbarOpen(true);
@@ -152,7 +153,7 @@ function Orders() {
         }
     };
 
-    const formattedData = data?.results?.map((item, index) => ({
+    const formattedData = ordersC?.map((item, index) => ({
         ...item,
         row: (
             <>

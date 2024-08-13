@@ -55,12 +55,12 @@ function SideBar() {
                     <span>Xizmatlar</span>
                   </NavLink>
                 </div> */}
-                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                {/* <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/order-products'>
                     <span>Maxsulotlar</span>
                   </NavLink>
-                </div>
+                </div> */}
               </div>
             </li>
             <li>
