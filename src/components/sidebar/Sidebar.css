@@ -1,6 +1,8 @@
 .sidebar {
     width: 300px;
     flex-grow: 1;
+    height: auto;
+    min-height: 100vh;
     background-color: var(--primary-color);
     overflow: hidden;
     transition: 0.3s ease;
@@ -11,6 +13,7 @@
     z-index: 2;
     padding: 0 10px;
 }
+
 
 .sidebar .logo {
     padding: 10px 20px;
