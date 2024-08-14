@@ -94,3 +94,33 @@
 .bar-items ul li .li-items .li-item p {
     color: var(--text-color);
 }
+
+.logo i {
+    display: none;
+}
+
+@media (max-width: 1120px) {
+    .sidebar {
+        position: fixed;
+        width: 200px;
+    }
+    .logo {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px !important;
+    }
+
+    .logo i {
+        display: flex;
+        color: var(--text-color);
+        font-size: 18px;
+    }
+    
+    .sidebar .logo h1 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+}

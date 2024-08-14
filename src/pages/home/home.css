@@ -2,7 +2,7 @@
     display: flex;
     align-items: start;
     justify-content: space-between;
-    overflow-x: auto;
+    overflow-x: auto !important;
 }
 
 
@@ -37,7 +37,7 @@ main {
     background-color: var(--primary-background-color);
     width: 100%;
     margin: 0 auto;
-    overflow: auto;
+    overflow-x: auto !important;
 }
 
 .home main .navbar {

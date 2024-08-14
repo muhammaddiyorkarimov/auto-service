@@ -35,6 +35,7 @@
 main .header-items {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
     width: 100%;
     justify-content: space-between !important;
@@ -72,3 +73,4 @@ main section{
     flex-grow: 1;
     margin-top: 20px;
 }
+

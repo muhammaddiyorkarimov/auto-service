@@ -8,12 +8,14 @@ import { useSidebar } from '../../context/SidebarContext'
 
 function SideBar() {
   const { isOpen } = useSidebar()
+  const { toggleSidebar } = useSidebar()
 
   return (
     <div className={`sidebar ${isOpen ? 'closed-sidebar' : 'open-sidebar'}`}>
       <div className="sidebar-header">
         <div className="logo">
-          <h1>Fassco Service</h1>
+          <h1>Fassco</h1>
+          <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
         </div>
         <div className="bar-items">
           <ul>
