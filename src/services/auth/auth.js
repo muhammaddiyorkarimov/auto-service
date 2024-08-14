@@ -11,6 +11,11 @@ export const login = async (username, password) => {
     return response.data;
 }
 
+export const getUser = async () => {
+    const response = await api.get('/users/me/');
+    return response.data;
+};
+
 // Token yangilash
 export const refreshToken = async (refreshToken) => {
     const response = await api.post('/users/token-refresh/', { refresh: refreshToken });

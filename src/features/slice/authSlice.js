@@ -1,15 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { login, logout } from '../../services/auth/auth';
+import { getUser, login, logout } from '../../services/auth/auth';
 import { getAccessToken, getRefreshToken } from '../../services/auth/tokenService';
 
 export const loginUser = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
     try {
-        const response = await login(credentials.username, credentials.password);
-        return response;
+        // Login so'rovi orqali tokenlarni oling
+        const { access, refresh } = await login(credentials.username, credentials.password);
+
+        const user = await getUser();
+
+        return { user, access, refresh };
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
     }
 });
+
 
 // Logout thunk
 export const logoutUser = createAsyncThunk('auth/logout', async () => {

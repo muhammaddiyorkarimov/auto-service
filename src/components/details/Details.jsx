@@ -25,9 +25,6 @@ export const tableHeaders = {
     "Xaridor",
     "Umumiy"
   ],
-  orderService: [
-
-  ],
   orderProduct: [
     'Miqdor',
     'Chegirma',
@@ -64,13 +61,12 @@ export const tableHeaders = {
     'Qarz',
   ],
   employees: [
-    'Turi',
+    'Username',
     'Ism',
     'Familiya',
     'Telefon raqam',
-    'Position',
+    'Kasbi',
     'Maosh',
-    'Part',
-    'Role',
+    'Ish vaqti',
   ]
 }

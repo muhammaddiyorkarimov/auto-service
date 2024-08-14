@@ -5,7 +5,7 @@ import { CircularProgress, Box } from '@mui/material';
 function Loader() {
     return (
         <Box
-            className="loading"
+            className="loader-item"
             sx={{
                 display: 'flex',
                 justifyContent: 'center',

@@ -109,7 +109,6 @@ function Orders() {
     };
 
     const updateProduct = async (updatedData) => {
-        console.log(updatedData)
         const formattedData = {
             total: updatedData.total,
             paid: updatedData.paid,
@@ -126,7 +125,6 @@ function Orders() {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            console.log(error);
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
         } finally {

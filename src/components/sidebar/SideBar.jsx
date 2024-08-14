@@ -5,10 +5,20 @@ import images from '../../images/index';
 import { Link, NavLink } from 'react-router-dom';
 // context
 import { useSidebar } from '../../context/SidebarContext'
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../features/slice/authSlice';
 
 function SideBar() {
   const { isOpen } = useSidebar()
   const { toggleSidebar } = useSidebar()
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  console.log(user)
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    window.location.href = '/login';
+  };
 
   return (
     <div className={`sidebar ${isOpen ? 'closed-sidebar' : 'open-sidebar'}`}>
@@ -68,6 +78,16 @@ function SideBar() {
             <li>
               <div className="link-title"><span></span>Xarajat<span></span></div>
               <div className="li-items">
+                {user?.role === 'Admin' && (
+                  <li>
+                    <div className="li-item">
+                      <span></span>
+                      <NavLink to='/employees'>
+                        <span>Xodimlar</span>
+                      </NavLink>
+                    </div>
+                  </li>
+                )}
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/provider'>
@@ -94,12 +114,6 @@ function SideBar() {
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/employees'>
-                    <span>Xodimlar</span>
-                  </NavLink>
-                </div>
-                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
                   <NavLink to='/expenses'>
                     <span>Xarajatlar</span>
                   </NavLink>
@@ -110,7 +124,7 @@ function SideBar() {
         </div>
       </div>
       <div className="sidebar-footer">
-        <img src={images.logoutIcon} alt="" />
+        <img src={images.logoutIcon} alt="Logout" onClick={handleLogout} />
       </div>
     </div>
   );
