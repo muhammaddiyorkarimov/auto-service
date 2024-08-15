@@ -37,7 +37,7 @@ function SideBar() {
         <div className="bar-items">
           <ul>
             <li>
-              <NavLink to='/' className={({ isActive }) => isActive ? "active" : ""}>
+              <NavLink to='/' className={({ isActive }) => isActive ? "active main-page" : "main-page"}>
                 <img src={images.homeIcon} alt="" />
                 <span className='main-page-title'>Главная</span>
               </NavLink>
