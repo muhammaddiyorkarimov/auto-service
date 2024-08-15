@@ -7,6 +7,10 @@ import { Link, NavLink } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext'
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/slice/authSlice';
+import logo from '../../images/logo.png';
+import { LuWarehouse } from 'react-icons/lu';
+import { CiMoneyBill } from 'react-icons/ci';
+import { TiUploadOutline } from 'react-icons/ti';
 
 function SideBar() {
   const { isOpen } = useSidebar()
@@ -24,7 +28,10 @@ function SideBar() {
     <div className={`sidebar ${isOpen ? 'closed-sidebar' : 'open-sidebar'}`}>
       <div className="sidebar-header">
         <div className="logo">
-          <h1>Fassco</h1>
+          <div className="logo-wrapper">
+            <img width={150} src={logo} alt="logo" />
+            <p>автосервис</p>
+          </div>
           <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
         </div>
         <div className="bar-items">
@@ -32,58 +39,58 @@ function SideBar() {
             <li>
               <NavLink to='/' className={({ isActive }) => isActive ? "active" : ""}>
                 <img src={images.homeIcon} alt="" />
-                <span>Asosiy</span>
+                <span className='main-page-title'>Главная</span>
               </NavLink>
             </li>
             <li>
-              <div className="link-title"><span></span>Ombor<span></span></div>
+              <hr />
+              <div className="link-title">
+                <LuWarehouse />
+                <span>Склад</span>
+              </div>
               <div className="li-items">
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/product'>
-                    <span>Tovarlar</span>
+                  <NavLink to='/import-products'>
+                    <span>• Приход товара</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/import-products'>
-                    <span>Kirim Tovarlar</span>
+                  <NavLink to='/product'>
+                    <span>• Товары</span>
                   </NavLink>
                 </div>
               </div>
             </li>
             <li>
-              <div className="link-title"><span></span>Sotuv<span></span></div>
+              <hr />
+              <div className="link-title">
+                <CiMoneyBill />
+                <span>Продажа</span>
+              </div>
               <div className="li-items">
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/orders'>
-                    <span>Buyurtmalar</span>
+                    <span>• Заказы</span>
                   </NavLink>
                 </div>
-                {/* <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
-                  <NavLink to='/order-services'>
-                    <span>Xizmatlar</span>
-                  </NavLink>
-                </div> */}
-                {/* <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
-                  <NavLink to='/order-products'>
-                    <span>Maxsulotlar</span>
-                  </NavLink>
-                </div> */}
               </div>
             </li>
             <li>
-              <div className="link-title"><span></span>Xarajat<span></span></div>
+              <hr />
+              <div className="link-title">
+                <TiUploadOutline />
+                <span>Прочие</span>
+              </div>
               <div className="li-items">
                 {user?.role === 'Admin' && (
                   <li>
                     <div className="li-item">
                       <span></span>
                       <NavLink to='/employees'>
-                        <span>Xodimlar</span>
+                        <span>• Персонал</span>
                       </NavLink>
                     </div>
                   </li>
@@ -91,31 +98,33 @@ function SideBar() {
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/provider'>
-                    <span>Ta'minlovchi</span>
+                    <span>• Поставщик</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/auto-services'>
-                    <span>Xizmatlar</span>
+                    <span>• Сервисы</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/customers'>
-                    <span>Mijozlar</span>
+                
+
+                  <span>• Клиенты</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/cars'>
-                    <span>Avtomobillar</span>
+                    <span>• Автомобили</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/expenses'>
-                    <span>Xarajatlar</span>
+                    <span>• Расходы</span>
                   </NavLink>
                 </div>
               </div>

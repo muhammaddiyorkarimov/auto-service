@@ -223,6 +223,7 @@ function Expenses() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
+                name="Xarajat qo'shish"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}

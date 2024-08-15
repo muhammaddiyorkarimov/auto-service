@@ -1,72 +1,72 @@
 export const tableHeaders = {
   ourProduct: [
-    "Tovar nomi",
-    "Artikul",
-    "Miqdori",
-    "Birlik",
-    "ставка",
-    "выручка",
-    "Chegirma",
-    "скидка",
-    "Yetkazib berish",
-    "Umumiy foyda"
+    "Имя товара",
+    "Артикул",
+    "Количество",
+    "Единица",
+    "Цена покупки",
+    "Цена продажа",
+    "Скидка",
+    "Сумма скидки",
+    "Поставшик",
+    "Итого"
   ],
   importProduct: [
-    "Miqdor",
-    "Kelish summasi",
-    "Qarz",
-    "Mahsulot",
-    "Yetkazib beruvchi",
-    "Umumiy",
+    "Количество",
+    "Цена покупки",
+    "Долг",
+    "Продукт",
+    "Поставшик",
+    "Итого",
   ],
   orders: [
-    "To'langan",
-    "Qarz",
-    "Xaridor",
-    "Umumiy"
+    "Оплачено",
+    "Долг",
+    "Клиент",
+    "Итого"
   ],
   orderProduct: [
-    'Miqdor',
-    'Chegirma',
-    'Buyurtmachi',
-    'Maxsulot',
-    'Umumiy',
+    'Количество',
+    'Скидка',
+    'Клиент',
+    'Продукт',
+    'Итого',
   ],
   autoService: [
-    'Xizmat turi',
-    'Narxi'
+    'Тип сервиса',
+    'Цена'
   ],
   customers: [
-    'Ism familiya',
-    'Telefon raqam',
-    'Qarz',
-    'Manzil'
+    'Имя Фамилия',
+    'Номер телефона',
+    'Долг',
+    'Адрес'
   ],
   cars: [
-    'Kod',
-    'Nomi',
-    'Brand',
-    'Rangi',
-    'Davlat raqami',
-    'Xaridor'
+    'Артикул',
+    'Имя',
+    'Бренд',
+    'Цвет',
+    'Гос номер',
+    'Клиент'
   ],
   expenses: [
-    'Xarajat turi',
-    'Narxi',
-    'Tavsif',
+    'Тип расхода',
+    'Цена',
+    'Описание',
   ],
   provider: [
-    'Ism',
-    'Telefon raqam',
-    'Qarz',
+    'Имя',
+    'Номер телефона',
+    'Долг',
   ],
   employees: [
-    'Username',
-    'Ism',
-    'Familiya',
-    'Telefon raqam',
-    'Kasbi',
-    'Maosh',
-    'Ish vaqti',
+    'Юзернейм',
+    'Имя',
+    'Фамилия',
+    'Номер телефона',
+    'Должность',
+    'Зарплата',
+    'Рабочее время',
   ]
 }

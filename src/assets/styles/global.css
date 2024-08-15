@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
 }
 
 * {
@@ -30,4 +30,17 @@ select:focus {
 
 li {
     list-style: none;
+}
+
+main {
+    position: relative;
+}
+
+main .extra-items {
+    min-height: 85vh !important;
+}
+
+.MuiPagination-root {
+    position: absolute;
+    bottom: 20px;
 }

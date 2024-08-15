@@ -1,5 +1,5 @@
 .sidebar {
-    width: 300px;
+    width: 250px;
     flex-grow: 1;
     height: auto;
     min-height: 100vh;
@@ -11,17 +11,12 @@
     justify-content: space-between;
     align-items: start;
     z-index: 2;
-    padding: 0 10px;
+    padding: 10px;
 }
 
 
 .sidebar .logo {
-    padding: 10px 20px;
-}
-
-.sidebar .logo h1 {
-    font-size: 24px;
-    font-weight: 600;
+    padding: 0 20px;
 }
 
 .sidebar.closed-sidebar {
@@ -48,24 +43,34 @@
 }
 
 .sidebar-header ul a {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 20px;
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: pointer;
-    color: var(--text-color);
+    color: #878787;
     padding: 0 20px;
 }
 
+.main-page-title {
+    color: #000;
+}
+
 .sidebar-header ul a.active {
-    padding: 5px 20px;
+    width: 100%;
+    padding: 10px 20px;
     border-radius: 10px;
     color: var(--primary-color);
-    background-color: var(--background-color);
+    background-color: #5B78FF;
 }
 
 .sidebar-header ul a.active img {
     filter: brightness(0) invert(1)
+}
+
+.sidebar-header ul a.active .main-page-title {
+    color: var(--primary-color);
 }
 
 .sidebar-footer img {
@@ -75,16 +80,29 @@
 
 .bar-items ul li .link-title{
     display: flex;
-    gap: 5px;
-    align-items: center;
-    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
     color: var(--row-color);
 }
 
+hr {
+    padding: 0 20px !important;
+    margin: 0 20px 10px;
+    height: 2px;
+    color: #eee;
+    background-color: #eee;
+    border: none;
+}
+
+.bar-items ul li .link-title svg {
+    width: 22px;
+    height: 22px;
+    color: var(--text-color);
+}
+
 .bar-items ul li .link-title span {
-    width: 30px;
-    height: 1px;
-    background-color: var(--row-color);
+    font-size: 16px;
+    color: var(--text-color);
 }
 
 .bar-items ul li .li-items {
@@ -98,6 +116,18 @@
     color: var(--text-color);
 }
 
+.logo .logo-wrapper {
+    position: relative;
+}
+
+.logo .logo-wrapper p{
+    position: absolute;
+    right: 2px;
+    top: 25px;
+    color: #5B78FF;
+    font-size: 15px;
+}
+
 .logo i {
     display: none;
 }
@@ -105,7 +135,7 @@
 @media (max-width: 1120px) {
     .sidebar {
         position: fixed;
-        width: 200px;
+        width: 250px;
     }
     .logo {
         width: 100%;
@@ -113,7 +143,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        padding: 10px !important;
+        padding: 20px !important;
     }
 
     .logo i {

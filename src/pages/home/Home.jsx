@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ActiveReports from '../../components/activeReports/ActiveReports';
 import PieChartC from '../../components/pieChart/PieChart';
 import SideBar from '../../components/sidebar/SideBar';
@@ -8,8 +8,9 @@ import Statistics from '../../services/landing/statistics';
 import './home.css';
 import TopTableComponent from './TopTableComponent';
 import img2 from '../../images/xarajatIcon.png';
-import img1 from '../../images/foydaIcon.png'; // Replace with actual image paths
+import img1 from '../../images/foydaIcon.png';
 import img3 from '../../images/daromadIcon.png';
+import { BiLoader } from 'react-icons/bi';
 
 function Home() {
   const { data: topProducts, loading: topProductsLoading, error: topProductsError } = useFetch(Statistics.getTopProducts);
@@ -27,7 +28,7 @@ function Home() {
 
   const customerData = topCustomers ? topCustomers.map(customer => ({
     full_name: customer.customer_full_name,
-    total_paid: customer.total_paid ? formatNumberWithCommas(customer.total_paid) : "N/A",
+    total_paid: customer.total_paid ? formatNumberWithCommas(customer.total_paid) : "0",
     orders_count: customer.orders_count,
   })) : [];
 
@@ -38,8 +39,10 @@ function Home() {
   ] : [];
 
   function formatNumberWithCommas(number) {
-    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
+
+  const descriptionColors = ["#c70000", "green", "blue"];
 
   return (
     <div className="home">
@@ -49,11 +52,15 @@ function Home() {
         <div className="extra-items">
           <div className="header">
             <div className="items">
-              {calculateData?.map((item, index) => (
+              {topCalculateError ? <p>{error}</p> : calculateData?.map((item, index) => (
                 <div className="item" key={index}>
                   <div className="about">
-                    <div className="title">{item.title}</div>
-                    <div className="description">{item.value}</div>
+                    {topCalculateLoading ? <BiLoader /> : <>
+                      <div className="title">{item.title}</div>
+                      <div className="description" style={{ color: descriptionColors[index] }}>
+                        UZS {item.value}
+                      </div>
+                    </>}
                   </div>
                   <div className="img">
                     <img src={item.img} alt={item.title} />
@@ -64,17 +71,16 @@ function Home() {
           </div>
           <div className="main">
             <ActiveReports />
-            <PieChartC />
           </div>
           <div className="footer">
             <div className="cards">
               <div className="top-products">
                 <div className="title">Top tovarlar</div>
-                <TopTableComponent columns={productColumns} data={productData} />
+                <TopTableComponent loading={topProductsLoading} error={topProductsError} columns={productColumns} data={productData} />
               </div>
               <div className="top-customers">
                 <div className="title">Top mijozlar</div>
-                <TopTableComponent columns={customerColumns} data={customerData} />
+                <TopTableComponent loading={topCustomersLoading} error={topCustomersError} columns={customerColumns} data={customerData} />
               </div>
             </div>
           </div>

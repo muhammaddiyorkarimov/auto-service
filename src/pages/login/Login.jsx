@@ -49,7 +49,7 @@ function Login() {
             </div>
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit}>
-                    <label onClick={handleOpenBranches} className={`input-wrapper branches ${active ? 'active' : ''}`}>
+                    {/* <label onClick={handleOpenBranches} className={`input-wrapper branches ${active ? 'active' : ''}`}>
                         <div className='branch-title'>
                             <img src={images.branch} alt="" />
                             <span>{branch || 'Branches'}</span>
@@ -60,7 +60,7 @@ function Login() {
                             <span onClick={() => handleBranchSelect('Branch 3')}>Branch 3</span>
                         </div>
                         <i className="fa-solid fa-chevron-down"></i>
-                    </label>
+                    </label> */}
                     <label className="input-wrapper">
                         <img src={images.user} alt="" />
                         <UiInput
