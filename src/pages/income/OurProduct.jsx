@@ -106,7 +106,6 @@ function OurProduct() {
         setPage(1);
     };
 
-
     const handleAdd = () => {
         setFormConfig([
             { type: 'text', label: 'Kod', name: 'code' },

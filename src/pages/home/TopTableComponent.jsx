@@ -9,7 +9,7 @@ const TopTableComponent = ({ columns, data, loading, error }) => {
                 {loading ? <BiLoader /> : <>
                     <thead>
                         <tr>
-                            {columns.map((col, index) => (
+                            {columns?.map((col, index) => (
                                 <th key={index}>{col}</th>
                             ))}
                         </tr>

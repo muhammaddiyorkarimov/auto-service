@@ -153,7 +153,7 @@ function Customers() {
     const handleDeleteConfirm = async () => {
         try {
             await CustomersService.deleteCustomers(currentItem);
-            setCustomersItem(customersItem.filter(o => o.id !== currentItem));
+            setCustomersItem(customersItem?.filter(o => o.id !== currentItem));
             setSuccessMsg('Customer successfully deleted!');
             setSnackbarOpen(true);
             setDeleteOpen(false);

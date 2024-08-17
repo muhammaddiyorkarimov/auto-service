@@ -220,7 +220,7 @@ function Income() {
     row: (
       <>
         <td>{(page - 1) * itemsPerPage + index + 1}</td>
-        <td>{item.name}</td>
+        <td>{item.product?.name}</td>
         <td>{item.code}</td>
         <td>{item.amount}</td>
         <td>{item.unit}</td>

@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import NotAvailable from '../../helpers/notAvailable/NotAvailale';
 import './DataTable.css';
 import Loader from '../../helpers/loader/Loader';
@@ -30,6 +30,15 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                     </tr>
                 </thead>
                 <tbody>
+                    {/* <tr>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                        <td><TextField size=''/></td>
+                    </tr> */}
                     {data.map((item, index) => (
                         <tr key={index}>
                             {item.row}

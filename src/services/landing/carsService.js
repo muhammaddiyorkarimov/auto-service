@@ -12,6 +12,14 @@ const CarsService = {
             throw error.response || new Error('Unknown error');
         }
     },
+    async getCarsForCustomer(id) {
+        try {
+            const response = await axios.get(`/main/cars/?customer_id=${id}`);
+            return response.data.results
+        } catch (error) {
+            throw error.response || new Error('Unknown error');
+        }
+    },
     async deleteCars(id) {
         try {
             const response = await axios.delete(`/main/cars/${id}/`)

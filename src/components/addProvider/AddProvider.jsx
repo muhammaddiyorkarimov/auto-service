@@ -13,7 +13,7 @@ function AddProvider() {
     const [formData, setFormData] = useState({
         name: '',
         phone_number: '',
-        debt: ''
+        debt: 0
     });
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -35,9 +35,6 @@ function AddProvider() {
         const errors = {};
         if (!formData.name) {
             errors.name = 'Ushbu maydoni to\'ldirilishi shart';
-        }
-        if (!formData.debt) {
-            errors.debt = 'Ushbu maydoni to\'ldirilishi shart';
         }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
@@ -68,6 +65,7 @@ function AddProvider() {
                 label={field.label}
                 name={field.name}
                 type={field.type}
+                value={formData[field.name]} // Set the value from formData
                 onChange={handleChange}
                 fullWidth
                 size="small"

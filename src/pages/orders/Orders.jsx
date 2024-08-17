@@ -77,7 +77,8 @@ function Orders() {
             { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true },
         ]);
-        setAddOpen(true);
+        navigate('/add-order')
+        // setAddOpen(true);
     };
 
     const createProduct = async (item) => {

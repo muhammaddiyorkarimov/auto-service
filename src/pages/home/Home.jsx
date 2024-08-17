@@ -14,22 +14,14 @@ import { BiLoader } from 'react-icons/bi';
 
 function Home() {
   const { data: topProducts, loading: topProductsLoading, error: topProductsError } = useFetch(Statistics.getTopProducts);
-  const { data: topCustomers, loading: topCustomersLoading, error: topCustomersError } = useFetch(Statistics.getTopCustomers);
   const { data: topCalculate, loading: topCalculateLoading, error: topCalculateError } = useFetch(Statistics.getTopCalculate);
 
   const productColumns = ["Name", "Amount", "Total Benefit"];
-  const customerColumns = ["Full Name", "Total Paid", "Orders Count"];
 
   const productData = topProducts ? topProducts.map(product => ({
     name: product.product.name,
     amount: formatNumberWithCommas(product.product.amount),
     total_benefit: formatNumberWithCommas(product.product.total_benefit),
-  })) : [];
-
-  const customerData = topCustomers ? topCustomers.map(customer => ({
-    full_name: customer.customer_full_name,
-    total_paid: customer.total_paid ? formatNumberWithCommas(customer.total_paid) : "0",
-    orders_count: customer.orders_count,
   })) : [];
 
   const calculateData = topCalculate ? [
@@ -77,10 +69,6 @@ function Home() {
               <div className="top-products">
                 <div className="title">Top tovarlar</div>
                 <TopTableComponent loading={topProductsLoading} error={topProductsError} columns={productColumns} data={productData} />
-              </div>
-              <div className="top-customers">
-                <div className="title">Top mijozlar</div>
-                <TopTableComponent loading={topCustomersLoading} error={topCustomersError} columns={customerColumns} data={customerData} />
               </div>
             </div>
           </div>
