@@ -11,19 +11,24 @@ import CarsService from './../../services/landing/carsService';
 import OurProduct from '../../services/landing/ourProduct';
 import FormComponent from './FormComponent';
 import OrderProducts from './../../services/landing/orderProduct';
+import { Autocomplete, Button, FormControl, TextField } from '@mui/material';
 
 function AddOrder() {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [selectedCarId, setSelectedCarId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [formIsOpen, setFormIsOpen] = useState(false);
     const [orderProduct, setOrderProduct] = useState([]);
     const [formConfig, setFormConfig] = useState([]);
-    const [savedData, setSavedData] = useState([]); // Mahsulotlarni vaqtincha saqlash uchun
+    const [savedData, setSavedData] = useState([]);
+    const [orderItems, setOrderItems] = useState([]);
 
     const toggleForm = () => {
         setFormIsOpen(prev => !prev);
     };
+
+    const currentDate = new Date().toLocaleDateString();
 
     const fetchCustomerById = useCallback(() => {
         if (selectedCustomerId) {
@@ -43,16 +48,12 @@ function AddOrder() {
     const { data: customerCars, loading: carsLoading, error: carsError } = useFetch(fetchCarsForCustomer);
     const { data: orderProducts, loading: orderProductsLoading, error: orderProductsError } = useFetch(OurProduct.getProduct);
 
+
     useEffect(() => {
         if (orderProducts) {
             setOrderProduct(orderProducts.results);
         }
     }, [orderProducts]);
-
-    useEffect(() => {
-        setLoading(customerLoading || carsLoading);
-        setError(customerError || carsError);
-    }, [customerLoading, carsLoading, customerError, carsError]);
 
     const handleSelectCustomer = (customerId) => {
         setSelectedCustomerId(customerId);
@@ -82,6 +83,17 @@ function AddOrder() {
         ]);
     };
 
+    const handleAddOrder = () => {
+        setFormConfig([
+            { type: 'number', label: 'To\'langan', name: 'paid', required: true },
+            { type: 'number', label: 'Qarz', name: 'debt', required: true },
+            { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers', required: true },
+            { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
+        ]);
+    }
+
+
+
     const handleSaveProduct = (item) => {
         const newProduct = {
             amount: parseFloat(item.amount),
@@ -95,17 +107,15 @@ function AddOrder() {
         setSavedData(prevData => [...prevData, newProduct])
     };
 
-    const handleSubmitOrder = async () => {
-        try {
-            for (const item of savedData) {
-                await OrderProducts.postOrders(item); // Har bir mahsulotni serverga yuborish
-            }
-            console.log("Successfully submitted all products.");
-        } catch (error) {
-            console.error("Error submitting products:", error);
-            handleErrorChange(error.message);
-        }
+    const handleDeleteItem = (id) => {
+        setOrderProduct(orderProduct?.filter(item => item.id !== id))
+    }
+
+    const handleCheckboxChange = (carId) => {
+        setSelectedCarId(carId);
     };
+
+
 
     return (
         <div className='add-order'>
@@ -114,69 +124,100 @@ function AddOrder() {
             <main>
                 <Navbar title="Buyurtma qo'shish" />
                 <div className="extra-items">
-                    <div className="items">
-                        <SelectOrder
-                            onSelectCustomer={handleSelectCustomer}
-                            onLoadingChange={handleLoadingChange}
-                            onErrorChange={handleErrorChange}
-                        />
-                        <AddItemBtn name='Buyurtmachi' />
-                    </div>
                     <section className="details">
                         {(loading) && <Loader />}
                         {error && <p>Xatolik: {error?.message}</p>}
+                        <div className="created-about">
+                            <div className="title">Buyurtma tafsilotlari</div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Yaratilgan sana</th>
+                                        <th>To'langan summa</th>
+                                        <th>Qarz</th>
+                                        <th>Umumiy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{currentDate}</td>
+                                        <td>200 000</td>
+                                        <td>100 000</td>
+                                        <td>300 000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                        {selectedCustomerId && customerAbout && !loading && (
-                            <div className="customer-about">
-                                <div className="title">Mijoz haqida ma'lumot</div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Ism Familiya</th>
-                                            <th>Manzil</th>
-                                            <th>Telefon raqam</th>
-                                            {customerAbout.debt ? <th>Qarzi</th> : ''}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{customerAbout.first_name + ' ' + customerAbout.last_name}</td>
-                                            <td>{customerAbout?.address}</td>
-                                            <td>{customerAbout?.phone_number}</td>
-                                            {customerAbout.debt ? <td>{customerAbout?.debt}</td> : ''}
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div className="by-order">
+                            <div className='header'>
+                                <div className="title">Buyurtmachi</div>
+                                <div className="items">
+                                    <SelectOrder
+                                        onSelectCustomer={handleSelectCustomer}
+                                        onLoadingChange={handleLoadingChange}
+                                        onErrorChange={handleErrorChange}
+                                    />
+                                    <AddItemBtn name='Buyurtmachi' />
+                                </div>
                             </div>
-                        )}
-
-                        {selectedCustomerId && customerCars && customerCars.length > 0 && !loading && (
-                            <div className="customer-cars customer-about">
-                                <div className="title">Mijozning avtomobillari</div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Kod</th>
-                                            <th>Nomi</th>
-                                            <th>Brend</th>
-                                            <th>Rangi</th>
-                                            <th>Davlat raqami</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {customerCars?.map((car) => (
-                                            <tr key={car.code}>
-                                                <td>{car.code}</td>
-                                                <td>{car.name}</td>
-                                                <td>{car.brand}</td>
-                                                <td>{car.color}</td>
-                                                <td>{car.state_number}</td>
+                            {selectedCustomerId && customerAbout && !loading && (
+                                <div className="customer-about">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th colSpan={3}>Mijoz haqida ma'lumot</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
+                                            <tr>
+                                                <th>Ism Familiya</th>
+                                                <th>Telefon raqam</th>
+                                                <th>Qarzi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{customerAbout.first_name + ' ' + customerAbout.last_name}</td>
+                                                <td>{customerAbout?.phone_number}</td>
+                                                {customerAbout.debt ? <td>{customerAbout?.debt}</td> : ''}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th colSpan={5}>Mijozning avtomobillari</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Artikul</th>
+                                                <th>Name</th>
+                                                <th>Brand</th>
+                                                <th>Davlat raqami</th>
+                                                <th>Xizmat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {customerCars?.length > 0 ? customerCars?.map((car) => (
+                                                <tr key={car.id}>
+                                                    {console.log(car)}
+                                                    <td>{car.code}</td>
+                                                    <td>{car.name}</td>
+                                                    <td>{car.brand}</td>
+                                                    <td>{car.state_number}</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            onChange={() => handleCheckboxChange(car.id)}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            )) : <tr>
+                                                <td colSpan={5}>Tanlangan mijozning mashinasi mavjud emas</td>
+                                            </tr>}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
 
                         {selectedCustomerId && customerAbout && !loading && (
                             <div className="order-services">
@@ -188,7 +229,7 @@ function AddOrder() {
                                         {formIsOpen &&
                                             <FormComponent
                                                 formConfig={formConfig}
-                                                onSave={handleSaveProduct} // Formni saqlash tugmasi
+                                                onSave={handleSaveProduct}
                                             />
                                         }
                                     </div>
@@ -203,20 +244,29 @@ function AddOrder() {
                                                         <th>Miqdor</th>
                                                         <th>Chegirma</th>
                                                         <th>Umumiy</th>
+                                                        <th>Holat</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {savedData.map((product, index) => (
-                                                        <tr key={index}>
-                                                            <td>{product.productName}</td>
-                                                            <td>{product.amount}</td>
-                                                            <td>{product.discount}</td>
-                                                            <td>{product.total}</td>
-                                                        </tr>
+                                                        <>
+                                                            <tr key={index}>
+                                                                {console.log(savedData)}
+                                                                <td>{product.productName}</td>
+                                                                <td>{product.amount}</td>
+                                                                <td>{product.discount}</td>
+                                                                <td>{product.total}</td>
+                                                                <td style={{ textAlign: 'center' }} >
+                                                                    <Button variant='contained'
+                                                                        color='error'
+                                                                        size='small' onClick={() => handleDeleteItem(product.id)}>O'chirish</Button>
+                                                                </td>
+                                                            </tr>
+                                                        </>
                                                     ))}
                                                 </tbody>
                                             </table>
-                                            <button onClick={handleSubmitOrder}>Yuborish</button> {/* Yuborish tugmasi */}
+                                            <Button variant='outlined'>Yuborish</Button>
                                         </div>
                                     )}
                                 </div>

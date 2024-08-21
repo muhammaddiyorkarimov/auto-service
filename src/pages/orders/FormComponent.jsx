@@ -21,7 +21,6 @@ function FormComponent({ formConfig, onSave }) {
   }
 
   useEffect(() => {
-    // Calculate the total based on amount and discount
     const amount = parseFloat(formData.amount) || 0;
     const discount = parseFloat(formData.discount) || 0;
     const total = amount - (amount * (discount / 100));
@@ -42,7 +41,6 @@ function FormComponent({ formConfig, onSave }) {
       return;
     }
 
-    // Yangi obyektni saqlash va jo'natish
     setSavedData([...savedData, formData]);
     onSave(formData);
 
@@ -85,7 +83,7 @@ function FormComponent({ formConfig, onSave }) {
                   setFormData({ 
                     ...formData, 
                     [field.name]: newValue ? newValue.value : '',
-                    [`${field.name}Name`]: newValue ? newValue.label : '' // name ni alohida saqlash
+                    [`${field.name}Name`]: newValue ? newValue.label : ''
                   });
                 }}
                 size='small'

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AddItemBtn from '../addItemBtn/AddItemBtn';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Alert, AlertTitle } from '@mui/material';
 import Provider from '../../services/landing/provider';
 
-function AddProvider() {
+function AddProvider({ addProvider, onSuccess }) {
     const [open, setOpen] = useState(false);
     const [formConfig] = useState([
         { type: 'text', label: 'Nomi', name: 'name' },
@@ -49,13 +49,22 @@ function AddProvider() {
             const response = await Provider.postProvider(formData);
             setSuccess(true);
             setOpen(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
+            console.log(response)
+            onSuccess(response);  // Yangi ta'minotchini qaytarish
         } catch (error) {
             setError(true);
         }
     };
+
+    useEffect(() => {
+        if (success || error) {
+            const timer = setTimeout(() => {
+                setSuccess(false);
+                setError(false);
+            }, 3000); // 3 soniyadan keyin alert o'chiriladi
+            return () => clearTimeout(timer); // Timerni tozalash
+        }
+    }, [success, error]);
 
     const renderFields = () => {
         return formConfig.map((field, index) => (
@@ -65,7 +74,7 @@ function AddProvider() {
                 label={field.label}
                 name={field.name}
                 type={field.type}
-                value={formData[field.name]} // Set the value from formData
+                value={formData[field.name]}
                 onChange={handleChange}
                 fullWidth
                 size="small"
@@ -78,17 +87,35 @@ function AddProvider() {
 
     return (
         <div>
-            {success && (
-                <Alert severity="success" onClose={() => setSuccess(false)}>
-                    <AlertTitle>Muvaffaqiyatli</AlertTitle>
-                </Alert>
+            {(success || error) && (
+                <div style={{ position: 'fixed', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 1000 }}>
+                    {success && (
+                        <Alert severity="success" onClose={() => setSuccess(false)}>
+                            <AlertTitle>Muvaffaqiyatli</AlertTitle>
+                            Ta'minotchi muvaffaqiyatli qo'shildi
+                        </Alert>
+                    )}
+                    {error && (
+                        <Alert severity="error" onClose={() => setError(false)}>
+                            <AlertTitle>Xato</AlertTitle>
+                            Ta'minotchini qo'shishda xato yuz berdi
+                        </Alert>
+                    )}
+                </div>
             )}
-            {error && (
-                <Alert severity="error" onClose={() => setError(false)}>
-                    <AlertTitle>{error}</AlertTitle>
-                </Alert>
+            {addProvider ? (
+                <button
+                    className='add-provider-btn'
+                    onClick={() => setOpen(true)}
+                >
+                    +
+                </button>
+            ) : (
+                <AddItemBtn
+                    name="Provider qo'shish"
+                    onClick={() => setOpen(true)}
+                />
             )}
-            <AddItemBtn name="Provider qo'shish" onClick={() => setOpen(true)} />
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
                     <DialogTitle>Ta'minlovchi qo'shish</DialogTitle>

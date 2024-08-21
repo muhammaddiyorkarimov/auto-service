@@ -50,8 +50,14 @@ function SideBar() {
               <div className="li-items">
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
-                  <NavLink to='/import-products'>
+                  <NavLink to='/import'>
                     <span>• Приход товара</span>
+                  </NavLink>
+                </div>
+                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                  <span></span>
+                  <NavLink to='/import-products'>
+                    <span>• Kirim tovarlar</span>
                   </NavLink>
                 </div>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
@@ -73,6 +79,12 @@ function SideBar() {
                   <span></span>
                   <NavLink to='/orders'>
                     <span>• Заказы</span>
+                  </NavLink>
+                </div>
+                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                  <span></span>
+                  <NavLink to='/adding-order'>
+                    <span>Add Order</span>
                   </NavLink>
                 </div>
               </div>

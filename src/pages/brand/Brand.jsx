@@ -54,7 +54,7 @@ function Brand() {
         if (data) {
             setProduct(data.results);
         }
-    }, [data]);    
+    }, [data]);
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -227,9 +227,9 @@ function Brand() {
                                 onSearchChange={handleSearchChange}
                             />
                             <Filter
-                            selectedFilter={selectedFilter}
-                            onFilterChange={handleFilterChange}
-                            options={sortedOptions}
+                                selectedFilter={selectedFilter}
+                                onFilterChange={handleFilterChange}
+                                options={sortedOptions}
                             />
                         </div>
                         <div className="header-items-add">
@@ -245,6 +245,15 @@ function Brand() {
                             onDelete={handleDelete}
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
+                            formConfig={[
+                                { type: 'number', label: 'Miqdor', name: 'amount', required: true },
+                                { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
+                                { type: 'number', label: 'Qarz', name: 'debt' },
+                                { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+                                { type: 'select', label: 'Yetkazib beruvchi', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
+                                { type: 'number', label: 'Umumiy', name: 'total', required: true },
+                            ]}
+                            onSave={createProduct}
                         />
                     </section>
                     <CustomPagination
