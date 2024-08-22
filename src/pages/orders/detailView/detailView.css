@@ -45,7 +45,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;  
+    padding: 10px;
 }
 
 .grid-item-title {
@@ -59,4 +59,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+@media print {
+    .MuiDialogActions-root {
+        display: none;
+    }
+}
+
+.line {
+    width: 200px;
+    height: 1px;
+    background-color: black;
+    color: black;
 }

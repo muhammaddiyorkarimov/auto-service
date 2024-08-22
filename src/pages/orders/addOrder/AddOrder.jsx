@@ -9,8 +9,11 @@ import CarsService from '../../../services/landing/carsService';
 import { TextField, Button } from '@mui/material';
 import FormData from './FormData';
 import OrderProduct from './OrderProduct';
-import OrderService from './OrderService';
+import OrderingService from './OrderService';
 import OrdersService from '../../../services/landing/orders';
+import OrderProducts from '../../../services/landing/orderProduct';
+import OrderServices from './../../../services/landing/orderService';
+import { useNavigate } from 'react-router-dom';
 
 function AddOrder() {
     const [formConfig, setFormConfig] = useState([]);
@@ -28,7 +31,11 @@ function AddOrder() {
     const [loading, setLoading] = useState(false);
     const [orderId, setOrderId] = useState(null);
     const [orderFormProducts, setOrderFormProducts] = useState([])
+    const [orderFormServices, setOrderFormServices] = useState([])
 
+    const navigate = useNavigate();
+
+    console.log(orderFormServices)
 
     const fetchCarsForCustomer = useCallback(() => {
         if (selectedCustomerId) {
@@ -49,7 +56,7 @@ function AddOrder() {
                 setCustomerCars(customerCar);
             }
         } else if (allCar) {
-            setAllCars(allCar);
+            setAllCars(allCar.results);
         }
     }, [customer, customerCar, selectedCustomerId, allCar]);
 
@@ -76,7 +83,7 @@ function AddOrder() {
                     <button className='add-itemBtn' onClick={() => console.log('Mashina qo\'shish tugmasi bosildi')}>+</button>
                 ),
             },
-            { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers', required: true},
+            { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers' },
             { type: 'text', label: 'Tavsif', name: 'description' },
         ]);
     };
@@ -110,43 +117,83 @@ function AddOrder() {
         setPaid(newPaid);
     };
 
-    console.log(formData)
 
 
     const handleSubmit = async () => {
+        setLoading(true);
         const postData = {
             car: formData.car,
             total: total,
             paid: parseInt(paid),
             debt: debt,
-            car_kilometers: formData.car_kilometers,
+            car_kilometers: formData.car_kilometers || 0,
             customer: formData.customer,
             description: formData.description
         };
 
+        const postOrderProduct = orderFormProducts?.map(product => ({
+            order: null,
+            amount: product.amount,
+            product: product.product,
+            discount: product.discount,
+            total: product.total,
+        }));
+
+        const postOrderService = orderFormServices?.map(service => ({
+            order: null,
+            part: service.part,
+            service: service.service,
+            staff: service.staff,
+            total: service.total,
+        }));
 
         try {
-            // Post qilish
-            const response = await OrdersService.postOrders(postData);
-
-            // Agar javobda orderning `id` bo'lsa, uni mana shunday oling
-            const orderId = response?.id;
-            setOrderId(orderId);
+            const orderResponse = await OrdersService.postOrders(postData);
+            const orderId = orderResponse?.id;
 
             if (!orderId) {
-                alert('Failed to retrieve the order ID');
+                alert("Order yaratishda xatolik yuz berdi.");
+                setLoading(false);
                 return;
             }
 
-            alert(`Order successfully posted with ID: ${orderId}`);
+            const postOrderProductWithId = postOrderProduct?.map(product => ({
+                ...product,
+                order: orderId
+            }));
 
+            for (const productData of postOrderProductWithId) {
+                const response = await OrderProducts.postOrders(productData);
+                if (!response) {
+                    alert("OrderProduct ma'lumotlarini yuborishda xatolik yuz berdi.");
+                    setLoading(false);
+                    return;
+                }
+            }
 
+            const postOrderServiceWithId = postOrderService?.map(service => ({
+                ...service,
+                order: orderId
+            }));
+
+            for (const serviceData of postOrderServiceWithId) {
+                const response = await OrderServices.postOrders(serviceData);
+                if (!response) {
+                    alert("OrderProduct ma'lumotlarini yuborishda xatolik yuz berdi.");
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            alert("Buyurtma muvaffaqiyatli qo'shildi.");
+            navigate(`/orders/${orderId}`); // Navigate qilish
         } catch (error) {
-            alert(`Error posting data: ${error.message}`);
+            alert(`Ma'lumotlarni yuborishda xatolik yuz berdi: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
+    console.log(formConfig)
 
 
     return (
@@ -221,8 +268,8 @@ function AddOrder() {
                                     </table>
                                 </div>
                                 <div className="order-wrapper">
-                                    <OrderProduct selectedCustomerId={selectedCustomerId} orderId={orderId} onTotalChange={handleAddProductTotal} onSave={setOrderFormProducts}/>
-                                    <OrderService selectedCustomerId={selectedCustomerId} onTotalChange={handleAddServiceTotal} />
+                                    <OrderProduct onTotalChange={handleAddProductTotal} onSave={setOrderFormProducts} />
+                                    <OrderingService onTotalChange={handleAddServiceTotal} onSave={setOrderFormServices} />
                                 </div>
                             </>}
                         </section>

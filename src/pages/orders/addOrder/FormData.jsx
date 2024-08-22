@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, TextField, FormControl, Button, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, price, onProductIdChange, productPrice }) {
+function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, price, onProductIdChange, productPrice, productAmount }) {
     const [customerId, setCustomerId] = useState(null);
     const [formData, setFormData] = useState({});
     const [validationErrors, setValidationErrors] = useState({});
@@ -10,8 +10,6 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
     const [productId, setProductId] = useState(null);
     const [selectedService, setSelectedService] = useState(null)
     const [selectedProduct, setSelectedProduct] = useState(null)
-
-    console.log(productId)
 
     useEffect(() => {
         const initialData = formConfig?.reduce((acc, field) => {
@@ -35,17 +33,14 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
     useEffect(() => {
         if (productPrice > 0) {
             const { amount, discount } = formData;
-            console.log(amount, discount);
             const discountValue = ((amount * productPrice * discount) / 100);
             const total = (productPrice * amount) - discountValue;
-            console.log(total)
             setFormData(prevData => ({
                 ...prevData,
                 total
             }));
         }
     }, [productPrice, formData?.amount, formData?.discount]);
-    console.log(formData)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -165,12 +160,13 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
                                 )}
                                 {selectedService && (
                                     <Typography variant="caption" color="textSecondary">
-                                        Narx: {price} so'm
+                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Narx: {price} so'm</p>
                                     </Typography>
                                 )}
                                 {selectedProduct && (
                                     <Typography variant="caption" color="textSecondary">
-                                        Narx: {productPrice} so'm
+                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Tannarx: {productPrice} so'm</p>
+                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Mavjud: {productAmount} ta</p>
                                     </Typography>
                                 )}
                             </Box>

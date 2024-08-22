@@ -1,6 +1,6 @@
 import axios from '../api';
 
-const OrderService = {
+const OrderServices = {
     async getOrders() {
         try {
             const response = await axios.get(`/stats/order-services/&order_by=-created_at`);
@@ -51,4 +51,4 @@ const OrderService = {
     },
 }
 
-export default OrderService;
+export default OrderServices;

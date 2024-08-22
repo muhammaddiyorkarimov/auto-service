@@ -4,7 +4,7 @@ const CarsService = {
     async getCars(searchQuery = '') {
         try {
             const response = await axios.get(`/main/cars/?${searchQuery}`);
-            return response.data.results
+            return response.data
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }

@@ -1,21 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import AddItemBtn from '../../../components/addItemBtn/AddItemBtn'
-import useFetch from '../../../hooks/useFetch'
-import OurProduct from '../../../services/landing/ourProduct'
-import FormData from './FormData'
-import OrderProducts from '../../../services/landing/orderProduct'
+import React, { useCallback, useEffect, useState } from 'react';
+import AddItemBtn from '../../../components/addItemBtn/AddItemBtn';
+import useFetch from '../../../hooks/useFetch';
+import OurProduct from '../../../services/landing/ourProduct';
+import FormData from './FormData';
+import OrderProducts from '../../../services/landing/orderProduct';
 
-function OrderProduct({ selectedCustomerId, onTotalChange }) {
-    const [formConfig, setFormConfig] = useState([])
-    const [products, setProducts] = useState([])
-    const [formData, setFormData] = useState([])
-    const [selectedProductId, setSelectedProductId] = useState(null);
+function OrderProduct({ onTotalChange, orderId, onSave }) {
+    const [formConfig, setFormConfig] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [formData, setFormData] = useState([]);
+    const [ selectedProductId, setSelectedProductId] = useState(null);
     const [price, setPrice] = useState(0);
-    const [customerId, setCustomerId] = useState(null);
-
-    useEffect(() => {
-        setCustomerId(selectedCustomerId);
-    }, [selectedCustomerId]);
+    const [amountProduct, setAmountProduct] = useState(0);
 
     const fetchProduct = useCallback(() => {
         if (selectedProductId) {
@@ -23,14 +19,15 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
         }
     }, [selectedProductId]);
 
-    const { data: product } = useFetch(OurProduct.getProduct)
-    const { data: productById } = useFetch(fetchProduct)
+    const { data: product } = useFetch(OurProduct.getProduct);
+    const { data: productById } = useFetch(fetchProduct);
+    console.log(product)
 
     useEffect(() => {
         if (product) {
-            setProducts(product.results)
+            setProducts(product.results);
         }
-    }, [product])
+    }, [product]);
 
     useEffect(() => {
         const totalSum = formData.reduce((acc, product) => acc + product.total, 0);
@@ -39,16 +36,25 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
 
     useEffect(() => {
         if (productById) {
-            console.log(productById)
             setPrice(productById.export_price);
+        }
+    }, [productById]);
+    useEffect(() => {
+        if (productById) {
+            setAmountProduct(productById.amount);
         }
     }, [productById]);
 
     const handleSave = (data) => {
-        setFormData(prevData => [...prevData, { ...data }]);
+        setFormData(prevData => {
+            const updatedData = [...prevData, { ...data }];
+            onSave(updatedData);
+            return updatedData;
+        });
         setFormConfig([]);
         setSelectedProductId(null);
         setPrice(0);
+        setAmountProduct(0);
     };
 
     const handleAddProduct = () => {
@@ -58,16 +64,18 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
             { type: 'number', label: 'Chegirma', name: 'discount', required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
         ]);
-    }
+    };
 
     const onProductChange = (id) => {
-        console.log(id)
         setSelectedProductId(id);
     };
 
-    console.log(formData);
-
     const handleSubmit = async () => {
+        if (!orderId) {
+            alert('Order ID not set');
+            return;
+        }
+
         const postData = formData.map(product => ({
             order: orderId,
             amount: product.amount,
@@ -88,7 +96,7 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
         } catch (error) {
             alert(`Error posting data: ${error.message}`);
         } finally {
-            setLoading(false);
+            // If you have a loading state, set it to false here
         }
     };
 
@@ -98,7 +106,7 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
                 <AddItemBtn name='Maxsulot qoshish' onClick={handleAddProduct} />
             </div>
             <div className="order-product-content">
-                <FormData formConfig={formConfig} onSave={handleSave} onProductIdChange={onProductChange} productPrice={price} />
+                <FormData formConfig={formConfig} onSave={handleSave} onProductIdChange={onProductChange} productPrice={price} productAmount={amountProduct} />
                 <table>
                     <thead>
                         <tr>
@@ -121,7 +129,7 @@ function OrderProduct({ selectedCustomerId, onTotalChange }) {
                 </table>
             </div>
         </div>
-    )
+    );
 }
 
-export default OrderProduct
+export default OrderProduct;

@@ -58,7 +58,7 @@ function OurCars() {
     const { data, loading, error } = useFetch(fetchCars, { page, page_size: pageSize, search: searchQuery, order_by: selectedFilter });
     const { data: customersData } = useFetch(CustomersService.getCustomers);
 
-
+console.log(data)
     useEffect(() => {
         if (data) {
             setCarsItem(data.results)

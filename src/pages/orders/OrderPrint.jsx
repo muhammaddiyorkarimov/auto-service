@@ -99,7 +99,7 @@ function OrderPrint({ open, handleClose, id }) {
                                 {data?.products?.map((product, index) => (
                                     <Card key={index} className="card-item">
                                         <CardContent>
-                                            <Typography><strong>Nomi:</strong> {product.product?.name}</Typography>
+                                            <Typography><strong>Nomi:</strong> {product.name}</Typography>
                                             <Typography><strong>Miqdor:</strong> {product.amount}</Typography>
                                             <Typography><strong>Umumiy:</strong> {product.total}</Typography>
                                             <Typography><strong>Chegirma:</strong> {product.discount}</Typography>

@@ -5,7 +5,7 @@ import FormData from './FormData';
 import AutoServices from './../../../services/landing/autoService';
 import EmployeesService from './../../../services/landing/employees';
 
-function OrderService({onTotalChange }) {
+function OrderingService({onTotalChange, onSave }) {
     const [formConfig, setFormConfig] = useState([]);
     const [services, setServices] = useState([]);
     const [formData, setFormData] = useState([]);
@@ -49,7 +49,11 @@ function OrderService({onTotalChange }) {
     };
 
     const handleSave = (data) => {
-        setFormData(prevData => [...prevData, { ...data }]);
+        setFormData(prevData => {
+            const updatedData = [...prevData, { ...data }];
+            onSave(updatedData)
+            return updatedData;
+        });
         setFormConfig([]);
         setSelectedServiceId(null);
         setPrice(0);
@@ -97,4 +101,4 @@ function OrderService({onTotalChange }) {
     );
 }
 
-export default OrderService;
+export default OrderingService;
