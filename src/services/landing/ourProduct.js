@@ -3,7 +3,7 @@ import axios from '../api'
 const OurProduct = {
     async getProduct(searchQuery = '') {
         try {    
-            const response = await axios.get(`/main/products/?${searchQuery}`);
+            const response = await axios.get(`/main/products/?${searchQuery}&order_by=-created_at`);
             return {
                 results: response.data.results,
                 count: response.data.count

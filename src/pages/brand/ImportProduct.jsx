@@ -86,14 +86,9 @@ function Import() {
     useEffect(() => {
         if (productData && providerData) {
             setFormConfig([
-                { type: 'number', label: 'Artikul', name: 'code', required: true },
                 { type: 'select', label: 'Maxsulot', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
                 { type: 'number', label: 'Miqdor', name: 'amount' },
-                { type: 'number', label: 'Min miqdor', name: 'min_amount' },
-                { type: 'text', label: 'Birlik', name: 'unit' },
                 { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-                { type: 'number', label: 'Sotish summasi', name: 'export_price', required: true },
-                { type: 'number', label: 'Maksimal chegirma', name: 'max_discount' },
                 { type: 'number', label: 'Umumiy', name: 'total', disabled: true },
             ]);
         }
@@ -125,10 +120,8 @@ function Import() {
             return;
         }
 
-        // onSave(formData, file);
     };
 
-    // const providerOptions = provider?.map(p => ({ label: p.name, value: p.id }));
 
     useEffect(() => {
         const initialData = formConfig?.reduce((acc, field) => {
@@ -158,15 +151,12 @@ function Import() {
         const calculateTotal = async () => {
             const amount = parseFloat(formData.amount) || 0;
             const importPrice = parseFloat(formData.import_price) || 0;
-            const maxDiscountPercent = parseFloat(formData.max_discount) || 0;
-
-            const discountAmount = (importPrice * amount * maxDiscountPercent) / 100;
-            const total = (importPrice * amount) - discountAmount;
+            const total = importPrice * amount;
 
             setFormData(prevFormData => ({ ...prevFormData, total }));
         };
         calculateTotal();
-    }, [formData.amount, formData.import_price, formData.max_discount]);
+    }, [formData.amount, formData.import_price, ]);
 
 
 
@@ -204,7 +194,6 @@ function Import() {
     };
 
 
-
     const handleRemoveProduct = (index) => {
         const updatedProducts = selectedProducts.filter((_, i) => i !== index);
         setSelectedProducts(updatedProducts);
@@ -217,22 +206,27 @@ function Import() {
 
     console.log(formData)
     const handleSubmit = async () => {
-        setLoading(true);
         const providerId = selectedProvider;
-
-        const postData = selectedProducts.map(product => ({
-            code: product.code,
-            product: product.product.value,
+        
+        if (!formData.paidAmount || formData.paidAmount <= 0) {
+            alert("Iltimos, to'langan summani kiriting!");
+            return;
+        }
+        
+        setLoading(true);
+        const lastProductIndex = selectedProducts.length - 1;
+    
+        const postData = selectedProducts.map((product, index) => ({
+            debt: index === lastProductIndex ? formData?.debt : 0,
+            product: product.product?.value,
             amount: product.amount,
-            min_amount: product.min_amount,
-            unit: product.unit,
             import_price: product.import_price,
-            export_price: product.export_price,
-            max_discount: product.max_discount,
             total: product.total,
             provider: providerId
         }));
-
+    
+        console.log(postData);
+    
         try {
             for (const productData of postData) {
                 const response = await ImportProduct.postImportProduct(productData);
@@ -242,15 +236,17 @@ function Import() {
                 }
             }
             alert('Data successfully posted');
-
+    
             setSelectedProducts([]);
-            setSelectedProvider(null)
+            setSelectedProvider(null);
+            setFormData({});
         } catch (error) {
             alert(`Error posting data: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
+    
 
     const handleOpenAddProduct = () => {
         setAddOpen(true);
@@ -283,6 +279,7 @@ function Import() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             <FormControl key={index} fullWidth margin="dense" size="small" error={formSubmitted && !!validationErrors[field.name]}>
                                 <Autocomplete
+                                sx={{minWidth: '200px'}}
                                     size="small"
                                     options={field.options || []}
                                     getOptionLabel={(option) => option.label}
@@ -315,9 +312,8 @@ function Import() {
     };
 
     const isTableValid = () => {
-        // Har bir mahsulot uchun ma'lumotlarni tekshirish
         return selectedProducts?.every(product =>
-            product.amount && product.import_price && product.export_price
+            product.amount && product.import_price
         );
     };
 
@@ -340,7 +336,7 @@ function Import() {
                                     <Button
                                         variant="contained"
                                         onClick={handleSubmit}
-                                        disabled={!isTableValid() || loading}
+                                        disabled={loading}
                                     >
                                         {loading ? 'Yuborilmoqda...' : 'Yuborish'}
                                     </Button>
@@ -363,7 +359,7 @@ function Import() {
                                             <td>
                                                 <TextField
                                                     margin="dense"
-                                                    label="To'langan summa"
+                                                    label="To'langan summa *"
                                                     type="number"
                                                     value={formData.paidAmount || ''}
                                                     onChange={handlePaidAmountChange}
@@ -419,20 +415,15 @@ function Import() {
                                         <div className="title">Maxsulot qo'shish</div>
                                         <div className="header">
                                             {renderFields()}
-                                            <Button className='btn' variant='contained' onClick={handleAddProduct} disabled={!isTableValid()}>Tasdiqlash</Button>
+                                            <Button className='btn' variant='contained' onClick={handleAddProduct} >Tasdiqlash</Button>
                                         </div>
                                         <div className="render-fields-table">
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th>Artikul</th>
                                                         <th>Maxsulot</th>
                                                         <th>Miqdor</th>
-                                                        <th>Min miqdor</th>
                                                         <th>Kelish summasi</th>
-                                                        <th>Sotish summasi</th>
-                                                        <th>Birlik</th>
-                                                        <th>Chegirma</th>
                                                         <th>Umumiy</th>
                                                         <th>Holat</th>
                                                     </tr>
@@ -440,14 +431,9 @@ function Import() {
                                                 <tbody>
                                                     {selectedProducts?.map((product, index) => (
                                                         <tr key={index}>
-                                                            <td>{product.code || ''}</td>
                                                             <td>{product.product?.label || ''}</td>
                                                             <td>{product.amount || ''}</td>
-                                                            <td>{product.min_amount || ''}</td>
                                                             <td>{product.import_price || ''}</td>
-                                                            <td>{product.export_price || ''}</td>
-                                                            <td>{product.unit || ''}</td>
-                                                            <td>{product.max_discount || ''}%</td>
                                                             <td>{product.total || ''}</td>
                                                             <td style={{ textAlign: 'center' }}>
                                                                 <Button

@@ -147,16 +147,19 @@ function Brand() {
     // Handle editing a product
     const handleEdit = (item) => {
         setCurrentItem(item);
+        const calculatedTotal = item.import_price * item.amount - item.debt;
+        
         setEditFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price },
+            { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount, disabled: true },
+            { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price, disabled: true },
             { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id },
-            { type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })) },
-            { type: 'number', label: 'Umumiy', name: 'total', value: item.total },
+            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id, disabled: true },
+            { type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })), disabled: true },
+            { type: 'number', label: 'Umumiy', name: 'total', value: calculatedTotal, disabled: true },
         ]);
         setEditOpen(true);
     };
+    
 
     const updateProduct = async (formData) => {
         console.log(formData)

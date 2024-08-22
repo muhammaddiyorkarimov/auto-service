@@ -3,7 +3,7 @@ import axios from '../api';
 const OrderService = {
     async getOrders() {
         try {
-            const response = await axios.get(`/stats/order-services/`);
+            const response = await axios.get(`/stats/order-services/&order_by=-created_at`);
             return {
                 results: response.data
             };

@@ -28,9 +28,7 @@ function AddOrder() {
     const [loading, setLoading] = useState(false);
     const [orderId, setOrderId] = useState(null);
     const [orderFormProducts, setOrderFormProducts] = useState([])
-    console.log(orderFormProducts)
 
-    console.log(total, debt, paid)
 
     const fetchCarsForCustomer = useCallback(() => {
         if (selectedCustomerId) {
@@ -112,6 +110,8 @@ function AddOrder() {
         setPaid(newPaid);
     };
 
+    console.log(formData)
+
 
     const handleSubmit = async () => {
         const postData = {
@@ -124,7 +124,6 @@ function AddOrder() {
             description: formData.description
         };
 
-        console.log(postData);
 
         try {
             // Post qilish

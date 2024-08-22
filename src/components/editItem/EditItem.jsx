@@ -22,11 +22,17 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    const updatedFormData = { ...formData, [name]: value };
+
+    // Recalculate the total if debt changes
+    if (name === 'debt') {
+        const total = (formData.import_price * formData.amount) - Number(value);
+        updatedFormData.total = total; // Update total dynamically
+    }
+
+    setFormData(updatedFormData);
+};
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -57,6 +63,7 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
               value={formData[field.name] || ''}
               onChange={handleChange}
               fullWidth
+              disabled={field.disabled}
             />
           );
         case 'textarea':
@@ -71,6 +78,7 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
               fullWidth
               multiline
               rows={4}
+              disabled={field.disabled}
             />
           );
         case 'select':
@@ -95,6 +103,7 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
                     fullWidth
                   />
                 )}
+                disabled={field.disabled}
               />
             </FormControl>
           );
