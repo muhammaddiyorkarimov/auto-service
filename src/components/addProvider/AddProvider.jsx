@@ -49,7 +49,6 @@ function AddProvider({ addProvider, onSuccess }) {
             const response = await Provider.postProvider(formData);
             setSuccess(true);
             setOpen(false);
-            console.log(response)
             onSuccess(response);  // Yangi ta'minotchini qaytarish
         } catch (error) {
             setError(true);

@@ -14,6 +14,8 @@ import OrdersService from '../../../services/landing/orders';
 import OrderProducts from '../../../services/landing/orderProduct';
 import OrderServices from './../../../services/landing/orderService';
 import { useNavigate } from 'react-router-dom';
+import AddCustomerModal from './AddCustomerModal';
+import AddCustomerCarModal from './AddCustomerCarModal';
 
 function AddOrder() {
     const [formConfig, setFormConfig] = useState([]);
@@ -32,6 +34,8 @@ function AddOrder() {
     const [orderId, setOrderId] = useState(null);
     const [orderFormProducts, setOrderFormProducts] = useState([])
     const [orderFormServices, setOrderFormServices] = useState([])
+    const [openCustomerModal, setOpenCustomerModal] = useState(false);
+    const [openCarsModal, setOpenCarsModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -61,7 +65,7 @@ function AddOrder() {
                 label: car.name,
             }));
             setCustomerCars(mappedCars);
-    
+
             setFormConfig((prevConfig) =>
                 prevConfig.map((configItem) =>
                     configItem.name === 'car'
@@ -71,7 +75,7 @@ function AddOrder() {
             );
         } else {
             setCustomerCars([]);
-    
+
             setFormConfig((prevConfig) =>
                 prevConfig.map((configItem) =>
                     configItem.name === 'car'
@@ -81,9 +85,15 @@ function AddOrder() {
             );
         }
     }, [selectedCustomerId, customerCar]);
-    
 
-    console.log(customerCars)
+
+    const handleOpenCustomer = () => {
+        setOpenCustomerModal(true)
+    }
+
+    const handleOpenCustomerCar = () => {
+        setOpenCarsModal(true)
+    }
 
 
     const handleCreateOpen = () => {
@@ -96,7 +106,7 @@ function AddOrder() {
                 required: true,
                 options: customers?.map((p) => ({ value: p.id, label: p.first_name })),
                 renderButton: () => (
-                    <button className='add-itemBtn' onClick={() => `console`.log('Tugma bosildi')}>+</button>
+                    <button className='add-itemBtn' onClick={handleOpenCustomer}>+</button>
                 ),
             },
             {
@@ -106,10 +116,10 @@ function AddOrder() {
                 required: true,
                 options: customerCars.length > 0 ? customerCars : [],
                 renderButton: () => (
-                    <button className='add-itemBtn' onClick={() => console.log('Mashina qo\'shish tugmasi bosildi')}>+</button>
+                    <button className='add-itemBtn' onClick={handleOpenCustomerCar}>+</button>
                 ),
             },
-            
+
             { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers' },
             { type: 'text', label: 'Tavsif', name: 'description' },
         ]);
@@ -144,6 +154,44 @@ function AddOrder() {
         setPaid(newPaid);
     };
 
+    const handleAddCustomerSuccess = (newCustomer) => {
+        const newOption = { value: newCustomer.id, label: newCustomer.first_name };
+
+        // Yangi mijozni ro'yxatga qo'shish
+        setCustomers(prevOptions => [...prevOptions, newOption]);
+
+        // Tanlangan mijozni ID sini o'rnatish
+        setSelectedCustomerId(newCustomer.id);
+
+        // Formani qayta render qilish va yangi tanlangan mijozni inputga joylash
+        setFormConfig(prevConfig =>
+            prevConfig.map(configItem =>
+                configItem.name === 'customer'
+                    ? { ...configItem, options: [...customers, newOption], value: newCustomer.id }
+                    : configItem
+            )
+        );
+    };
+    const handleAddCarsSuccess = (newCar) => {
+        const newOption = { value: newCar.id, label: newCar.model }; // Model nomi yoki boshqa kerakli maydonni tanlang
+        CONSOLE.LOG(newOption)
+    
+        // Yangi mashinani ro'yxatga qo'shish
+        setCars(prevOptions => [...prevOptions, newOption]);
+    
+        // Tanlangan mashina ID sini o'rnatish
+        setSelectedCarId(newCar.id);
+    
+        // Formani qayta render qilish va yangi tanlangan mashinani inputga joylash
+        setFormConfig(prevConfig =>
+            prevConfig.map(configItem =>
+                configItem.name === 'car' // Agar 'car' bo'lsa, formConfig ni yangilang
+                    ? { ...configItem, options: [...cars, newOption], value: newCar.id }
+                    : configItem
+            )
+        );
+    };
+    
 
 
     const handleSubmit = async () => {
@@ -302,6 +350,21 @@ function AddOrder() {
                     }
                 </div>
             </main>
+
+            {openCustomerModal &&
+                <AddCustomerModal
+                    onSuccess={handleAddCustomerSuccess}
+                    open={openCustomerModal}
+                    onClose={() => setOpenCustomerModal(false)}
+                />}
+            {openCarsModal &&
+                <AddCustomerCarModal
+                    open={openCarsModal}
+                    onClose={() => setOpenCarsModal(false)}
+                    selectedCustomerId={selectedCustomerId}
+                    onSuccess={handleAddCarsSuccess}
+                />
+            }
         </div>
     );
 }
