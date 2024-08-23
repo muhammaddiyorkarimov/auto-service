@@ -11,14 +11,6 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
     const [selectedService, setSelectedService] = useState(null)
     const [selectedProduct, setSelectedProduct] = useState(null)
 
-    useEffect(() => {
-        const initialData = formConfig?.reduce((acc, field) => {
-            acc[field.name] = '';
-            return acc;
-        }, {});
-        setFormData(initialData);
-    }, [formConfig]);
-
 
     useEffect(() => {
         if (price > 0) {

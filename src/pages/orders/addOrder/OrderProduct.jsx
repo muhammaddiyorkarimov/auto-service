@@ -21,7 +21,6 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
 
     const { data: product } = useFetch(OurProduct.getProduct);
     const { data: productById } = useFetch(fetchProduct);
-    console.log(product)
 
     useEffect(() => {
         if (product) {

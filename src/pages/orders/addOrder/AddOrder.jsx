@@ -35,7 +35,6 @@ function AddOrder() {
 
     const navigate = useNavigate();
 
-    console.log(orderFormServices)
 
     const fetchCarsForCustomer = useCallback(() => {
         if (selectedCustomerId) {
@@ -51,14 +50,41 @@ function AddOrder() {
         if (customer) {
             setCustomers(customer.results);
         }
-        if (selectedCustomerId) {
-            if (customerCar) {
-                setCustomerCars(customerCar);
-            }
-        } else if (allCar) {
+        if (allCar) {
             setAllCars(allCar.results);
         }
     }, [customer, customerCar, selectedCustomerId, allCar]);
+    useEffect(() => {
+        if (selectedCustomerId && Array.isArray(customerCar)) {
+            const mappedCars = customerCar.map((car) => ({
+                value: car.id,
+                label: car.name,
+            }));
+            setCustomerCars(mappedCars);
+    
+            setFormConfig((prevConfig) =>
+                prevConfig.map((configItem) =>
+                    configItem.name === 'car'
+                        ? { ...configItem, options: mappedCars }
+                        : configItem
+                )
+            );
+        } else {
+            setCustomerCars([]);
+    
+            setFormConfig((prevConfig) =>
+                prevConfig.map((configItem) =>
+                    configItem.name === 'car'
+                        ? { ...configItem, options: [] }
+                        : configItem
+                )
+            );
+        }
+    }, [selectedCustomerId, customerCar]);
+    
+
+    console.log(customerCars)
+
 
     const handleCreateOpen = () => {
         setCreateOpen(true);
@@ -78,11 +104,12 @@ function AddOrder() {
                 label: 'Mashina',
                 name: 'car',
                 required: true,
-                options: allCars?.map((car) => ({ value: car.id, label: car.name })),
+                options: customerCars.length > 0 ? customerCars : [],
                 renderButton: () => (
                     <button className='add-itemBtn' onClick={() => console.log('Mashina qo\'shish tugmasi bosildi')}>+</button>
                 ),
             },
+            
             { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers' },
             { type: 'text', label: 'Tavsif', name: 'description' },
         ]);
@@ -193,7 +220,6 @@ function AddOrder() {
             setLoading(false);
         }
     };
-    console.log(formConfig)
 
 
     return (
