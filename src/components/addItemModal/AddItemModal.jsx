@@ -10,6 +10,8 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
   const [file, setFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
 
+  console.log(formData)
+
   useEffect(() => {
     const initialData = formConfig?.reduce((acc, field) => {
       acc[field.name] = '';

@@ -13,7 +13,6 @@ import ExpensesTypeService from './../../services/landing/expensesTypeSerive';
 import useFetch from '../../hooks/useFetch'
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material'
 import { Close, Edit } from '@mui/icons-material'
-import ExpensesType from './expensesType/ExpensesType'
 import AddItemModal from '../../components/addItemModal/AddItemModal'
 import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
@@ -45,11 +44,14 @@ function Expenses() {
 
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
     const { data: expensesType } = useFetch(ExpensesTypeService.getExpensesTypeService)
+
     useEffect(() => {
         if (data) {
             setProduct(data.results)
         }
     }, [data])
+
+    console.log(product)
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -101,11 +103,21 @@ function Expenses() {
     };
 
     const createProduct = async (item) => {
+        console.log(item)
+        const postProduct = {
+            type: item.name,
+            price: item.price,
+            description: item.description,
+        }
         try {
-            const newProduct = await ExpensesService.postExpensesService(item);
+            const newProduct = await ExpensesService.postExpensesService(postProduct);
+            console.log(newProduct);
             setProduct([...product, newProduct]);
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -211,8 +223,8 @@ function Expenses() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
-                expensesType={true}
-                name="Xarajat qo'shish"
+                    expensesType={true}
+                    name="Xarajat qo'shish"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}

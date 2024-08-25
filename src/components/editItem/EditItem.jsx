@@ -87,7 +87,6 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
         case 'select':
           return (
             <FormControl key={index} fullWidth margin="dense">
-              <InputLabel>{field.label}</InputLabel>
               <Autocomplete
                 options={field.options}
                 getOptionLabel={(option) => option.label}

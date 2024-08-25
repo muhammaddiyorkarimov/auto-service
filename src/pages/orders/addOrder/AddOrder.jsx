@@ -174,7 +174,6 @@ function AddOrder() {
     };
     const handleAddCarsSuccess = (newCar) => {
         const newOption = { value: newCar.id, label: newCar.name  };
-        console.log(newOption, newCar);
         setCustomerCars(prevOptions => {
             const updatedCars = [newOption, ...prevOptions];
             
