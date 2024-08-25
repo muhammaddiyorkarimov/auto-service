@@ -51,7 +51,6 @@ function Expenses() {
         }
     }, [data])
 
-    console.log(product)
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -103,7 +102,6 @@ function Expenses() {
     };
 
     const createProduct = async (item) => {
-        console.log(item)
         const postProduct = {
             type: item.name,
             price: item.price,
@@ -111,7 +109,6 @@ function Expenses() {
         }
         try {
             const newProduct = await ExpensesService.postExpensesService(postProduct);
-            console.log(newProduct);
             setProduct([...product, newProduct]);
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
@@ -138,9 +135,10 @@ function Expenses() {
     };
 
     const updateProduct = async (formData) => {
+        console.log(formData)
         try {
             const updatedData = {
-                name: formData.name.id ? formData.name.id : formData.name,
+                name: formData.name ? formData.name : formData.name,
                 price: formData.price,
                 description: formData.description,
             };
