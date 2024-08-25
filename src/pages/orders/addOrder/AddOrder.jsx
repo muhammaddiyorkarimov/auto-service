@@ -173,23 +173,24 @@ function AddOrder() {
         );
     };
     const handleAddCarsSuccess = (newCar) => {
-        const newOption = { value: newCar.id, label: newCar.model }; // Model nomi yoki boshqa kerakli maydonni tanlang
-    
-        // Yangi mashinani ro'yxatga qo'shish
-        setCars(prevOptions => [...prevOptions, newOption]);
-    
-        // Tanlangan mashina ID sini o'rnatish
-        setSelectedCarId(newCar.id);
-    
-        // Formani qayta render qilish va yangi tanlangan mashinani inputga joylash
-        setFormConfig(prevConfig =>
-            prevConfig.map(configItem =>
-                configItem.name === 'car' // Agar 'car' bo'lsa, formConfig ni yangilang
-                    ? { ...configItem, options: [...cars, newOption], value: newCar.id }
-                    : configItem
-            )
-        );
+        const newOption = { value: newCar.id, label: newCar.name  };
+        console.log(newOption, newCar);
+        setCustomerCars(prevOptions => {
+            const updatedCars = [newOption, ...prevOptions];
+            
+            setFormConfig(prevConfig =>
+                prevConfig.map(configItem =>
+                    configItem.name === 'car'
+                        ? { ...configItem, options: updatedCars, value: newCar.id }
+                        : configItem
+                )
+            );
+            
+            return updatedCars;
+        });
     };
+    
+    
     
 
 
