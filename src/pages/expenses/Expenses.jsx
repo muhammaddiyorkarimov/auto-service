@@ -13,7 +13,7 @@ import ExpensesTypeService from './../../services/landing/expensesTypeSerive';
 import useFetch from '../../hooks/useFetch'
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material'
 import { Close, Edit } from '@mui/icons-material'
-import ExpensesType from '../../components/expensesType/ExpensesType'
+import ExpensesType from './expensesType/ExpensesType'
 import AddItemModal from '../../components/addItemModal/AddItemModal'
 import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
@@ -197,7 +197,6 @@ function Expenses() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <ExpensesType />
                             <AddItemBtn name="Xarajat qo'shish" onClick={handleAdd} />
                         </div>
                     </div>
@@ -223,6 +222,7 @@ function Expenses() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
+                expensesType={true}
                 name="Xarajat qo'shish"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}

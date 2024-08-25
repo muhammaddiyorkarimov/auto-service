@@ -3,7 +3,7 @@ import axios from '../api'
 const Provider = {
     async getProvider(searchQuery = '') {
         try {
-            const response = await axios.get(`/main/providers/?${searchQuery}&order_by=-debt`)
+            const response = await axios.get(`/main/providers/?${searchQuery}&order_by=-created_at`)
             return response.data.results
         } catch (error) {
             throw error.response || new Error('Unknow error')

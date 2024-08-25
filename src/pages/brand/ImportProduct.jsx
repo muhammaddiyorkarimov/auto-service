@@ -59,6 +59,7 @@ function Import() {
 
     const { data: productData, loading: productLoading, error: productError } = useFetch(OurProduct.getProduct)
 
+    console.log(productById)
 
     const [formData, setFormData] = useState({});
     const [openDetail, setOpenDetail] = useState(false)
@@ -101,6 +102,26 @@ function Import() {
         setProviderOptions(prevOptions => [...prevOptions, newOption]);
         setSelectedProvider(newProvider.id);
     };
+
+
+    const handleGetNewProduct = (newProduct) => {
+        const updatedProducts = [newProduct, ...product];
+        setProduct(updatedProducts);
+    
+        setFormConfig(prevConfig => 
+            prevConfig.map(field => 
+                field.name === 'product'
+                    ? { ...field, options: updatedProducts.map(p => ({ value: p.id, label: p.name })) }
+                    : field
+            )
+        );
+        setProductById(newProduct.id);
+    };
+    
+    
+    
+    console.log(product)
+    
 
     const currentDate = new Date().toLocaleDateString();
 
@@ -156,7 +177,7 @@ function Import() {
             setFormData(prevFormData => ({ ...prevFormData, total }));
         };
         calculateTotal();
-    }, [formData.amount, formData.import_price, ]);
+    }, [formData.amount, formData.import_price,]);
 
 
 
@@ -204,18 +225,17 @@ function Import() {
         const newDebt = newOverallTotal - (formData.paidAmount || 0);
     }
 
-    console.log(formData)
     const handleSubmit = async () => {
         const providerId = selectedProvider;
-        
+
         if (!formData.paidAmount || formData.paidAmount <= 0) {
             alert("Iltimos, to'langan summani kiriting!");
             return;
         }
-        
+
         setLoading(true);
         const lastProductIndex = selectedProducts.length - 1;
-    
+
         const postData = selectedProducts.map((product, index) => ({
             debt: index === lastProductIndex ? formData?.debt : 0,
             product: product.product?.value,
@@ -224,9 +244,8 @@ function Import() {
             total: product.total,
             provider: providerId
         }));
-    
-        console.log(postData);
-    
+
+
         try {
             for (const productData of postData) {
                 const response = await ImportProduct.postImportProduct(productData);
@@ -236,17 +255,17 @@ function Import() {
                 }
             }
             alert('Data successfully posted');
-    
-            setSelectedProducts([]);
-            setSelectedProvider(null);
-            setFormData({});
+
+            // setSelectedProducts([]);
+            // setSelectedProvider(null);
+            // setFormData({});
         } catch (error) {
             alert(`Error posting data: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
-    
+
 
     const handleOpenAddProduct = () => {
         setAddOpen(true);
@@ -279,7 +298,7 @@ function Import() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             <FormControl key={index} fullWidth margin="dense" size="small" error={formSubmitted && !!validationErrors[field.name]}>
                                 <Autocomplete
-                                sx={{minWidth: '200px'}}
+                                    sx={{ minWidth: '200px' }}
                                     size="small"
                                     options={field.options || []}
                                     getOptionLabel={(option) => option.label}
@@ -316,7 +335,6 @@ function Import() {
             product.amount && product.import_price
         );
     };
-
 
 
     return (
@@ -424,6 +442,7 @@ function Import() {
                                                         <th>Maxsulot</th>
                                                         <th>Miqdor</th>
                                                         <th>Kelish summasi</th>
+                                                        <th>Sotish summasi</th>
                                                         <th>Umumiy</th>
                                                         <th>Holat</th>
                                                     </tr>
@@ -434,6 +453,7 @@ function Import() {
                                                             <td>{product.product?.label || ''}</td>
                                                             <td>{product.amount || ''}</td>
                                                             <td>{product.import_price || ''}</td>
+                                                            <td>{productById.export_price || ''}</td>
                                                             <td>{product.total || ''}</td>
                                                             <td style={{ textAlign: 'center' }}>
                                                                 <Button
@@ -459,7 +479,7 @@ function Import() {
                 </div>
             </main>
             {addOpen &&
-                <AddItemModal open={addOpen} onClose={() => setAddOpen(false)}/>
+                <AddItemModal providerById={providerById?.id} onSave={handleGetNewProduct} open={addOpen} onClose={() => setAddOpen(false)} />
             }
         </div>
     )

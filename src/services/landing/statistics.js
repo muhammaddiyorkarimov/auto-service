@@ -9,6 +9,19 @@ const Statistics = {
             throw error.response || new Error('Unknow error')
         }
     },
+    async pieChart(startDate, endDate) {
+        try {
+            const response = await axios.get(`/statistics/expenses/`, {
+                params: {
+                    start_date: startDate,
+                    end_date: endDate,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response || new Error('Unknown error');
+        }
+    },
     async getTopProducts() {
         try {
             const response = await axios.get(`/statistics/top-sale-products/`)
@@ -17,23 +30,23 @@ const Statistics = {
             throw error.response || new Error('Unknow error')
         }
     },
-    async getTopCustomers() {
-        try {
-            const response = await axios.get(`/statistics/top-customers/`)
-            return response.data
-        } catch (error) {
-            throw error.response || new Error('Unknow error')
-        }
-    },
+        async getTopCustomers() {
+    try {
+        const response = await axios.get(`/statistics/top-customers/`)
+        return response.data
+    } catch (error) {
+        throw error.response || new Error('Unknow error')
+    }
+},
     async getTopCalculate() {
-        try {
-            const response = await axios.get(`/statistics/calculate/`)
-            return response.data
-        } catch (error) {
-            throw error.response || new Error('Unknow error')
-        }
-    },
-    
+    try {
+        const response = await axios.get(`/statistics/calculate/`)
+        return response.data
+    } catch (error) {
+        throw error.response || new Error('Unknow error')
+    }
+},
+
 }
 
 export default Statistics

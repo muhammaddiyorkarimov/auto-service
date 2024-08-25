@@ -44,6 +44,27 @@ function SideBar() {
             <li>
               <hr />
               <div className="link-title">
+                <CiMoneyBill />
+                <span>Продажа</span>
+              </div>
+              <div className="li-items">
+                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                  <span></span>
+                  <NavLink to='/orders'>
+                    <span>• Заказы</span>
+                  </NavLink>
+                </div>
+                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                  <span></span>
+                  <NavLink to='/adding-order'>
+                    <span>• Открытие чека</span>
+                  </NavLink>
+                </div>
+              </div>
+            </li>
+            <li>
+              <hr />
+              <div className="link-title">
                 <LuWarehouse />
                 <span>Склад</span>
               </div>
@@ -65,27 +86,6 @@ function SideBar() {
                   <span></span>
                   <NavLink to='/product'>
                     <span>• Товары</span>
-                  </NavLink>
-                </div>
-              </div>
-            </li>
-            <li>
-              <hr />
-              <div className="link-title">
-                <CiMoneyBill />
-                <span>Продажа</span>
-              </div>
-              <div className="li-items">
-                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
-                  <NavLink to='/orders'>
-                    <span>• Заказы</span>
-                  </NavLink>
-                </div>
-                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
-                  <NavLink to='/adding-order'>
-                    <span>• Открытие чека</span>
                   </NavLink>
                 </div>
               </div>

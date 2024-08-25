@@ -154,13 +154,19 @@ function Income() {
     }
   };
 
+  const unitOptions = [
+    {id: 1, name: 'Dona'},
+    {id: 2, name: 'Komplekt'},
+    {id: 3, name: 'Litr'},
+]
+
 
   const handleAdd = () => {
     setFormConfig([
       { type: 'text', label: 'Kod', name: 'code' },
       { type: 'text', label: 'Nomi', name: 'name' },
       { type: 'number', label: 'Miqdori', name: 'amount' },
-      { type: 'text', label: 'Birlik', name: 'unit' },
+      { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
       { type: 'number', label: 'Import narxi', name: 'import_price' },
       { type: 'number', label: 'Eksport narxi', name: 'export_price' },
       { type: 'number', label: 'Chegirma', name: 'max_discount' },
@@ -176,7 +182,7 @@ function Income() {
       { type: 'text', label: 'Kod', name: 'code', value: item.code },
       { type: 'text', label: 'Nomi', name: 'name', value: item.name },
       { type: 'number', label: 'Miqdori', name: 'amount', value: item.amount },
-      { type: 'text', label: 'Birlik', name: 'unit', value: item.unit },
+      { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name})), value: item.unit},
       { type: 'number', label: 'Import narxi', name: 'import_price', value: item.import_price },
       { type: 'number', label: 'Eksport narxi', name: 'export_price', value: item.export_price },
       { type: 'number', label: 'Chegirma', name: 'max_discount', value: item.max_discount },

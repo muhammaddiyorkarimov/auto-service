@@ -15,6 +15,8 @@ function DetailView() {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  console.log(data)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,6 +47,8 @@ function DetailView() {
     setOpenModal(false);
   };
 
+  console.log(data)
+
   const today = new Date().toLocaleDateString()
 
   return (
@@ -69,13 +73,52 @@ function DetailView() {
         height: 1px;
         background-color: black;
       }
+        .oreder-details-wrapper table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.oreder-details-wrapper table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.oreder-details-wrapper table thead th {
+    text-align: left;
+    vertical-align: top;
+}
+
+.oreder-details-wrapper table thead th[rowspan="2"] {
+    width: 20%;
+}
+
+.oreder-details-wrapper table thead td {
+    text-align: left;
+}
+
+.oreder-details-wrapper table thead td {
+    width: 30%;
+}
+
+.oreder-details-wrapper table tbody th, 
+.oreder-details-wrapper table tbody td {
+    text-align: left;
+}
+
+.oreder-details-wrapper table th p,
+.oreder-details-wrapper table td p {
+    font-weight: 400;
+    margin: 0;
+}
+
     }
   `}
       </style>
       <SideBar />
       <main>
         <Navbar title="To'liq ma'lumotni ko'rish" />
-        <section className="details-wrapper">
+        <section className="oreder-details-wrapper">
           {loading ? <Loader /> : error ? <p>{error}</p> : (
             <Card>
               <CardContent className="card-content">
@@ -86,7 +129,7 @@ function DetailView() {
                 <Divider style={{ margin: '20px 0' }} />
 
                 <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
-                <Typography variant="subtitle1"><strong>Umumiy:</strong> {data.total}</Typography>
+                <Typography variant="subtitle1"><strong>Umumiy:</strong> {data.paid + data.debt}</Typography>
                 <Typography variant="subtitle1"><strong>To'langan:</strong> {data.paid}</Typography>
                 <Typography variant="subtitle1"><strong>Qarz:</strong> {data.debt}</Typography>
 
@@ -95,71 +138,71 @@ function DetailView() {
                 <Typography variant="subtitle1"><strong>Ism:</strong> {data.customer?.first_name}</Typography>
                 <Typography variant="subtitle1"><strong>Familiya:</strong> {data.customer?.last_name}</Typography>
                 <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
+                <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="h6" className="typography-section">Maxsulotlar</Typography>
-                    <Divider style={{ margin: '10px 0' }} />
-                    <TableContainer component={Paper} style={{ borderRadius: 0 }}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Nomi</TableCell>
-                            <TableCell>Miqdor</TableCell>
-                            <TableCell>Umumiy</TableCell>
-                            <TableCell>Chegirma</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {data?.products?.map((product, index) => (
-                            <TableRow key={index} onClick={() => navigate('/product')}>
-                              <TableCell>{product.product?.name}</TableCell>
-                              <TableCell>{product.amount}</TableCell>
-                              <TableCell>{product.total}</TableCell>
-                              <TableCell>{product.discount}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="h6" className="typography-section">Xizmatlar</Typography>
-                    <Divider style={{ margin: '10px 0' }} />
-                    <TableContainer component={Paper} style={{ borderRadius: 0 }}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Xodim</TableCell>
-                            <TableCell>Xizmat qismi</TableCell>
-                            <TableCell>Xizmat nomi</TableCell>
-                            <TableCell>Umumiy</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {data?.services?.map((service, index) => (
-                            <TableRow key={index} onClick={() => navigate('/auto-services')}>
-                              <TableCell>{service.staff}</TableCell>
-                              <TableCell>{service.part}</TableCell>
-                              <TableCell>{service.service?.name}</TableCell>
-                              <TableCell>{service.total}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                </Grid>
+                <table className="oreder-details-wrapper">
+                  <thead>
+                    <tr>
+                      <th style={{ border: '1px solid black' }} rowspan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
+                      <th style={{ border: '1px solid black' }} rowspan="2">Vin code: <p>{data?.car?.code}</p></th>
+                    </tr>
+                    <tr>
+                      <th style={{ border: '1px solid black' }}>Davlat raqami: <p>{data?.car?.state_number}</p></th>
+                      <th style={{ border: '1px solid black' }}>Yurgan kilometri: <p>{data?.car_kilometers} km</p></th>
+                    </tr>
+                  </thead>
+                </table>
+                <table>
+                  {data?.products?.length > 0 &&
+                    <>
+                      <tr>
+                        <th style={{ border: '1px solid black' }} colspan="4">Maxsulotlar</th>
+                      </tr>
+                      <tr>
+                        <th style={{ border: '1px solid black' }}>Nomi</th>
+                        <th style={{ border: '1px solid black' }}>Miqdor</th>
+                        <th style={{ border: '1px solid black' }}>Umumiy</th>
+                        <th style={{ border: '1px solid black' }}>Chegirma</th>
+                      </tr>
+                      {data?.products?.map((product, index) => (
+                        <tr key={index}>
+                          <td style={{ border: '1px solid black' }}>{product.product?.name}</td>
+                          <td style={{ border: '1px solid black' }}>{product.amount}</td>
+                          <td style={{ border: '1px solid black' }}>{product.total}</td>
+                          <td style={{ border: '1px solid black' }}>{product.discount}</td>
+                        </tr>
+                      ))}
+                    </>
+                  }
+                </table>
+                <table>
+                  <tr>
+                    <th colspan="4">Xizmatlar</th>
+                  </tr>
+                  <tr>
+                    <th style={{ border: '1px solid black' }}>Xodim</th>
+                    <th style={{ border: '1px solid black' }}>Xizmat qismi</th>
+                    <th style={{ border: '1px solid black' }}>Xizmat nomi</th>
+                    <th style={{ border: '1px solid black' }}>Umumiy</th>
+                  </tr>
+                  {data?.services?.map((service, index) => (
+                    <tr key={index}>
+                      <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
+                      <td style={{ border: '1px solid black' }}>{service.part}</td>
+                      <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
+                      <td style={{ border: '1px solid black' }}>{service.total}</td>
+                    </tr>
+                  ))}
+                </table>
               </CardContent>
             </Card>
           )}
         </section>
       </main>
 
-      {/* Modal for print preview */}
       <Dialog open={openModal} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>Buyurtma tafsilotlari</DialogTitle>
-        <DialogContent dividers>
+        <DialogContent className='oreder-details-wrapper' dividers>
           <CardContent>
             <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
             <Typography variant="subtitle1"><strong>Umumiy:</strong> {data.total}</Typography>
@@ -171,61 +214,59 @@ function DetailView() {
             <Typography variant="subtitle1"><strong>Ism:</strong> {data.customer?.first_name}</Typography>
             <Typography variant="subtitle1"><strong>Familiya:</strong> {data.customer?.last_name}</Typography>
             <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h6" className="typography-section">Maxsulotlar</Typography>
-                <Divider style={{ margin: '10px 0' }} />
-                <TableContainer component={Paper} style={{ borderRadius: 0 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Nomi</TableCell>
-                        <TableCell>Miqdor</TableCell>
-                        <TableCell>Umumiy</TableCell>
-                        <TableCell>Chegirma</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data?.products?.map((product, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{product.product?.name}</TableCell>
-                          <TableCell>{product.amount}</TableCell>
-                          <TableCell>{product.total}</TableCell>
-                          <TableCell>{product.discount}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h6" className="typography-section">Xizmatlar</Typography>
-                <Divider style={{ margin: '10px 0' }} />
-                <TableContainer component={Paper} style={{ borderRadius: 0 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Xizmat qismi</TableCell>
-                        <TableCell>Xizmat nome</TableCell>
-                        <TableCell>Umumiy</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data?.services?.map((service, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{service.part}</TableCell>
-                          <TableCell>{service.service?.name}</TableCell>
-                          <TableCell>{service.total}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            </Grid>
+            <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
+            <table className="oreder-details-wrapper">
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid black' }} rowspan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
+                  <th style={{ border: '1px solid black' }} rowspan="2">Vin code: <p>{data?.car?.code}</p></th>
+                </tr>
+                <tr>
+                  <th style={{ border: '1px solid black' }}>Davlat raqami: <p>{data?.car?.state_number}</p></th>
+                  <th style={{ border: '1px solid black' }}>Yurgan kilometri: <p>{data?.car_kilometers} km</p></th>
+                </tr>
+              </thead>
+            </table>
+            {data?.products?.length > 0 && <table>
+              <tr>
+                <th style={{ border: '1px solid black' }} colspan="4">Maxsulotlar</th>
+              </tr>
+              <tr>
+                <th style={{ border: '1px solid black' }}>Nomi</th>
+                <th style={{ border: '1px solid black' }}>Miqdor</th>
+                <th style={{ border: '1px solid black' }}>Umumiy</th>
+                <th style={{ border: '1px solid black' }}>Chegirma</th>
+              </tr>
+              {data?.products?.map((product, index) => (
+                <tr key={index}>
+                  <td style={{ border: '1px solid black' }}>{product.product?.name}</td>
+                  <td style={{ border: '1px solid black' }}>{product.amount}</td>
+                  <td style={{ border: '1px solid black' }}>{product.total}</td>
+                  <td style={{ border: '1px solid black' }}>{product.discount}</td>
+                </tr>
+              ))}
+            </table>}
+            <table>
+              <tr>
+                <th style={{ border: '1px solid black' }} colspan="4">Xizmatlar</th>
+              </tr>
+              <tr>
+                <th style={{ border: '1px solid black' }}>Xodim</th>
+                <th style={{ border: '1px solid black' }}>Xizmat qismi</th>
+                <th style={{ border: '1px solid black' }}>Xizmat nomi</th>
+                <th style={{ border: '1px solid black' }}>Umumiy</th>
+              </tr>
+              {data?.services?.map((service, index) => (
+                <tr key={index}>
+                  <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
+                  <td style={{ border: '1px solid black' }}>{service.part}</td>
+                  <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
+                  <td style={{ border: '1px solid black' }}>{service.total}</td>
+                </tr>
+              ))}
+            </table>
           </CardContent>
-          <div className="print-info" style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: '100px' }}>
+          <div className="print-info">
             <div>{today}</div>
             <div className='line'></div>
             <div className='line'></div>

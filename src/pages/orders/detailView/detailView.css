@@ -73,3 +73,41 @@
     background-color: black;
     color: black;
 }
+
+.oreder-details-wrapper table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.oreder-details-wrapper table, th, td {
+    padding: 5px;
+}
+
+.oreder-details-wrapper table thead th {
+    text-align: left;
+    vertical-align: top;
+}
+
+.oreder-details-wrapper table thead th[rowspan="2"] {
+    width: 20%;
+}
+
+.oreder-details-wrapper table thead td {
+    text-align: left;
+}
+
+.oreder-details-wrapper table thead td {
+    width: 30%;
+}
+
+.oreder-details-wrapper table tbody th, 
+.oreder-details-wrapper table tbody td {
+    text-align: left;
+}
+
+.oreder-details-wrapper table th p,
+.oreder-details-wrapper table td p {
+    font-weight: 400;
+    margin: 0;
+}

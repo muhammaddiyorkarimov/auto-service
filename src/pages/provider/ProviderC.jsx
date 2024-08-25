@@ -17,6 +17,7 @@ import Filter from './../../helpers/Filter';
 import { useNavigate } from 'react-router-dom';
 import useQueryParams from '../../helpers/useQueryParams';
 import CustomPagination from '../../helpers/CustomPagination';
+import AddItemBtn from '../../components/addItemBtn/AddItemBtn';
 
 function ProviderC() {
     const headers = tableHeaders['provider'];
@@ -33,6 +34,7 @@ function ProviderC() {
     const [formConfig, setFormConfig] = useState([]);
     const [editFormConfig, setEditFormConfig] = useState([]);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
+    
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
@@ -119,13 +121,9 @@ function ProviderC() {
     const createProduct = async (item) => {
         try {
             const newProduct = await Provider.postProvider(item);
-            setProduct([...product, newProduct]);
+            setProduct((prevProducts) => [...prevProducts, newProduct]); // Yangi mahsulotni jadvalga qo'shish
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -133,6 +131,7 @@ function ProviderC() {
             setAddOpen(false);
         }
     };
+    
 
     // Handle editing a product
     const handleEdit = (item) => {
@@ -160,9 +159,6 @@ function ProviderC() {
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
             setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -194,6 +190,7 @@ function ProviderC() {
     };
 
 
+
     return (
         <div className='brand'>
             <SideBar />
@@ -213,7 +210,7 @@ function ProviderC() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddProvider />
+                            <AddItemBtn onClick={handleAdd} name="Ta'minotchi"/>
                         </div>
                     </div>
                     <section className="details-wrapper">

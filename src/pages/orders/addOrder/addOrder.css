@@ -116,6 +116,7 @@ main section {
 
 .order-wrapper {
     display: flex;
+    align-items: end !important;
     flex-direction: column;
     margin-top: 40px;
     gap: 20px;
@@ -126,10 +127,25 @@ main section {
     margin-top: 20px;
 }
 
+.order-wrapper .order-product .header {
+    width: 100%;
+    display: flex !important;
+    align-items: end !important;
+    justify-content: end;
+}
+
 .order-wrapper .order-service {
     width: 100%;
     margin-top: 20px;
 }
+
+.order-wrapper .order-service .header {
+    width: 100%;
+    display: flex !important;
+    align-items: end !important;
+    justify-content: end;
+}
+
 
 .order-product-content {
     display: flex;

@@ -1,7 +1,8 @@
+import '../expenses.css'
 import React, { useState } from 'react';
-import AddItemBtn from '../addItemBtn/AddItemBtn';
+import AddItemBtn from '../../../components/addItemBtn/AddItemBtn';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Alert, AlertTitle, Snackbar } from '@mui/material';
-import ExpensesTypeService from '../../services/landing/expensesTypeSerive';
+import ExpensesTypeService from '../../../services/landing/expensesTypeSerive';
 
 function ExpensesType() {
     const [open, setOpen] = useState(false);
@@ -93,7 +94,7 @@ function ExpensesType() {
                     <AlertTitle>{error}</AlertTitle>
                 </Alert>
             )}
-            <AddItemBtn name="Xarajat turi qo'shish" onClick={() => setOpen(true)} />
+            <AddItemBtn className='flex-expenses-type' onClick={() => setOpen(true)} />
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
                     <DialogTitle>Xarajat turi qo'shish</DialogTitle>

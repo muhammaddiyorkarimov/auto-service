@@ -175,7 +175,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
         <>
             {renderFields()}
             <div style={{ marginTop: '10px' }}>
-                <Button variant="contained" color="primary" onClick={handleSave}>Saqlash</Button>
+                {formConfig?.length > 0 && <Button variant="contained" color="primary" onClick={handleSave}>Saqlash</Button>}
             </div>
         </>
     );

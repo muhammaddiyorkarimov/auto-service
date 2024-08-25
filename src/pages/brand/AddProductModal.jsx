@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import OurProduct from '../../services/landing/ourProduct';
 import Provider from './../../services/landing/provider';
 
-function AddItemModal({ name, open, onClose }) {
+function AddItemModal({ name, open, onClose, onSave, providerById }) {
     const [formData, setFormData] = useState({});
     const [file, setFile] = useState(null);
     const [validationErrors, setValidationErrors] = useState({});
@@ -15,8 +15,13 @@ function AddItemModal({ name, open, onClose }) {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [formConfig, setFormConfig] = useState([]);
 
+    const unitOptions = [
+        {id: 1, name: 'Dona'},
+        {id: 2, name: 'Komplekt'},
+        {id: 3, name: 'Litr'},
+    ]
+    
     useEffect(() => {
-        // Provider ma'lumotlarini olish
         const fetchProvider = async () => {
             try {
                 const response = await Provider.getProvider();
@@ -26,13 +31,10 @@ function AddItemModal({ name, open, onClose }) {
                     { type: 'text', label: 'Nomi', name: 'name', required: true },
                     { type: 'number', label: 'Miqdori', name: 'amount', required: true },
                     { type: 'number', label: 'Min miqdor', name: 'min_amount', required: true },
-                    { type: 'text', label: 'Birlik', name: 'unit' },
+                    { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
                     { type: 'number', label: 'Import narxi', name: 'import_price', required: true },
                     { type: 'number', label: 'Eksport narxi', name: 'export_price' },
                     { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
-                    {
-                        type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: response?.map(p => ({ value: p.id, label: p.name }))
-                    }
                 ]);
             } catch (error) {
                 console.error("Ta’minotchilarni olishda xatolik:", error);
@@ -59,21 +61,22 @@ function AddItemModal({ name, open, onClose }) {
                 errors[field.name] = `${field.label} maydoni to'ldirilishi shart!`;
             }
         });
-
+    
         if (Object.keys(errors).length > 0) {
             setValidationErrors(errors);
             return;
         }
-
+    
         try {
-            const newProduct = await OurProduct.postProduct(formData);
+            // `providerById` ni `formData` ga qo'shing
+            const dataToSend = { ...formData, provider: providerById };
+            const newProduct = await OurProduct.postProduct(dataToSend);
+            console.log(newProduct);
+            onSave(newProduct);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
-            const updatedProvider = await Provider.getProvider(); // Yangi ma'lumotlarni olish
+            const updatedProvider = await Provider.getProvider();
             setProvider(updatedProvider);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -81,6 +84,7 @@ function AddItemModal({ name, open, onClose }) {
             onClose();
         }
     };
+    
 
     const renderFields = () => {
         return formConfig?.map((field, index) => {

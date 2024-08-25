@@ -41,7 +41,11 @@ function OrderingService({onTotalChange, onSave }) {
 
     const handleAddService = () => {
         setFormConfig([
-            { type: 'select', label: 'Xodim', name: 'staff', options: staffData?.map(p => ({ value: p.id, label: p.username })), required: true },
+            { type: 'select', label: 'Xodim', name: 'staff', options: staffData?.map(p => ({
+                value: p.id,
+                label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
+              }))
+              , required: true },
             { type: 'select', label: 'Xizmat', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
             { type: 'number', label: 'Part', name: 'part', required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },

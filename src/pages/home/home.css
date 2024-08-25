@@ -64,10 +64,20 @@ main {
     justify-content: space-between;
     align-items: start;
     gap: 20px;
+    margin-bottom: 10px;
 }
 
 .home main .extra-items .main .active-reports-wrapper {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: aliceblue;
+}
+
+.home main .extra-items .main .pie-chart-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -84,12 +94,7 @@ main {
 .home main .extra-items .main .active-reports .title {
     color: var(--text-color);
 }
-
-.home main .extra-items .main .pie-chart {
-    border-radius: 8px;
-    background-color: aliceblue;
-    flex: 1;
-}
+.home main .extra-items .main .pie-chart-container .title
 
 .home main .extra-items .footer .cards {
     width: 100%;

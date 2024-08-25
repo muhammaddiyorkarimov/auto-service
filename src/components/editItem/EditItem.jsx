@@ -14,20 +14,20 @@ import Autocomplete from '@mui/material/Autocomplete';
 function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   const [formData, setFormData] = useState(initialData || {});
   const [file, setFile] = useState(null);
-  console.log(formConfig)
 
   useEffect(() => {
     setFormData(initialData || {});
   }, [initialData]);
 
+  console.log(initialData);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     const updatedFormData = { ...formData, [name]: value };
 
-    // Recalculate the total if debt changes
     if (name === 'debt') {
         const total = (formData.import_price * formData.amount) - Number(value);
-        updatedFormData.total = total; // Update total dynamically
+        updatedFormData.total = total;
     }
 
     setFormData(updatedFormData);
@@ -45,7 +45,7 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
 
   const handleSave = () => {
     onSave(formData);
-    onClose(); // Close the dialog after saving
+    onClose();
   };
 
   const renderFields = () => {

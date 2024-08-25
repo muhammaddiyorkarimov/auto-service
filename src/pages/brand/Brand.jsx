@@ -235,9 +235,6 @@ function Brand() {
                                 options={sortedOptions}
                             />
                         </div>
-                        <div className="header-items-add">
-                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
-                        </div>
                     </div>
                     <section className="details-wrapper">
                         <DataTable

@@ -7,10 +7,16 @@ function AddItemBtn({ name, onClick }) {
         <Button
             variant="outlined"
             color="primary"
-            startIcon={<AddIcon />}
             onClick={onClick}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: name ? 'center' : 'start',
+                textAlign: 'center',
+                
+            }}
         >
-            {name}
+            {name || <AddIcon />}
         </Button>
     );
 }

@@ -1,9 +1,11 @@
+import './addItemModal.css'
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, FormControl, FormHelperText, IconButton, Input } from '@mui/material';
 import { AddPhotoAlternate } from '@mui/icons-material';
 import Autocomplete from '@mui/material/Autocomplete';
+import ExpensesType from '../../pages/expenses/expensesType/ExpensesType';
 
-function AddItemModal({ name, open, onClose, onSave, formConfig }) {
+function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType }) {
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
@@ -80,24 +82,29 @@ function AddItemModal({ name, open, onClose, onSave, formConfig }) {
           );
         case 'select':
           return (
-            <FormControl key={index} fullWidth margin="dense" size="small" error={!!validationErrors[field.name]}>
-              <Autocomplete
-                options={field.options || []} // Default to empty array if undefined
-                getOptionLabel={(option) => option.label}
-                value={field?.options?.find(option => option.value === formData[field.name]) || null}
-                onChange={(event, newValue) => {
-                  setFormData({ ...formData, [field.name]: newValue ? newValue.value : '' });
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label={field.label}
-                    error={!!validationErrors[field.name]}
-                    helperText={validationErrors[field.name]}
-                  />
-                )}
-              />
-            </FormControl>
+            <FormControl className='flex-container' fullWidth margin="dense" size="small" error={!!validationErrors[field.name]}>
+      <div className='flex-content'>
+        <Autocomplete
+          size='small'
+          options={field.options || []}
+          getOptionLabel={(option) => option.label}
+          value={field?.options?.find(option => option.value === formData[field.name]) || null}
+          onChange={(event, newValue) => {
+            setFormData({ ...formData, [field.name]: newValue ? newValue.value : '' });
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={field.label}
+              error={!!validationErrors[field.name]}
+              helperText={validationErrors[field.name]}
+              fullWidth // Ensure the TextField takes up full width
+            />
+          )}
+        />
+        {expensesType ? <ExpensesType /> : null}
+      </div>
+    </FormControl>
           );
         case 'file':
           return (
@@ -117,13 +124,13 @@ function AddItemModal({ name, open, onClose, onSave, formConfig }) {
       }
     });
   };
-  
+
 
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="dialog-wrapper">
         <DialogTitle>{name ? name : 'Yangi maxsulot qo\'shish'}</DialogTitle>
-        <DialogContent className='dialog-content'>{renderFields()}</DialogContent>
+        <DialogContent>{renderFields()}</DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Bekor qilish</Button>
           <Button onClick={handleSave}>Saqlash</Button>
