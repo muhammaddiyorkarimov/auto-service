@@ -99,15 +99,22 @@ function Orders() {
     };
 
     const handleEdit = (item) => {
-        setCurrentItem(item);
+        const computedTotal = item.debt + item.paid;
+        const updatedItem = {
+            ...item,
+            total: computedTotal
+        };
+        setCurrentItem(updatedItem);
         setFormConfig([
             { type: 'number', label: "To'langan", name: 'paid', value: item.paid },
             { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
             { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
-            { type: 'number', label: 'Umumiy', name: 'total', value: item.total },
+            { type: 'number', label: 'Umumiy', name: 'total', value: computedTotal },
         ]);
+        
         setEditOpen(true);
     };
+    
 
     const updateProduct = async (updatedData) => {
         const formattedData = {
@@ -122,9 +129,6 @@ function Orders() {
             setOrdersC(ordersC.map(o => o.id === currentItem.id ? updatedOrder : o));
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -160,10 +164,11 @@ function Orders() {
                 <td>{item.paid}</td>
                 <td>{item.debt}</td>
                 <td>{item.customer ? item.customer.first_name + ' ' + item.customer.last_name : '0'}</td>
-                <td>{item.total}</td>
+                <td>{item.debt + item.paid}</td>
             </>
         )
     }));
+    console.log(formattedData);
 
 
     return (

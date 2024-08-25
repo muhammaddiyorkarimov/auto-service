@@ -206,7 +206,6 @@ function Income() {
     try {
       await OurProduct.deleteProduct(currentIncome);
       setIncome(income.filter(c => c.id !== currentIncome));
-      window.location.reload();
     } catch (error) {
       setErrorMsg(error.message || 'Xatolik yuz berdi');
       setSnackbarOpen(true);

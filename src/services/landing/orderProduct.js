@@ -21,7 +21,6 @@ const OrderProducts = {
     },
 
     async postOrders(item) {
-        console.log(item)
         try {
             const { data } = await axios.post('/stats/order-products/', item);
             return data;
@@ -40,7 +39,6 @@ const OrderProducts = {
     },
 
     async putOrdersById(id, item) {
-        console.log(item)
         try {
             const { data } = await axios.patch(`/stats/order-products/${id}/`, item);
             return data;

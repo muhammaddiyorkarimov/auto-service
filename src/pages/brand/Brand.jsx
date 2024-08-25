@@ -12,7 +12,7 @@ import AddItemBtn from '../../components/addItemBtn/AddItemBtn';
 import AddItemModal from '../../components/addItemModal/AddItemModal';
 import OurProduct from '../../services/landing/ourProduct';
 import Provider from './../../services/landing/provider';
-import EditItem from '../../components/editItem/EditItem';
+import EditItem from './EditItem';
 import { Close, Edit } from '@mui/icons-material';
 import SearchInput from './../../helpers/SearchInput';
 import Filter from './../../helpers/Filter';
@@ -180,9 +180,6 @@ function Brand() {
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
             setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -234,6 +231,9 @@ function Brand() {
                                 onFilterChange={handleFilterChange}
                                 options={sortedOptions}
                             />
+                        </div>
+                        <div className="header-items-add">
+                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">

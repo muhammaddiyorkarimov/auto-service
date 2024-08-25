@@ -59,7 +59,6 @@ function Import() {
 
     const { data: productData, loading: productLoading, error: productError } = useFetch(OurProduct.getProduct)
 
-    console.log(productById)
 
     const [formData, setFormData] = useState({});
     const [openDetail, setOpenDetail] = useState(false)
@@ -120,7 +119,6 @@ function Import() {
     
     
     
-    console.log(product)
     
 
     const currentDate = new Date().toLocaleDateString();

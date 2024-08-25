@@ -17,7 +17,6 @@ function Login() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user, loading, error } = useSelector(state => state.auth)
-    console.log(user)
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {

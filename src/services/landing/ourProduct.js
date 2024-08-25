@@ -38,10 +38,8 @@ const OurProduct = {
         }
     },
     async putProductById(id, item) {
-        console.log(item, id);
         try {
             const { data } = await axios.patch(`/main/products/${id}/`, item);
-            console.log(item, id);
 
             return data;
         } catch (error) {

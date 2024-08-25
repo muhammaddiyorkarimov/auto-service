@@ -133,7 +133,6 @@ function Employees() {
     }))
 
     const handleDelete = (item) => {
-        console.log(item.id)
         setCurrentItem(item.id);
         setDeleteOpen(true);
     };

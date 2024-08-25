@@ -15,7 +15,6 @@ function DetailView() {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  console.log(data)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +46,6 @@ function DetailView() {
     setOpenModal(false);
   };
 
-  console.log(data)
 
   const today = new Date().toLocaleDateString()
 

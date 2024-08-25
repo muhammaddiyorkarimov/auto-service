@@ -24,7 +24,6 @@ const ImportProduct = {
     async postImportProduct(item) {
         try {
             const { data } = await axios.post('/main/import-products/', item);
-            console.log(item);
             return data;
         } catch (error) {
             throw error;
@@ -41,7 +40,6 @@ const ImportProduct = {
     async putImportProduct(id, item) {
         try {
             const { data } = await axios.patch(`/main/import-products/${id}/`, item);
-            console.log(item, id);
 
             return data;
         } catch (error) {

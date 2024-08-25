@@ -19,23 +19,19 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
     setFormData(initialData || {});
   }, [initialData]);
 
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    let updatedFormData = { ...formData, [name]: value };
+    const updatedFormData = { ...formData, [name]: value };
 
-    if (name === 'paid' || name === 'debt') {
-      const paid = Number(updatedFormData.paid || 0);
-      // const debt = Number(updatedFormData.debt || 0);
-
-      if (paid >= (formData.total || 0)) {
-        updatedFormData.debt = 0;
-      } else {
-        updatedFormData.debt = (formData.total || 0) - paid;
-      }
-    }
+    // if (name === 'debt') {
+    //     const total = (formData.import_price * formData.amount) - Number(value);
+    //     updatedFormData.total = total;
+    // }
 
     setFormData(updatedFormData);
-  };
+};
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

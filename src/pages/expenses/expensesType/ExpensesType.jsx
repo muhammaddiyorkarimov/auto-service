@@ -48,9 +48,6 @@ function ExpensesType() {
             setSuccess(true);
             setOpen(false);
             setSnackbarOpen(true)
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             setError(true);
 

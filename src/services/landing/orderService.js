@@ -41,7 +41,6 @@ const OrderServices = {
     },
 
     async putOrdersById(id, item) {
-        console.log(item)
         try {
             const { data } = await axios.patch(`/stats/order-services/${id}/`, item);
             return data;

@@ -218,7 +218,6 @@ function OurProduct() {
         }
     };
 
-    console.log(ourProduct)
 
     const formattedData = ourProduct?.map((item, index) => ({
         ...item,

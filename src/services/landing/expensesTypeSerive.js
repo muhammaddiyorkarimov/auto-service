@@ -24,7 +24,6 @@ const ExpensesTypeService = {
     async postExpensesTypeService(item) {
         try {
             const { data } = await axios.post('/stats/expense-types/', item);
-            console.log(item);
             return data;
         } catch (error) {
             throw error;
@@ -41,8 +40,6 @@ const ExpensesTypeService = {
     async putExpensesTypeService(id, item) {
         try {
             const { data } = await axios.patch(`/stats/expense-types/${id}/`, item);
-            console.log(item, id);
-
             return data;
         } catch (error) {
             throw error;

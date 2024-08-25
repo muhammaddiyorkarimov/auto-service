@@ -174,7 +174,6 @@ function AddOrder() {
     };
     const handleAddCarsSuccess = (newCar) => {
         const newOption = { value: newCar.id, label: newCar.model }; // Model nomi yoki boshqa kerakli maydonni tanlang
-        CONSOLE.LOG(newOption)
     
         // Yangi mashinani ro'yxatga qo'shish
         setCars(prevOptions => [...prevOptions, newOption]);

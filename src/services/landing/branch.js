@@ -37,7 +37,6 @@ const Branch = {
     async putBranchById(id, item) {
         try {
             const { data } = await axios.patch(`/main/branchs/${id}/`, item);
-            console.log(item, id);
 
             return data;
         } catch (error) {

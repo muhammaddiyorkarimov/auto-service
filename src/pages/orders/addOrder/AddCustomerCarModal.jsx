@@ -65,17 +65,14 @@ function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
 
         try {
             const response = await CarsService.postCars(postData);
-            console.log(response)
             if (response) {
                 setSuccess(true);
                 onClose();
                 onSuccess(response);
-                console.log(response);
             } else {
                 setError(true);
             }
         } catch (error) {
-            console.log(error.response.data.customer[0] === "This field may not be null.")
             if (error.response.data.customer[0] === "This field may not be null.") {
                 setError("Iltimos, mijozni tanlang");
             }

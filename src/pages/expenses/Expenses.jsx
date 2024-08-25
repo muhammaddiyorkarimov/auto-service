@@ -45,7 +45,6 @@ function Expenses() {
 
     const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
     const { data: expensesType } = useFetch(ExpensesTypeService.getExpensesTypeService)
-    console.log(data)
     useEffect(() => {
         if (data) {
             setProduct(data.results)
@@ -102,16 +101,11 @@ function Expenses() {
     };
 
     const createProduct = async (item) => {
-        console.log(item)
         try {
             const newProduct = await ExpensesService.postExpensesService(item);
             setProduct([...product, newProduct]);
             setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
             setSnackbarOpen(true);
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -132,7 +126,6 @@ function Expenses() {
     };
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
                 name: formData.name.id ? formData.name.id : formData.name,
@@ -147,9 +140,6 @@ function Expenses() {
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
             setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
             setSnackbarOpen(true);
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
         } catch (error) {
             setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
             setSnackbarOpen(true);
@@ -178,7 +168,6 @@ function Expenses() {
 
 
     const handleRowClick = (item) => {
-        console.log(item)
         setCurrentItem(item);
         setRowDetailOpen(true);
     };

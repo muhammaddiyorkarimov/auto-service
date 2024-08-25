@@ -1,3 +1,4 @@
+// Import necessary modules and components
 import React, { useState } from 'react';
 import ActiveReports from '../../components/activeReports/ActiveReports';
 import PieChartC from '../../components/pieChart/PieChart';
@@ -66,29 +67,28 @@ function Home() {
                 </div>
               ))}
               <div className="filter-section">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                sx={{marginRight: '20px'}}
-                  label="Start Date"
-                  value={startDate}
-                  onChange={(newValue) => setStartDate(newValue)}
-                  format="YYYY-MM-DD"
-                  maxDate={dayjs().endOf('month')}
-                />
-                <DatePicker
-                  label="End Date"
-                  value={endDate}
-                  onChange={(newValue) => setEndDate(newValue)}
-                  format="YYYY-MM-DD"
-                  minDate={startDate}
-                  maxDate={dayjs().endOf('month')}
-                />
-              </LocalizationProvider>
-            </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{marginRight: '20px'}}
+                    label="Start Date"
+                    value={startDate}
+                    onChange={(newValue) => setStartDate(newValue)}
+                    format="YYYY-MM-DD"
+                    maxDate={dayjs().endOf('month')}
+                  />
+                  <DatePicker
+                    label="End Date"
+                    value={endDate}
+                    onChange={(newValue) => setEndDate(newValue)}
+                    format="YYYY-MM-DD"
+                    minDate={startDate}
+                    maxDate={dayjs().endOf('month')}
+                  />
+                </LocalizationProvider>
+              </div>
             </div>
           </div>
           <div className="main">
-            
             <ActiveReports />
             <PieChartC startDate={startDate} endDate={endDate} />
           </div>

@@ -37,7 +37,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                     { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
                 ]);
             } catch (error) {
-                console.error("Ta’minotchilarni olishda xatolik:", error);
+                alert("Ta’minotchilarni olishda xatolik:", error);
             }
         };
 
@@ -71,7 +71,6 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
             // `providerById` ni `formData` ga qo'shing
             const dataToSend = { ...formData, provider: providerById };
             const newProduct = await OurProduct.postProduct(dataToSend);
-            console.log(newProduct);
             onSave(newProduct);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
