@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import useFetch from './useFetch.js';
+import useFetch from './useFetch';
 import Statistics from '../../services/landing/statistics';
 import './pieChart.css';
 import { Pie, PieChart, Tooltip } from 'recharts';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { BiLoader } from 'react-icons/bi';
 
 function PieChartC({ startDate, endDate }) {
     const [filteredData, setFilteredData] = useState([]);
+
+    // Start va end date o'zgarganda ma'lumotni qayta olish uchun useFetch-ni chaqiramiz
     const { data: pieChartData, loading, error } = useFetch(() =>
-        Statistics.pieChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'))
+        Statistics.pieChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')), [startDate, endDate]
     );
 
     useEffect(() => {
@@ -34,7 +33,6 @@ function PieChartC({ startDate, endDate }) {
         }
     }, [pieChartData]);
 
-    // Generate a random color
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';

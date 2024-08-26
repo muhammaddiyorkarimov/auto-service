@@ -67,7 +67,7 @@ function Home() {
                 </div>
               ))}
               <div className="filter-section">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     sx={{marginRight: '20px'}}
                     label="Start Date"
@@ -84,7 +84,7 @@ function Home() {
                     minDate={startDate}
                     maxDate={dayjs().endOf('month')}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
               </div>
             </div>
           </div>

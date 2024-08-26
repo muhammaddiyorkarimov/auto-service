@@ -11,9 +11,9 @@ const Statistics = {
     },
     async pieChart(startDate, endDate) {
         try {
-            const response = await axios.get(`/statistics/expenses/`, {
+            const response = await axios.get('/statistics/expenses/', {
                 params: {
-                    start_date: startDate,
+                    start_date: startDate, // Parametr nomlari server talabiga mos bo'lishi kerak
                     end_date: endDate,
                 },
             });
@@ -21,7 +21,8 @@ const Statistics = {
         } catch (error) {
             throw error.response || new Error('Unknown error');
         }
-    },
+    }
+    ,
     async getTopProducts() {
         try {
             const response = await axios.get(`/statistics/top-sale-products/`)
