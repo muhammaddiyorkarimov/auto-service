@@ -158,6 +158,10 @@ function Expenses() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
     const formattedData = product?.map((item, index) => {
         return {
             ...item,
@@ -165,7 +169,7 @@ function Expenses() {
                 <>
                     <td>{index + 1}</td>
                     <td>{item.type?.name}</td>
-                    <td>{item.price}</td>
+                    <td>{formatNumberWithCommas(item.price)}</td>
                     <td>
                         {item.description?.length > 30
                             ? `${item.description?.slice(0, 30)}...`
@@ -293,7 +297,7 @@ function Expenses() {
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Typography variant="body1"><strong>Xarajat turi:</strong> {currentItem?.type?.name}</Typography>
-                        <Typography variant="body1"><strong>Narxi:</strong> {currentItem.price}</Typography>
+                        <Typography variant="body1"><strong>Narxi:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
                         <Typography variant="body1"><strong>Tavsif:</strong> {currentItem.description}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>

@@ -167,6 +167,9 @@ function ProviderC() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
 
     const formattedData = product?.map((item, index) => {
         return (
@@ -177,7 +180,7 @@ function ProviderC() {
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.phone_number}</td>
-                        <td>{item.debt}</td>
+                        <td>{formatNumberWithCommas(item.debt)}</td>
                     </>
                 ),
             }
@@ -309,7 +312,7 @@ function ProviderC() {
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Typography variant="body1"><strong>Ismi:</strong> {currentItem.name}</Typography>
                         <Typography variant="body1"><strong>Telefon raqami:</strong> {currentItem.phone_number}</Typography>
-                        <Typography variant="body1"><strong>Qarzi:</strong> {currentItem.debt}</Typography>
+                        <Typography variant="body1"><strong>Qarzi:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>

@@ -67,6 +67,10 @@ function OrderingService({onTotalChange, onSave }) {
         setSelectedServiceId(id);
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+
     return (
         <div className='order-service'>
             <div className="header">
@@ -95,7 +99,7 @@ function OrderingService({onTotalChange, onSave }) {
                                 <td>{item.serviceName}</td>
                                 <td>{item.staffName}</td>
                                 <td>{item.part}</td>
-                                <td>{item.total}</td>
+                                <td>{formatNumberWithCommas(item.total)}</td>
                             </tr>
                         ))}
                     </tbody>

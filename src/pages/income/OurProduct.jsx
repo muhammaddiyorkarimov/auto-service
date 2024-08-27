@@ -218,6 +218,10 @@ function OurProduct() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
 
     const formattedData = ourProduct?.map((item, index) => ({
         ...item,
@@ -230,12 +234,12 @@ function OurProduct() {
                 <td>{item.code}</td>
                 <td>{item.amount}</td>
                 <td>{item.unit}</td>
-                <td>{item.import_price}</td>
-                <td>{item.export_price}</td>
+                <td>{formatNumberWithCommas(item.import_price)}</td>
+                <td>{formatNumberWithCommas(item.export_price)}</td>
                 <td>{item.max_discount}%</td>
-                <td>{item.export_price * item.max_discount / 100}</td>
+                <td>{formatNumberWithCommas(item.export_price * item.max_discount / 100)}</td>
                 <td>{item.provider ? item.provider.name : '0'}</td>
-                <td>{item.total_benefit ? item.total_benefit : '0'  }</td>
+                <td>{formatNumberWithCommas(item.total_benefit ? item.total_benefit : '0'  )}</td>
             </>
         )
     }));
@@ -347,8 +351,8 @@ function OurProduct() {
                         <Typography variant="body1"><strong>Kod:</strong> {currentItem.code}</Typography>
                         <Typography variant="body1"><strong>Miqdori:</strong> {currentItem.amount}</Typography>
                         <Typography variant="body1"><strong>Birlik:</strong> {currentItem.unit}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {currentItem.import_price}</Typography>
-                        <Typography variant="body1"><strong>Eksport Narxi:</strong> {currentItem.export_price}</Typography>
+                        <Typography variant="body1"><strong>Import Narxi:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Eksport Narxi:</strong> {formatNumberWithCommas(currentItem.export_price)}</Typography>
                         <Typography variant="body1"><strong>Chegirma:</strong> {currentItem.max_discount}%</Typography>
                         <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>

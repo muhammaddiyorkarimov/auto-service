@@ -106,9 +106,9 @@ function Import() {
     const handleGetNewProduct = (newProduct) => {
         const updatedProducts = [newProduct, ...product];
         setProduct(updatedProducts);
-    
-        setFormConfig(prevConfig => 
-            prevConfig.map(field => 
+
+        setFormConfig(prevConfig =>
+            prevConfig.map(field =>
                 field.name === 'product'
                     ? { ...field, options: updatedProducts.map(p => ({ value: p.id, label: p.name })) }
                     : field
@@ -116,10 +116,10 @@ function Import() {
         );
         setProductById(newProduct.id);
     };
-    
-    
-    
-    
+
+
+
+
 
     const currentDate = new Date().toLocaleDateString();
 
@@ -269,6 +269,9 @@ function Import() {
         setAddOpen(true);
     }
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
 
     const renderFields = () => {
         return formConfig?.map((field, index) => {
@@ -383,8 +386,8 @@ function Import() {
                                                     size="small"
                                                 />
                                             </td>
-                                            <td>{formData.debt}</td>
-                                            <td>{overallTotal}</td>
+                                            <td>{formatNumberWithCommas(formData.debt)}</td>
+                                            <td>{formatNumberWithCommas(overallTotal)}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -450,9 +453,9 @@ function Import() {
                                                         <tr key={index}>
                                                             <td>{product.product?.label || ''}</td>
                                                             <td>{product.amount || ''}</td>
-                                                            <td>{product.import_price || ''}</td>
-                                                            <td>{productById.export_price || ''}</td>
-                                                            <td>{product.total || ''}</td>
+                                                            <td>{formatNumberWithCommas(product.import_price) || ''}</td>
+                                                            <td>{formatNumberWithCommas(productById.export_price) || ''}</td>
+                                                            <td>{formatNumberWithCommas(product.total) || ''}</td>
                                                             <td style={{ textAlign: 'center' }}>
                                                                 <Button
                                                                     onClick={() => handleRemoveProduct(index)}

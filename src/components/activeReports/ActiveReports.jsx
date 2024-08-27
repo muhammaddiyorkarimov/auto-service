@@ -6,6 +6,10 @@ import Statistics from '../../services/landing/statistics';
 
 function ActiveReports() {
     const { data: activeReports, loading, error } = useFetch(Statistics.getActiveReports);
+    
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }    
 
     const transformedData = activeReports
         ? [

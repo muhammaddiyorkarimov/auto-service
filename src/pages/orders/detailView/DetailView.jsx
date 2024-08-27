@@ -49,6 +49,10 @@ function DetailView() {
 
   const today = new Date().toLocaleDateString()
 
+  function formatNumberWithCommas(number) {
+    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
   return (
     <div className='order-detail-view'>
       <style>
@@ -127,9 +131,9 @@ function DetailView() {
                 <Divider style={{ margin: '20px 0' }} />
 
                 <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
-                <Typography variant="subtitle1"><strong>Umumiy:</strong> {data.paid + data.debt}</Typography>
-                <Typography variant="subtitle1"><strong>To'langan:</strong> {data.paid}</Typography>
-                <Typography variant="subtitle1"><strong>Qarz:</strong> {data.debt}</Typography>
+                <Typography variant="subtitle1"><strong>Umumiy:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
+                <Typography variant="subtitle1"><strong>To'langan:</strong> {formatNumberWithCommas(data.paid)}</Typography>
+                <Typography variant="subtitle1"><strong>Qarz:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
                 <Typography variant="h6" className="typography-section">Mijoz haqida ma'lumot</Typography>
                 <Divider style={{ margin: '10px 0' }} />
@@ -166,7 +170,7 @@ function DetailView() {
                         <tr key={index}>
                           <td style={{ border: '1px solid black' }}>{product.product?.name}</td>
                           <td style={{ border: '1px solid black' }}>{product.amount}</td>
-                          <td style={{ border: '1px solid black' }}>{product.total}</td>
+                          <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(product.total)}</td>
                           <td style={{ border: '1px solid black' }}>{product.discount}</td>
                         </tr>
                       ))}
@@ -188,7 +192,7 @@ function DetailView() {
                       <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
                       <td style={{ border: '1px solid black' }}>{service.part}</td>
                       <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
-                      <td style={{ border: '1px solid black' }}>{service.total}</td>
+                      <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
                     </tr>
                   ))}
                 </table>
@@ -203,9 +207,9 @@ function DetailView() {
         <DialogContent className='oreder-details-wrapper' dividers>
           <CardContent>
             <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
-            <Typography variant="subtitle1"><strong>Umumiy:</strong> {data.total}</Typography>
-            <Typography variant="subtitle1"><strong>To'langan:</strong> {data.paid}</Typography>
-            <Typography variant="subtitle1"><strong>Qarz:</strong> {data.debt}</Typography>
+            <Typography variant="subtitle1"><strong>Umumiy:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
+            <Typography variant="subtitle1"><strong>To'langan:</strong> {formatNumberWithCommas(data.paid)}</Typography>
+            <Typography variant="subtitle1"><strong>Qarz:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
             <Typography variant="h6" className="typography-section">Mijoz haqida ma'lumot</Typography>
             <Divider style={{ margin: '10px 0' }} />
@@ -239,7 +243,7 @@ function DetailView() {
                 <tr key={index}>
                   <td style={{ border: '1px solid black' }}>{product.product?.name}</td>
                   <td style={{ border: '1px solid black' }}>{product.amount}</td>
-                  <td style={{ border: '1px solid black' }}>{product.total}</td>
+                  <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(product.total)}</td>
                   <td style={{ border: '1px solid black' }}>{product.discount}</td>
                 </tr>
               ))}
@@ -259,7 +263,7 @@ function DetailView() {
                   <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
                   <td style={{ border: '1px solid black' }}>{service.part}</td>
                   <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
-                  <td style={{ border: '1px solid black' }}>{service.total}</td>
+                  <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
                 </tr>
               ))}
             </table>

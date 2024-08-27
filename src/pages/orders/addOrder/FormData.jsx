@@ -87,6 +87,10 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
         setProductId(null);
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
     const renderFields = () => {
         return formConfig?.map((field, index) => {
             switch (field.type) {
@@ -99,7 +103,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
                                 label={field.label}
                                 name={field.name}
                                 type={field.type}
-                                value={formData[field.name] || ''}
+                                value={formData[field.name] !== undefined ? formData[field.name] : (field.name === 'discount' ? 0 : '')}
                                 onChange={handleChange}
                                 size="small"
                                 disabled={field.disabled}
@@ -117,7 +121,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
                                     size="small"
                                     options={field.options || []}
                                     getOptionLabel={(option) => option?.label || ""}
-                                    value={field?.options?.find(option => option.value === formData[field.name]) || null}
+                                    value={field?.options?.find(option => option.value === (formData[field.name] || field.value)) || null} // Default value qo'shildi
                                     onChange={(event, newValue) => {
                                         setFormData(prevData => ({
                                             ...prevData,
@@ -152,17 +156,16 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
                                 )}
                                 {selectedService && (
                                     <Typography variant="caption" color="textSecondary">
-                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Narx: {price} so'm</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Narx: {formatNumberWithCommas(price)} so'm</p>
                                     </Typography>
                                 )}
                                 {selectedProduct && (
                                     <Typography variant="caption" color="textSecondary">
-                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Tannarx: {productPrice} so'm</p>
-                                        <p style={{fontSize: '16px', paddingLeft: '18px'}}>Mavjud: {productAmount} ta</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Tannarx: {formatNumberWithCommas(productPrice)} so'm</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Mavjud: {productAmount} ta</p>
                                     </Typography>
                                 )}
                             </Box>
-
                         </FormControl>
                     );
                 default:
@@ -170,6 +173,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
             }
         });
     };
+
 
     return (
         <>

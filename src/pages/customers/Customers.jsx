@@ -163,6 +163,10 @@ function Customers() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
     const formattedData = customersItem?.map((item, index) => ({
         ...item,
         row: (
@@ -170,7 +174,7 @@ function Customers() {
                 <td>{index + 1}</td>
                 <td>{item.first_name + ' ' + item.last_name}</td>
                 <td>{item.phone_number}</td>
-                <td>{item.debt}</td>
+                <td>{formatNumberWithCommas(item.debt)}</td>
                 <td>{item.address}</td>
             </>
         )
@@ -271,7 +275,7 @@ function Customers() {
                         <Typography><strong>Passport Seriyasi:</strong> {currentItem?.passport_serial_numbers}</Typography>
                         <Typography><strong>Passport Seriya Raqami:</strong> {currentItem?.passport_serial_letters}</Typography>
                         <Typography><strong>Manzil:</strong> {currentItem?.address}</Typography>
-                        <Typography><strong>Qarz:</strong> {currentItem?.debt}</Typography>
+                        <Typography><strong>Qarz:</strong> {formatNumberWithCommas(currentItem?.debt)}</Typography>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setRowDetailOpen(false)}>Close</Button>

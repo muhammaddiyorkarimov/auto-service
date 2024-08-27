@@ -16,6 +16,7 @@ import OrderServices from './../../../services/landing/orderService';
 import { useNavigate } from 'react-router-dom';
 import AddCustomerModal from './AddCustomerModal';
 import AddCustomerCarModal from './AddCustomerCarModal';
+import Loader from '../../../helpers/loader/Loader';
 
 function AddOrder() {
     const [formConfig, setFormConfig] = useState([]);
@@ -30,7 +31,7 @@ function AddOrder() {
     const [debt, setDebt] = useState(0);
     const [totalProduct, setTotalProduct] = useState(0);
     const [totalService, setTotalService] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [orderId, setOrderId] = useState(null);
     const [orderFormProducts, setOrderFormProducts] = useState([])
     const [orderFormServices, setOrderFormServices] = useState([])
@@ -39,6 +40,7 @@ function AddOrder() {
 
     const navigate = useNavigate();
 
+    
 
     const fetchCarsForCustomer = useCallback(() => {
         if (selectedCustomerId) {
@@ -94,6 +96,12 @@ function AddOrder() {
     const handleOpenCustomerCar = () => {
         setOpenCarsModal(true)
     }
+
+    useEffect(() => {
+        if (customers && customerCars) {
+            setLoading(false);
+        }
+    }, [customer, allCar]);
 
 
     const handleCreateOpen = () => {
@@ -268,6 +276,9 @@ function AddOrder() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
 
     return (
         <div className='adding-order'>
@@ -275,7 +286,8 @@ function AddOrder() {
             <main>
                 <Navbar title='Buyurtma yaratish' />
                 <div className="extra-items">
-                    <div className="create-btn">
+                    {loading ? <Loader/> : <>
+                        <div className="create-btn">
                         {!createOpen && <AddItemBtn name='Buyurtma yaratish' onClick={handleCreateOpen} />}
                     </div>
                     {createOpen &&
@@ -306,8 +318,8 @@ function AddOrder() {
                                                     onChange={handlePaidChange}
                                                 />
                                             </td>
-                                            <td>{debt}</td>
-                                            <td>{total}</td>
+                                            <td>{formatNumberWithCommas(debt)}</td>
+                                            <td>{formatNumberWithCommas(total)}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -347,6 +359,7 @@ function AddOrder() {
                             </>}
                         </section>
                     }
+                    </>}
                 </div>
             </main>
 

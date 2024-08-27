@@ -60,7 +60,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
         setFormConfig([
             { type: 'select', label: 'Maxsulot', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
             { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Chegirma', name: 'discount', required: true },
+            { type: 'number', label: 'Chegirma', name: 'discount', required: true, },
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
         ]);
     };
@@ -99,6 +99,10 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+
     return (
         <div className='order-product'>
             <div className="header">
@@ -121,7 +125,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
                                 <td>{product.productName}</td>
                                 <td>{product.amount}</td>
                                 <td>{product.discount}</td>
-                                <td>{product.total}</td>
+                                <td>{formatNumberWithCommas(product.total)}</td>
                             </tr>
                         ))}
                     </tbody>

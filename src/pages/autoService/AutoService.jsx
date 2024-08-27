@@ -137,13 +137,17 @@ function AutoService() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
     const formattedData = autoServiceItem?.map((item, index) => ({
         ...item,
         row: (
             <>
                 <td>{index + 1}</td>
                 <td>{item.name}</td>
-                <td>{item.price}</td>
+                <td>{formatNumberWithCommas(item.price)}</td>
             </>
         )
     }));
@@ -235,7 +239,7 @@ function AutoService() {
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Typography variant="body1"><strong>Xizmat turi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Narx:</strong> {currentItem.price}</Typography>
+                        <Typography variant="body1"><strong>Narx:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>

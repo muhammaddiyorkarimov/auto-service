@@ -148,7 +148,7 @@ function Brand() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         const calculatedTotal = item.import_price * item.amount - item.debt;
-        
+
         setEditFormConfig([
             { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount, disabled: true },
             { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price, disabled: true },
@@ -159,7 +159,7 @@ function Brand() {
         ]);
         setEditOpen(true);
     };
-    
+
 
     const updateProduct = async (formData) => {
         console.log(formData)
@@ -188,6 +188,9 @@ function Brand() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
 
     const formattedData = product?.map((item, index) => {
         return (
@@ -197,11 +200,11 @@ function Brand() {
                     <>
                         <td>{index + 1}</td>
                         <td>{item.amount}</td>
-                        <td>{item.import_price}</td>
-                        <td>{item.debt}</td>
+                        <td>{formatNumberWithCommas(item.import_price)}</td>
+                        <td>{formatNumberWithCommas(item.debt)}</td>
                         <td>{item.product ? item.product.name : ''}</td>
                         <td>{item.provider ? item.provider.name : ''}</td>
-                        <td>{item.total}</td>
+                        <td>{formatNumberWithCommas(item.total)}</td>
                     </>
                 ),
             }
@@ -338,9 +341,9 @@ function Brand() {
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Typography variant="body1"><strong>Mahsulot Nomi:</strong> {currentItem.name}</Typography>
                         <Typography variant="body1"><strong>Miqdor:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {currentItem.import_price}</Typography>
-                        <Typography variant="body1"><strong>Qarz:</strong> {currentItem.debt}</Typography>
-                        <Typography variant="body1"><strong>Umumiy:</strong> {currentItem.total}</Typography>
+                        <Typography variant="body1"><strong>Import Narxi:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Qarz:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
+                        <Typography variant="body1"><strong>Umumiy:</strong> {formatNumberWithCommas(currentItem.total)}</Typography>
                         <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
                         <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>

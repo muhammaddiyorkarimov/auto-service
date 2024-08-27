@@ -156,15 +156,19 @@ function Orders() {
         }
     };
 
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }    
+
     const formattedData = ordersC?.map((item, index) => ({
         ...item,
         row: (
             <>
                 <td>{index + 1}</td>
-                <td>{item.paid}</td>
-                <td>{item.debt}</td>
+                <td>{formatNumberWithCommas(item.paid)}</td>
+                <td>{formatNumberWithCommas(item.debt)}</td>
                 <td>{item.customer ? item.customer.first_name + ' ' + item.customer.last_name : '0'}</td>
-                <td>{item.debt + item.paid}</td>
+                <td>{formatNumberWithCommas(item.debt + item.paid)}</td>
             </>
         )
     }));
