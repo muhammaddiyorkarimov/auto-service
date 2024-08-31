@@ -3,12 +3,11 @@ import useFetch from './useFetch';
 import Statistics from '../../services/landing/statistics';
 import './pieChart.css';
 import { Pie, PieChart, Tooltip } from 'recharts';
-import { BiLoader } from 'react-icons/bi';
+import { BiLoader, BiPrinter } from 'react-icons/bi'; // Print iconni import qilish
 
 function PieChartC({ startDate, endDate }) {
     const [filteredData, setFilteredData] = useState([]);
 
-    // Start va end date o'zgarganda ma'lumotni qayta olish uchun useFetch-ni chaqiramiz
     const { data: pieChartData, loading, error } = useFetch(() =>
         Statistics.pieChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')), [startDate, endDate]
     );
@@ -42,19 +41,74 @@ function PieChartC({ startDate, endDate }) {
         return color;
     };
 
+    const handlePrint = () => {
+        const printWindow = window.open('', '_blank');
+        const printContent = `
+            <html>
+                <head>
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: green;
+                            color: white;
+                        }
+                        td:nth-child(2) {
+                            background-color: red;
+                            color: white;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kategoriyalar</th>
+                                <th>Narxi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredData.map(row => `
+                                <tr>
+                                    <td>${row.name}</td>
+                                    <td>${row.users}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+            </html>
+        `;
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    };
+
     return (
         <div className="pie-chart-container">
-            <div className="title">Xarajat bo'yicha statistika</div>
-            {loading ? <BiLoader /> : error ? <p>{error.message}</p> : <PieChart width={400} height={170}>
-                <Pie
-                    dataKey="users"
-                    isAnimationActive={true}
-                    data={filteredData}
-                    outerRadius={80}
-                    label
-                />
-                <Tooltip />
-            </PieChart>}
+            <div className="title">Xarajat bo'yicha statistika 
+                <BiPrinter onClick={handlePrint} style={{ cursor: 'pointer', fontSize: '25px', marginLeft: '10px' }} /></div>
+            {loading ? <BiLoader /> : error ? <p>{error.message}</p> : (
+                <>
+                    <PieChart width={400} height={170}>
+                        <Pie
+                            dataKey="users"
+                            isAnimationActive={true}
+                            data={filteredData}
+                            outerRadius={80}
+                            label
+                        />
+                        <Tooltip />
+                    </PieChart>
+                </>
+            )}
         </div>
     );
 }

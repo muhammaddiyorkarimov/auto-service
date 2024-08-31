@@ -16,6 +16,7 @@
     "@mui/material": "^5.16.6",
     "@mui/styled-engine": "^5.16.6",
     "@mui/x-date-pickers": "^7.14.0",
+    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.6",
     "axios": "^1.7.2",
     "dayjs": "^1.11.13",

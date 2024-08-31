@@ -45,6 +45,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
     }, [productById]);
 
     const handleSave = (data) => {
+        console.log(data)
         setFormData(prevData => {
             const updatedData = [...prevData, { ...data }];
             onSave(updatedData);
@@ -55,12 +56,13 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
         setPrice(0);
         setAmountProduct(0);
     };
+    console.log(formData)
 
     const handleAddProduct = () => {
         setFormConfig([
             { type: 'select', label: 'Maxsulot', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
             { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Chegirma', name: 'discount', required: true, },
+            { type: 'number', label: 'Chegirma', name: 'discount'},
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
         ]);
     };

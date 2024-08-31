@@ -1,30 +1,83 @@
 // icons
-import { CiUser } from 'react-icons/ci'
+import { CiUser } from 'react-icons/ci';
+import { FaSignOutAlt } from 'react-icons/fa';
 // css
-import './navbar.css'
-import { useSidebar } from '../../context/SidebarContext'
+import './navbar.css';
+import { useSidebar } from '../../context/SidebarContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { logoutUser } from '../../features/slice/authSlice';
 
-function Navbar({ title, name, adminType }) {
+function Navbar({ title }) {
+  const { toggleSidebar } = useSidebar();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
-  const { toggleSidebar } = useSidebar()
-  
+  // Dropdown holatini boshqarish
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Foydalanuvchi ma'lumotlarini localStorage'ga saqlash
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('first_name', user.first_name);
+      localStorage.setItem('last_name', user.last_name);
+      localStorage.setItem('position', user.position);
+    }
+  }, [user]);
+
+  // localStorage'dan foydalanuvchi ma'lumotlarini olish
+  const firstName = localStorage.getItem('first_name') || '';
+  const lastName = localStorage.getItem('last_name') || '';
+  const position = localStorage.getItem('position') || '';
+
+  // Chiqish funksiyasi
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    window.location.href = '/login';
+  };
+
+  // Sahifadagi boshqa joyga bosilganda dropdown'ni yopish
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.navbar-in-user')) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className='navbar'>
       <div className="navbar-item">
         <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
         <div className="title">{title}</div>
       </div>
-      <div className="navbar-in-user">
+      <div className="navbar-in-user" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
         <div className="user-image">
           <CiUser />
         </div>
-        {/* <div className="user-info">
-          <p>User</p>
-          <span>Super Admin</span>
-        </div> */}
+        <div className="user-info">
+          <p>{`${firstName} ${lastName}`}</p>
+          <span>{position}</span>
+        </div>
+        {isDropdownOpen && (
+          <>
+            <div className="overlay"></div>
+            <div className="dropdown-menu">
+              <div className="dropdown-item" onClick={handleLogout}>
+                <FaSignOutAlt className="dropdown-icon" />
+                Chiqish
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

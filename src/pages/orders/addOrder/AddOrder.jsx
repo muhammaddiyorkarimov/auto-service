@@ -40,7 +40,7 @@ function AddOrder() {
 
     const navigate = useNavigate();
 
-    
+
 
     const fetchCarsForCustomer = useCallback(() => {
         if (selectedCustomerId) {
@@ -158,9 +158,23 @@ function AddOrder() {
     const currentDate = new Date().toLocaleDateString();
 
     const handlePaidChange = (e) => {
-        const newPaid = e.target.value;
-        setPaid(newPaid);
+        let inputValue = e.target.value;
+
+        // Remove existing spaces from the input value
+        const plainNumber = inputValue.replace(/\s/g, '');
+
+        // Check if it's a valid number
+        if (/^\d*$/.test(plainNumber)) {
+            const formattedValue = formatNumberWithCommas(plainNumber);
+
+            // Convert plainNumber to number type before saving to state
+            setPaid(Number(plainNumber)); // now storing as number type
+
+            // Set the formatted value in the input (for display purposes)
+            e.target.value = formattedValue;
+        }
     };
+
 
     const handleAddCustomerSuccess = (newCustomer) => {
         const newOption = { value: newCustomer.id, label: newCustomer.first_name };
@@ -181,10 +195,10 @@ function AddOrder() {
         );
     };
     const handleAddCarsSuccess = (newCar) => {
-        const newOption = { value: newCar.id, label: newCar.name  };
+        const newOption = { value: newCar.id, label: newCar.name };
         setCustomerCars(prevOptions => {
             const updatedCars = [newOption, ...prevOptions];
-            
+
             setFormConfig(prevConfig =>
                 prevConfig.map(configItem =>
                     configItem.name === 'car'
@@ -192,13 +206,13 @@ function AddOrder() {
                         : configItem
                 )
             );
-            
+
             return updatedCars;
         });
     };
-    
-    
-    
+
+
+
 
 
     const handleSubmit = async () => {
@@ -278,7 +292,7 @@ function AddOrder() {
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      }
+    }
 
     return (
         <div className='adding-order'>
@@ -286,79 +300,79 @@ function AddOrder() {
             <main>
                 <Navbar title='Buyurtma yaratish' />
                 <div className="extra-items">
-                    {loading ? <Loader/> : <>
+                    {loading ? <Loader /> : <>
                         <div className="create-btn">
-                        {!createOpen && <AddItemBtn name='Buyurtma yaratish' onClick={handleCreateOpen} />}
-                    </div>
-                    {createOpen &&
-                        <section className="information">
-                            <div className="created-about">
-                                <div className="header">
-                                    <div className="title">Buyurtma tafsilotlari</div>
-                                    <Button onClick={handleSubmit} variant='contained'>{loading ? 'Yuborilmoqda...' : 'Yuborish'}</Button>
-                                </div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Yaratilgan sana</th>
-                                            <th>To'langan summa</th>
-                                            <th>Qarz</th>
-                                            <th>Umumiy</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{currentDate}</td>
-                                            <td>
-                                                <TextField
-                                                    type="number"
-                                                    id="standard-basic"
-                                                    variant="standard"
-                                                    value={paid}
-                                                    onChange={handlePaidChange}
-                                                />
-                                            </td>
-                                            <td>{formatNumberWithCommas(debt)}</td>
-                                            <td>{formatNumberWithCommas(total)}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="created-order">
-                                <FormData
-                                    formConfig={formConfig}
-                                    onSave={handleAddToTable}
-                                    onCustomerIdChange={onCustomerChange}
-                                />
-                            </div>
-                            {Object.keys(formData).length !== 0 && <>
-                                <div className="created-table">
+                            {!createOpen && <AddItemBtn name='Buyurtma yaratish' onClick={handleCreateOpen} />}
+                        </div>
+                        {createOpen &&
+                            <section className="information">
+                                <div className="created-about">
+                                    <div className="header">
+                                        <div className="title">Buyurtma tafsilotlari</div>
+                                        <Button onClick={handleSubmit} variant='contained'>{loading ? 'Yuborilmoqda...' : 'Yuborish'}</Button>
+                                    </div>
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Mijoz</th>
-                                                <th>Mashina</th>
-                                                <th>Yurgan masofasi</th>
-                                                <th>Tavsif</th>
+                                                <th>Yaratilgan sana</th>
+                                                <th>To'langan summa</th>
+                                                <th>Qarz</th>
+                                                <th>Umumiy</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{formData.customerName}</td>
-                                                <td>{formData.carName}</td>
-                                                <td>{formData.car_kilometers}</td>
-                                                <td>{formData.description}</td>
+                                                <td>{currentDate}</td>
+                                                <td>
+                                                    <TextField
+                                                        type="text"
+                                                        id="standard-basic"
+                                                        variant="standard"
+                                                        value={formatNumberWithCommas(paid)}
+                                                        onChange={handlePaidChange}
+                                                    />
+                                                </td>
+                                                <td>{formatNumberWithCommas(debt)}</td>
+                                                <td>{formatNumberWithCommas(total)}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="order-wrapper">
-                                    <OrderProduct onTotalChange={handleAddProductTotal} onSave={setOrderFormProducts} />
-                                    <OrderingService onTotalChange={handleAddServiceTotal} onSave={setOrderFormServices} />
+                                <div className="created-order">
+                                    <FormData
+                                        formConfig={formConfig}
+                                        onSave={handleAddToTable}
+                                        onCustomerIdChange={onCustomerChange}
+                                    />
                                 </div>
-                            </>}
-                        </section>
-                    }
+                                {Object.keys(formData).length !== 0 && <>
+                                    <div className="created-table">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Mijoz</th>
+                                                    <th>Mashina</th>
+                                                    <th>Yurgan masofasi</th>
+                                                    <th>Tavsif</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{formData.customerName}</td>
+                                                    <td>{formData.carName}</td>
+                                                    <td>{formData.car_kilometers}</td>
+                                                    <td>{formData.description}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="order-wrapper">
+                                        <OrderProduct onTotalChange={handleAddProductTotal} onSave={setOrderFormProducts} />
+                                        <OrderingService onTotalChange={handleAddServiceTotal} onSave={setOrderFormServices} />
+                                    </div>
+                                </>}
+                            </section>
+                        }
                     </>}
                 </div>
             </main>

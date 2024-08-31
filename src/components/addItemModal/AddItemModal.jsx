@@ -1,4 +1,4 @@
-import './addItemModal.css'
+import './addItemModal.css';
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, FormControl, FormHelperText, IconButton, Input } from '@mui/material';
 import { AddPhotoAlternate } from '@mui/icons-material';
@@ -10,20 +10,39 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
   const [file, setFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
 
-  console.log(formData)
-
   useEffect(() => {
     const initialData = formConfig?.reduce((acc, field) => {
-      acc[field.name] = '';
+      if (field.type === 'number' && (field.name === 'discount' || field.name === 'debt')) {
+        acc[field.name] = '0'; // Default value of 0 for discount and debt
+      } else {
+        acc[field.name] = '';
+      }
       return acc;
     }, {});
     setFormData(initialData);
   }, [formConfig]);
 
+  // Helper function to format numbers with spaces
+  const formatNumberWithSpaces = (number) => {
+    return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setValidationErrors({ ...validationErrors, [name]: '' }); // Xatolikni tozalash
+    const { name, value, type } = e.target;
+
+    // If input type is 'number', format the value with spaces
+    if (type === 'text' && formConfig?.find((field) => field.name === name && field.type === 'number')) {
+      const rawValue = value.replace(/\s/g, ''); // Remove spaces to get raw number
+      if (/^\d*$/.test(rawValue)) { // Only allow digits
+        const formattedValue = formatNumberWithSpaces(rawValue);
+        setFormData({ ...formData, [name]: formattedValue });
+      }
+    } else {
+      // If input is 'text', handle normally
+      setFormData({ ...formData, [name]: value });
+    }
+
+    setValidationErrors({ ...validationErrors, [name]: '' }); // Clear validation error
   };
 
   const handleFileChange = (e) => {
@@ -43,7 +62,18 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
       return;
     }
 
-    onSave(formData, file);
+    // Prepare the data for saving
+    const rawData = { ...formData };
+    Object.keys(rawData).forEach(key => {
+      if (formConfig.some(f => f.type === 'number' && f.name === key)) {
+        rawData[key] = rawData[key].replace(/\s/g, ''); // Remove spaces for number fields
+      }
+      if (key === 'discount' || key === 'debt') {
+        rawData[key] = rawData[key] || '0'; // Ensure default value of 0
+      }
+    });
+
+    onSave(rawData, file);
   };
 
   const renderFields = () => {
@@ -57,11 +87,12 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
                 margin="dense"
                 label={field.label}
                 name={field.name}
-                type={field.type}
+                type="text" // Always render as text to allow formatting for number types
                 value={formData[field.name] || ''}
                 onChange={handleChange}
                 fullWidth
                 size="small"
+                inputProps={field.type === 'number' ? { inputMode: 'numeric' } : {}}
               />
               <FormHelperText>{validationErrors[field.name]}</FormHelperText>
             </FormControl>
@@ -85,28 +116,28 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
         case 'select':
           return (
             <FormControl className='flex-container' fullWidth margin="dense" size="small" error={!!validationErrors[field.name]}>
-      <div className='flex-content'>
-        <Autocomplete
-          size='small'
-          options={field.options || []}
-          getOptionLabel={(option) => option.label}
-          value={field?.options?.find(option => option.value === formData[field.name]) || null}
-          onChange={(event, newValue) => {
-            setFormData({ ...formData, [field.name]: newValue ? newValue.value : '' });
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={field.label}
-              error={!!validationErrors[field.name]}
-              helperText={validationErrors[field.name]}
-              fullWidth // Ensure the TextField takes up full width
-            />
-          )}
-        />
-        {expensesType ? <ExpensesType /> : null}
-      </div>
-    </FormControl>
+              <div className='flex-content'>
+                <Autocomplete
+                  size='small'
+                  options={field.options || []}
+                  getOptionLabel={(option) => option.label}
+                  value={field?.options?.find(option => option.value === formData[field.name]) || null}
+                  onChange={(event, newValue) => {
+                    setFormData({ ...formData, [field.name]: newValue ? newValue.value : '' });
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={field.label}
+                      error={!!validationErrors[field.name]}
+                      helperText={validationErrors[field.name]}
+                      fullWidth
+                    />
+                  )}
+                />
+                {expensesType ? <ExpensesType /> : null}
+              </div>
+            </FormControl>
           );
         case 'file':
           return (
@@ -126,7 +157,6 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
       }
     });
   };
-
 
   return (
     <Dialog open={open} onClose={onClose}>

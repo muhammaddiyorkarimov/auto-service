@@ -7,9 +7,13 @@ import {
   Button,
   TextField,
   FormControl,
-  InputLabel,
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
+
+// Helper function to format numbers with spaces
+const formatNumberWithSpaces = (number) => {
+  return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
 
 function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   const [formData, setFormData] = useState(initialData || {});
@@ -20,17 +24,24 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   }, [initialData]);
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type } = event.target;
     let updatedFormData = { ...formData, [name]: value };
 
     if (name === 'paid' || name === 'debt') {
       const paid = Number(updatedFormData.paid || 0);
-      // const debt = Number(updatedFormData.debt || 0);
 
       if (paid >= (formData.total || 0)) {
         updatedFormData.debt = 0;
       } else {
         updatedFormData.debt = (formData.total || 0) - paid;
+      }
+    }
+
+    // Apply number formatting only if field type is 'number'
+    if (formConfig.find((field) => field.name === name && field.type === 'number')) {
+      const rawValue = value.replace(/\s/g, ''); // Remove spaces to get raw number
+      if (/^\d*$/.test(rawValue)) { // Only allow digits
+        updatedFormData[name] = formatNumberWithSpaces(rawValue);
       }
     }
 
@@ -47,7 +58,15 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   };
 
   const handleSave = () => {
-    onSave(formData);
+    // Remove spaces from number fields before saving
+    const rawData = { ...formData };
+    Object.keys(rawData).forEach(key => {
+      if (formConfig.some(f => f.type === 'number' && f.name === key)) {
+        rawData[key] = rawData[key].replace(/\s/g, ''); // Remove spaces for number fields
+      }
+    });
+
+    onSave(rawData);
     onClose();
   };
 
@@ -62,11 +81,12 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
               margin="dense"
               label={field.label}
               name={field.name}
-              type={field.type}
+              type="text" // Always render as text to allow formatting for number types
               value={formData[field.name] || ''}
               onChange={handleChange}
               fullWidth
               disabled={field.disabled}
+              inputProps={field.type === 'number' ? { inputMode: 'numeric' } : {}}
             />
           );
         case 'textarea':

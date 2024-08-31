@@ -15,13 +15,7 @@ import { TiUploadOutline } from 'react-icons/ti';
 function SideBar() {
   const { isOpen } = useSidebar()
   const { toggleSidebar } = useSidebar()
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    window.location.href = '/login';
-  };
 
   return (
     <div className={`sidebar ${isOpen ? 'closed-sidebar' : 'open-sidebar'}`}>
@@ -145,9 +139,6 @@ function SideBar() {
             </li>
           </ul>
         </div>
-      </div>
-      <div className="sidebar-footer">
-        <img src={images.logoutIcon} alt="Logout" onClick={handleLogout} />
       </div>
     </div>
   );

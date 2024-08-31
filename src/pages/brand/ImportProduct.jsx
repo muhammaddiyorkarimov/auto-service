@@ -44,6 +44,10 @@ function Import() {
                 .then(response => {
                     if (response) {
                         setProductById(response);
+                        setFormData(prevFormData => ({
+                            ...prevFormData,
+                            export_price: response.export_price || '' // export_price ni value ga joylash
+                        }));
                     } else {
                         alert('Product not found or ID is invalid');
                     }
@@ -52,9 +56,7 @@ function Import() {
                     alert('Error fetching product by ID:', error.message);
                 });
         }
-
     }, [selectedProvider, productId]);
-
 
 
     const { data: productData, loading: productLoading, error: productError } = useFetch(OurProduct.getProduct)
@@ -87,8 +89,9 @@ function Import() {
         if (productData && providerData) {
             setFormConfig([
                 { type: 'select', label: 'Maxsulot', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
-                { type: 'number', label: 'Miqdor', name: 'amount' },
+                { type: 'number', label: 'Miqdor', name: 'amount', },
                 { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
+                { type: 'number', label: 'Sotish summasi', name: 'export_price', required: true },
                 { type: 'number', label: 'Umumiy', name: 'total', disabled: true },
             ]);
         }
@@ -150,20 +153,32 @@ function Import() {
         setFormData(initialData);
     }, [formConfig]);
 
+    const formatNumberWithCommas = (number) => {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        if (typeof formData[name] === 'object' && formData[name] !== null) {
-            setFormData({
-                ...formData,
-                [name]: { ...formData[name], value: value }
-            });
-        } else {
-            setFormData({ ...formData, [name]: value });
+    
+        // Remove any existing spaces from the value
+        const plainNumber = value.replace(/\s/g, '');
+    
+        if (/^\d*$/.test(plainNumber)) {
+            // Save the plain number value without formatting
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: plainNumber
+            }));
+    
+            // Update validation errors
+            setValidationErrors(prevErrors => ({
+                ...prevErrors,
+                [name]: ''
+            }));
         }
-
-        setValidationErrors({ ...validationErrors, [name]: '' });
     };
+    
+
 
 
     useEffect(() => {
@@ -207,10 +222,23 @@ function Import() {
     };
 
     const handlePaidAmountChange = (event) => {
-        const paidAmount = parseFloat(event.target.value) || 0;
-        const newDebt = overallTotal - paidAmount;
-        setFormData({ ...formData, paidAmount, debt: newDebt });
+        // Raqam bo'lmagan belgilarni olib tashlash
+        const value = event.target.value.replace(/\s/g, '');
+
+        // Agar qiymat faqat raqamlardan iborat bo'lsa
+        if (/^\d*\.?\d*$/.test(value)) {
+            const paidAmount = parseFloat(value) || 0;
+            const newDebt = overallTotal - paidAmount;
+
+            setFormData(prevData => ({
+                ...prevData,
+                paidAmount: value, // Formatlanmagan qiymatni saqlash
+                debt: newDebt,
+                productById
+            }));
+        }
     };
+
 
 
     const handleRemoveProduct = (index) => {
@@ -222,6 +250,28 @@ function Import() {
 
         const newDebt = newOverallTotal - (formData.paidAmount || 0);
     }
+
+    const handleEditExportPrice = async () => {
+        const postData = selectedProducts.map(product => {
+            return (({
+
+                id: product?.product.value,
+                export_price: product.export_price
+            }))
+        });
+        try {
+            await Promise.all(postData.map(data =>
+                OurProduct.putProductById(data.id, { export_price: data.export_price })
+            ));
+
+            // // Yangilanishdan keyin mahsulotlar ro'yxatini yangilash
+            // fetchProducts();
+
+        } catch (error) {
+            alert('Xato:', error.message);
+        }
+    };
+
 
     const handleSubmit = async () => {
         const providerId = selectedProvider;
@@ -252,6 +302,8 @@ function Import() {
                     return;
                 }
             }
+
+            await handleEditExportPrice();
             alert('Data successfully posted');
 
             // setSelectedProducts([]);
@@ -269,9 +321,6 @@ function Import() {
         setAddOpen(true);
     }
 
-    function formatNumberWithCommas(number) {
-        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
 
     const renderFields = () => {
         return formConfig?.map((field, index) => {
@@ -284,8 +333,10 @@ function Import() {
                                 margin="dense"
                                 label={field.label}
                                 name={field.name}
-                                type={field.type}
-                                value={formData[field.name] || ''}
+                                type="text"
+                                value={field.name === 'export_price'
+                                    ? formatNumberWithCommas(formData.export_price || '')
+                                    : (formData[field.name] || '')}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
@@ -293,6 +344,8 @@ function Import() {
                                 error={formSubmitted && !!validationErrors[field.name]}
                             />
                         </FormControl>
+
+
                     );
                 case 'select':
                     return (
@@ -379,12 +432,13 @@ function Import() {
                                                 <TextField
                                                     margin="dense"
                                                     label="To'langan summa *"
-                                                    type="number"
-                                                    value={formData.paidAmount || ''}
+                                                    type="text" // Change to 'text' to allow formatted input
+                                                    value={formatNumberWithCommas(formData.paidAmount || '')}
                                                     onChange={handlePaidAmountChange}
                                                     fullWidth
                                                     size="small"
                                                 />
+
                                             </td>
                                             <td>{formatNumberWithCommas(formData.debt)}</td>
                                             <td>{formatNumberWithCommas(overallTotal)}</td>
@@ -454,7 +508,7 @@ function Import() {
                                                             <td>{product.product?.label || ''}</td>
                                                             <td>{product.amount || ''}</td>
                                                             <td>{formatNumberWithCommas(product.import_price) || ''}</td>
-                                                            <td>{formatNumberWithCommas(productById.export_price) || ''}</td>
+                                                            <td>{formatNumberWithCommas(product.export_price) || ''}</td>
                                                             <td>{formatNumberWithCommas(product.total) || ''}</td>
                                                             <td style={{ textAlign: 'center' }}>
                                                                 <Button
