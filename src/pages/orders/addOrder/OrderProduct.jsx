@@ -9,9 +9,10 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
     const [formConfig, setFormConfig] = useState([]);
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState([]);
-    const [ selectedProductId, setSelectedProductId] = useState(null);
+    const [selectedProductId, setSelectedProductId] = useState(null);
     const [price, setPrice] = useState(0);
     const [amountProduct, setAmountProduct] = useState(0);
+    const [isAdding, setIsAdding] = useState(false); // Yangi holat qo'shildi
 
     const fetchProduct = useCallback(() => {
         if (selectedProductId) {
@@ -38,6 +39,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
             setPrice(productById.export_price);
         }
     }, [productById]);
+    
     useEffect(() => {
         if (productById) {
             setAmountProduct(productById.amount);
@@ -55,16 +57,17 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
         setSelectedProductId(null);
         setPrice(0);
         setAmountProduct(0);
+        setIsAdding(false); // Formdan keyin holatni yangilash
     };
-    console.log(formData)
 
     const handleAddProduct = () => {
         setFormConfig([
             { type: 'select', label: 'Maxsulot', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
             { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Chegirma', name: 'discount'},
+            { type: 'number', label: 'Chegirma', name: 'discount' },
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
         ]);
+        setIsAdding(true); // Tugma bosilganda form qo'shish holati o'zgaradi
     };
 
     const onProductChange = (id) => {
@@ -103,12 +106,14 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      }
+    }
 
     return (
         <div className='order-product'>
             <div className="header">
-                <AddItemBtn name='Maxsulot qoshish' onClick={handleAddProduct} />
+                {!isAdding && ( // Agar form qo'shilsa, tugma ko'rinmaydi
+                    <AddItemBtn name='Maxsulot qoshish' onClick={handleAddProduct} />
+                )}
             </div>
             <div className="order-product-content">
                 <FormData formConfig={formConfig} onSave={handleSave} onProductIdChange={onProductChange} productPrice={price} productAmount={amountProduct} />

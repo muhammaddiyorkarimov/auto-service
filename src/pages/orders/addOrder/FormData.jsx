@@ -193,7 +193,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
     return (
         <>
             {renderFields()}
-            <div style={{ marginTop: '10px' }}>
+            <div style={{ margin: '10px 0' }}>
                 {formConfig?.length > 0 && <Button variant="contained" color="primary" onClick={handleSave}>Saqlash</Button>}
             </div>
         </>

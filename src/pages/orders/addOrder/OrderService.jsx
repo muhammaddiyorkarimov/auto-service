@@ -5,12 +5,13 @@ import FormData from './FormData';
 import AutoServices from './../../../services/landing/autoService';
 import EmployeesService from './../../../services/landing/employees';
 
-function OrderingService({onTotalChange, onSave }) {
+function OrderingService({ onTotalChange, onSave }) {
     const [formConfig, setFormConfig] = useState([]);
     const [services, setServices] = useState([]);
     const [formData, setFormData] = useState([]);
     const [selectedServiceId, setSelectedServiceId] = useState(null);
     const [price, setPrice] = useState(0);
+    const [showAddButton, setShowAddButton] = useState(true); // State to control AddItemBtn visibility
 
     const fetchService = useCallback(() => {
         if (selectedServiceId) {
@@ -20,7 +21,7 @@ function OrderingService({onTotalChange, onSave }) {
 
     const { data: service } = useFetch(AutoServices.getAutoService);
     const { data: serviceById } = useFetch(fetchService);
-    const { data: staffData} = useFetch(EmployeesService.getEmployees) 
+    const { data: staffData } = useFetch(EmployeesService.getEmployees);
 
     useEffect(() => {
         if (service) {
@@ -44,23 +45,24 @@ function OrderingService({onTotalChange, onSave }) {
             { type: 'select', label: 'Xodim', name: 'staff', options: staffData?.map(p => ({
                 value: p.id,
                 label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
-              }))
-              , required: true },
+            })), required: true },
             { type: 'select', label: 'Xizmat', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
             { type: 'number', label: 'Part', name: 'part', required: true },
             { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
         ]);
+        setShowAddButton(false); // Hide AddItemBtn after click
     };
 
     const handleSave = (data) => {
         setFormData(prevData => {
             const updatedData = [...prevData, { ...data }];
-            onSave(updatedData)
+            onSave(updatedData);
             return updatedData;
         });
         setFormConfig([]);
         setSelectedServiceId(null);
         setPrice(0);
+        setShowAddButton(true); // Show AddItemBtn again after saving
     };
 
     const onServiceChange = (id) => {
@@ -69,12 +71,12 @@ function OrderingService({onTotalChange, onSave }) {
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      }
+    }
 
     return (
         <div className='order-service'>
             <div className="header">
-                <AddItemBtn name='Xizmat qoshish' onClick={handleAddService} />
+                {showAddButton && <AddItemBtn name='Xizmat qoshish' onClick={handleAddService} />}
             </div>
             <div className="order-product-content">
                 <FormData
