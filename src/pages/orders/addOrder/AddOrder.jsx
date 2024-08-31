@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import AddCustomerModal from './AddCustomerModal';
 import AddCustomerCarModal from './AddCustomerCarModal';
 import Loader from '../../../helpers/loader/Loader';
+import OrdersManagers from '../../../services/landing/manager';
 
 function AddOrder() {
     const [formConfig, setFormConfig] = useState([]);
@@ -24,6 +25,8 @@ function AddOrder() {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [customerCars, setCustomerCars] = useState([]);
+    const [managers, setManagers] = useState([]);
+    const [selectedManagerId, setSelectedManagerId] = useState(null);
     const [allCars, setAllCars] = useState([]);
     const [formData, setFormData] = useState({})
     const [total, setTotal] = useState(0);
@@ -47,10 +50,24 @@ function AddOrder() {
             return CarsService.getCarsForCustomer(selectedCustomerId);
         }
     }, [selectedCustomerId]);
+    const fetchManagerForOrder = useCallback(() => {
+        if (selectedManagerId) {
+            return OrdersManagers.getOrdersById(selectedManagerId);
+        }
+    }, [selectedManagerId]);
 
     const { data: customer } = useFetch(CustomersService.getCustomers);
+    const { data: manager } = useFetch(OrdersManagers.getOrders);
+    const { data: managerById } = useFetch(fetchManagerForOrder);
     const { data: customerCar } = useFetch(fetchCarsForCustomer);
     const { data: allCar } = useFetch(CarsService.getCars);
+
+    console.log(managerById)
+    useEffect(() => {
+        if (managerById?.part === null) {
+            alert('Menejerning ulushi belgilanmagan')
+        }
+    }, [managerById]);
 
     useEffect(() => {
         if (customer) {
@@ -59,7 +76,11 @@ function AddOrder() {
         if (allCar) {
             setAllCars(allCar.results);
         }
-    }, [customer, customerCar, selectedCustomerId, allCar]);
+        if (manager) {
+            setManagers(manager.results);
+        }
+    }, [customer, customerCar, selectedCustomerId, allCar, manager]);
+
     useEffect(() => {
         if (selectedCustomerId && Array.isArray(customerCar)) {
             const mappedCars = customerCar.map((car) => ({
@@ -103,6 +124,8 @@ function AddOrder() {
         }
     }, [customer, allCar]);
 
+    console.log(manager)
+
 
     const handleCreateOpen = () => {
         setCreateOpen(true);
@@ -127,6 +150,13 @@ function AddOrder() {
                     <button className='add-itemBtn' onClick={handleOpenCustomerCar}>+</button>
                 ),
             },
+            {
+                type: 'select',
+                label: 'Boshqaruvchi',
+                name: 'manager',
+                required: true,
+                options: managers?.map((p) => ({ value: p.id, label: p.first_name + ' ' + p.last_name })),
+            },
 
             { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers' },
             { type: 'text', label: 'Tavsif', name: 'description' },
@@ -146,7 +176,6 @@ function AddOrder() {
         setTotal(totalProduct + totalService)
     }, [totalProduct, totalService, paid]);
 
-
     const handleAddToTable = (formData) => {
         setFormData(formData)
     };
@@ -154,6 +183,12 @@ function AddOrder() {
     const onCustomerChange = (id) => {
         setSelectedCustomerId(id);
     };
+
+    const onManagerIdChange = (id) => {
+        setSelectedManagerId(id);
+    }
+
+    console.log(selectedManagerId, selectedCustomerId)
 
     const currentDate = new Date().toLocaleDateString();
 
@@ -194,6 +229,7 @@ function AddOrder() {
             )
         );
     };
+
     const handleAddCarsSuccess = (newCar) => {
         const newOption = { value: newCar.id, label: newCar.name };
         setCustomerCars(prevOptions => {
@@ -218,6 +254,7 @@ function AddOrder() {
     const handleSubmit = async () => {
         setLoading(true);
         const postData = {
+            manager: selectedManagerId,
             car: formData.car,
             total: total,
             paid: parseInt(paid),
@@ -284,6 +321,7 @@ function AddOrder() {
             alert("Buyurtma muvaffaqiyatli qo'shildi.");
             navigate(`/orders/${orderId}`); // Navigate qilish
         } catch (error) {
+            console.log(error);
             alert(`Ma'lumotlarni yuborishda xatolik yuz berdi: ${error.message}`);
         } finally {
             setLoading(false);
@@ -340,6 +378,7 @@ function AddOrder() {
                                 </div>
                                 <div className="created-order">
                                     <FormData
+                                        onManagerIdChange={onManagerIdChange}
                                         formConfig={formConfig}
                                         onSave={handleAddToTable}
                                         onCustomerIdChange={onCustomerChange}
@@ -352,6 +391,7 @@ function AddOrder() {
                                                 <tr>
                                                     <th>Mijoz</th>
                                                     <th>Mashina</th>
+                                                    <th>Boshqaruvchi</th>
                                                     <th>Yurgan masofasi</th>
                                                     <th>Tavsif</th>
                                                 </tr>
@@ -360,6 +400,7 @@ function AddOrder() {
                                                 <tr>
                                                     <td>{formData.customerName}</td>
                                                     <td>{formData.carName}</td>
+                                                    <td>{managerById.first_name + ' ' + managerById.last_name}</td>
                                                     <td>{formData.car_kilometers}</td>
                                                     <td>{formData.description}</td>
                                                 </tr>

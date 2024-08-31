@@ -3,7 +3,7 @@ import AddItemBtn from '../../components/addItemBtn/AddItemBtn'
 import { tableHeaders } from '../../components/details/Details'
 import Navbar from '../../components/navbar/Navbar'
 import SideBar from '../../components/sidebar/SideBar'
-import './employees.css'
+// import '../employees/Employees.css'
 import useFetch from '../../hooks/useFetch'
 import EmployeesService from '../../services/landing/employees'
 import DataTable from '../../components/dataTable/DataTable'
@@ -13,9 +13,10 @@ import AddItemModal from '../../components/addItemModal/AddItemModal'
 import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import { Alert, Snackbar } from '@mui/material'
+import OrdersManagers from '../../services/landing/manager'
 
-function Employees() {
-    const headers = tableHeaders['employees']
+function Managers() {
+    const headers = tableHeaders['managers']
     const [employessData, setEmployeesData] = useState([])
     const [formConfig, setFormConfig] = useState([]);
     const [currentItem, setCurrentItem] = useState(null);
@@ -26,18 +27,20 @@ function Employees() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
 
+    console.log(employessData)
+
     const [params, setQueryParams] = useQueryParams();
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
 
     const fetchOrders = useCallback((query) => {
-        return EmployeesService.getEmployees(query);
+        return OrdersManagers.getOrders(query);
     }, []);
 
     const { data, loading, error } = useFetch(fetchOrders)
 
     useEffect(() => {
         if (data) {
-            setEmployeesData(data)
+            setEmployeesData(data.results)
         }
     }, [data])
 
@@ -58,13 +61,17 @@ function Employees() {
             { type: 'text', label: "Familiya", name: 'last_name' },
             { type: 'text', label: "Telefon raqam", name: 'phone_number' },
             { type: 'text', label: "Kasbi", name: 'position' },
+            { type: 'number', label: "часть", name: 'part' },
+            { type: 'number', label: "Maosh", name: 'balance' },
         ])
         setAddOpen(true);
     }
 
     const createStaff = async (item) => {
         try {
-            const newStaff = await EmployeesService.postEmployees(item);
+            const staffWithPassword = { ...item, password: '12345678' };
+
+            const newStaff = await OrdersManagers.postOrders(staffWithPassword);
             setEmployeesData([...employessData, newStaff]);
             setSuccessMsg("Muvaffaqiyatli qo'shildi");
             setSnackbarOpen(true);
@@ -76,6 +83,7 @@ function Employees() {
         }
     };
 
+
     const handleEdit = (item) => {
         setCurrentItem(item);
         setFormConfig([
@@ -84,6 +92,8 @@ function Employees() {
             { type: 'text', label: "Familiya", name: 'last_name', value: 'last_name' },
             { type: 'text', label: "Telefon raqam", name: 'phone_number', value: 'phone_number' },
             { type: 'text', label: "Kasbi", name: 'position', value: 'position' },
+            { type: 'number', label: "Maosh", name: 'part', value: 'part' },
+            { type: 'number', label: "Maosh", name: 'balance', value: 'balance' },
         ])
         setEditOpen(true);
     };
@@ -95,13 +105,13 @@ function Employees() {
             last_name: updatedData.last_name,
             phone_number: updatedData.phone_number,
             position: updatedData.position,
-            salary: updatedData.salary,
             part: updatedData.part,
+            balance: updatedData.balance,
         };
 
         try {
-            const updatedStaff = await EmployeesService.putEmployeesById(currentItem.id, formattedData);
-            setEmployeesData(employessData.map(o => o.id === currentItem.id ? updatedStaff : o));
+            const updatedStaff = await OrdersManagers.putOrdersById(currentItem.id, formattedData);
+            setEmployeesData(employessData?.map(o => o.id === currentItem.id ? updatedStaff : o));
             setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
             setSnackbarOpen(true);
         } catch (error) {
@@ -111,6 +121,10 @@ function Employees() {
             setEditOpen(false);
         }
     };
+
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
 
     const formattedData = employessData?.map((employee, index) => ({
         ...employee,
@@ -122,6 +136,8 @@ function Employees() {
                 <td>{employee.last_name}</td>
                 <td>{employee.phone_number}</td>
                 <td>{employee.position}</td>
+                <td>{employee.part}</td>
+                <td>{formatNumberWithCommas(employee.balance)}</td>
             </>
         )
     }))
@@ -133,7 +149,7 @@ function Employees() {
 
     const handleDeleteConfirm = async (item) => {
         try {
-            await EmployeesService.deleteEmployees(currentItem);
+            await OrdersManagers.deleteOrders(currentItem);
             setEmployeesData(employessData?.filter(o => o.id !== currentItem));
             setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
@@ -156,7 +172,7 @@ function Employees() {
                             {/* <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} /> */}
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Xodim qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Manager qo'shish" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -212,5 +228,4 @@ function Employees() {
 
     )
 }
-
-export default Employees
+export default Managers

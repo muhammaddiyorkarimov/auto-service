@@ -16,6 +16,8 @@ import Expenses from './pages/expenses/Expenses';
 import ProviderC from './pages/provider/ProviderC';
 import Import from './pages/brand/ImportProduct';
 import AddOrder from './pages/orders/addOrder/AddOrder';
+import Managers from './pages/managers/Managers';
+import Workers from './pages/workers/Workers';
 
 function App() {
     const routes = createBrowserRouter(
@@ -34,6 +36,8 @@ function App() {
                     <Route path="/customers" element={<Customers />} />
                     <Route path="/cars" element={<OurCars />} />
                     <Route path="/employees" element={<Employees />} />
+                    <Route path="/managers" element={<Managers />} />
+                    <Route path="/workers" element={<Workers />} />
                     <Route path="/expenses" element={<Expenses />} />
                     <Route path="/provider" element={<ProviderC />} />
                     <Route path="/add-order" element={<AddOrder />} />

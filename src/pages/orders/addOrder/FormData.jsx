@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, TextField, FormControl, Button, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, price, onProductIdChange, productPrice, productAmount }) {
+function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, onServiceIdChange, price, onProductIdChange, productPrice, productAmount }) {
     const [customerId, setCustomerId] = useState(null);
     const [formData, setFormData] = useState({});
     const [validationErrors, setValidationErrors] = useState({});
@@ -10,6 +10,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
     const [productId, setProductId] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [managerId, setManagerId] = useState(null);
 
     useEffect(() => {
         if (price > 0) {
@@ -69,13 +70,16 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
         if (customerId !== null) {
             onCustomerIdChange(customerId);
         }
+        if (managerId !== null) {
+            onManagerIdChange(managerId);
+        }
         if (serviceId !== null) {
             onServiceIdChange(serviceId);
         }
         if (productId !== null) {
             onProductIdChange(productId);
         }
-    }, [customerId, serviceId, onCustomerIdChange, productId, onServiceIdChange, onProductIdChange]);
+    }, [customerId, serviceId, onCustomerIdChange, managerId, onManagerIdChange, productId, onServiceIdChange, onProductIdChange]);
 
     const handleSave = () => {
         const errors = {};
@@ -140,6 +144,9 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onServiceIdChange, p
                                         }));
                                         if (field.name === 'customer') {
                                             setCustomerId(newValue ? newValue.value : '');
+                                        }
+                                        if (field.name === 'manager') {
+                                            setManagerId(newValue ? newValue.value : '');
                                         }
                                         if (field.name === 'service') {
                                             setServiceId(newValue ? newValue.value : '');

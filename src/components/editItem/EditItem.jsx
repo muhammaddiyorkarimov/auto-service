@@ -62,13 +62,18 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
     const rawData = { ...formData };
     Object.keys(rawData).forEach(key => {
       if (formConfig.some(f => f.type === 'number' && f.name === key)) {
-        rawData[key] = rawData[key].replace(/\s/g, ''); // Remove spaces for number fields
+        const value = rawData[key];
+        // Faqat string bo'lgan qiymatlarga replace qo'llanadi
+        if (typeof value === 'string') {
+          rawData[key] = value.replace(/\s/g, ''); // Remove spaces for number fields
+        }
       }
     });
 
     onSave(rawData);
     onClose();
   };
+
 
   const renderFields = () => {
     return formConfig && formConfig.map((field, index) => {

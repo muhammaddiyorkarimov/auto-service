@@ -93,7 +93,8 @@ function SideBar() {
                 <span>Прочие</span>
               </div>
               <div className="li-items">
-                {user?.role === 'Admin' && (
+                {/* {user?.role === 'Admin' && (
+                )} */}
                   <li>
                     <div className="li-item">
                       <span></span>
@@ -102,7 +103,22 @@ function SideBar() {
                       </NavLink>
                     </div>
                   </li>
-                )}
+                  <li>
+                    <div className="li-item">
+                      <span></span>
+                      <NavLink to='/managers'>
+                        <span>• Manager</span>
+                      </NavLink>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="li-item">
+                      <span></span>
+                      <NavLink to='/workers'>
+                        <span>• Ishchilar</span>
+                      </NavLink>
+                    </div>
+                  </li>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/provider'>

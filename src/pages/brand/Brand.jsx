@@ -103,7 +103,7 @@ function Brand() {
         try {
             await ImportProduct.deleteImportProduct(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
-            setSuccessMsg('Mahsulot muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
             setSnackbarOpen(true);
         } catch (error) {
             setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');

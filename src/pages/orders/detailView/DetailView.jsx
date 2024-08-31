@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './detailView.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, CardContent, Typography, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
@@ -6,6 +6,8 @@ import OrdersService from '../../../services/landing/orders';
 import SideBar from '../../../components/sidebar/SideBar';
 import Navbar from '../../../components/navbar/Navbar';
 import Loader from '../../../helpers/loader/Loader';
+import OrdersManagers from '../../../services/landing/manager';
+import useFetch from '../../../hooks/useFetch';
 
 function DetailView() {
   const navigate = useNavigate();
@@ -15,6 +17,12 @@ function DetailView() {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const fetchManagerForOrder = useCallback(() => {
+    if (data?.manager) {
+      return OrdersManagers.getOrdersById(data?.manager);
+    }
+  }, [data?.manager]);
+  const { data: managerById } = useFetch(fetchManagerForOrder);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +60,8 @@ function DetailView() {
   function formatNumberWithCommas(number) {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
+
+  console.log(data)
 
   return (
     <div className='order-detail-view'>
@@ -142,6 +152,8 @@ function DetailView() {
                 <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
                 <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
 
+                <Divider style={{ margin: '10px 0' }} />
+                <Typography variant="subtitle1"><strong>Boshqaruvchi:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
                 <table className="oreder-details-wrapper">
                   <thead>
                     <tr>
@@ -217,6 +229,8 @@ function DetailView() {
             <Typography variant="subtitle1"><strong>Familiya:</strong> {data.customer?.last_name}</Typography>
             <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
             <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
+            <Divider style={{ margin: '10px 0' }} />
+            <Typography variant="subtitle1"><strong>Boshqaruvchi:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
             <table className="oreder-details-wrapper">
               <thead>
                 <tr>
