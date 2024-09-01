@@ -124,9 +124,6 @@ function AddOrder() {
         }
     }, [customer, allCar]);
 
-    console.log(manager)
-
-
     const handleCreateOpen = () => {
         setCreateOpen(true);
         setFormConfig([
@@ -134,7 +131,7 @@ function AddOrder() {
                 type: 'select',
                 label: 'Mijoz',
                 name: 'customer',
-                required: true,
+                // required: true,
                 options: customers?.map((p) => ({ value: p.id, label: p.first_name })),
                 renderButton: () => (
                     <button className='add-itemBtn' onClick={handleOpenCustomer}>+</button>
@@ -190,8 +187,6 @@ function AddOrder() {
         setSelectedManagerId(id);
     }
 
-    console.log(selectedManagerId, selectedCustomerId)
-
     const currentDate = new Date().toLocaleDateString();
 
     const handlePaidChange = (e) => {
@@ -216,42 +211,35 @@ function AddOrder() {
     const handleAddCustomerSuccess = (newCustomer) => {
         const newOption = { value: newCustomer.id, label: newCustomer.first_name };
 
-        // Yangi mijozni ro'yxatga qo'shish
-        setCustomers(prevOptions => [...prevOptions, newOption]);
+        // Yangi mijozni ro'yxatning yuqori qismiga qo'shish va eski mijozlarni saqlab qolish
+        setCustomers((prevCustomers) => [newOption, ...prevCustomers]);
 
-        // Tanlangan mijozni ID sini o'rnatish
-        setSelectedCustomerId(newCustomer.id);
-
-        // Formani qayta render qilish va yangi tanlangan mijozni inputga joylash
-        setFormConfig(prevConfig =>
-            prevConfig.map(configItem =>
+        // Formani qayta render qilish, eski va yangi mijozlarni birlashtirish
+        setFormConfig((prevConfig) =>
+            prevConfig.map((configItem) =>
                 configItem.name === 'customer'
-                    ? { ...configItem, options: [...customers, newOption], value: newCustomer.id }
+                    ? { ...configItem, options: [newOption, ...customers.map(customer => ({ value: customer.id, label: customer.first_name }))] }
                     : configItem
             )
         );
     };
 
+
     const handleAddCarsSuccess = (newCar) => {
         const newOption = { value: newCar.id, label: newCar.name };
-        setCustomerCars(prevOptions => {
-            const updatedCars = [newOption, ...prevOptions];
 
-            setFormConfig(prevConfig =>
-                prevConfig.map(configItem =>
-                    configItem.name === 'car'
-                        ? { ...configItem, options: updatedCars, value: newCar.id }
-                        : configItem
-                )
-            );
+        // Mashinalarni ro'yxatning yuqori qismiga qo'shish va eski mashinalarni saqlab qolish
+        setCustomerCars((prevCars) => [newOption, ...prevCars]);
 
-            return updatedCars;
-        });
+        // Formani qayta render qilish, eski va yangi mashinalarni birlashtirish
+        setFormConfig((prevConfig) =>
+            prevConfig.map((configItem) =>
+                configItem.name === 'car'
+                    ? { ...configItem, options: [newOption, ...customerCars.map(car => ({ value: car.id, label: car.name }))] }
+                    : configItem
+            )
+        );
     };
-
-
-
-
 
     const handleSubmit = async () => {
         setLoading(true);
