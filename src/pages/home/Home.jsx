@@ -15,6 +15,7 @@ import { BiLoader } from 'react-icons/bi';
 import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { getUser } from '../../services/auth/auth';
 
 function Home() {
   const [startDate, setStartDate] = useState(dayjs().startOf('month'));
@@ -22,6 +23,8 @@ function Home() {
 
   const { data: topProducts, loading: topProductsLoading, error: topProductsError } = useFetch(Statistics.getTopProducts);
   const { data: topCalculate, loading: topCalculateLoading, error: topCalculateError } = useFetch(Statistics.getTopCalculate);
+  const { data: benefitBranch, loading: benefitBranchLoading, error: benefitBranchError } = useFetch(getUser)
+  console.log(benefitBranch)
 
   const productColumns = ["Name", "Amount", "Total Benefit"];
 
@@ -50,22 +53,39 @@ function Home() {
         <Navbar title="Asosiy" />
         <div className="extra-items">
           <div className="header">
-            <div className="items">
-              {topCalculateError ? <p>{topCalculateError.message}</p> : calculateData?.map((item, index) => (
-                <div className="item" key={index}>
+            <div className="items-wrapper">
+              <div className='items'>
+                {topCalculateError ? <p>{topCalculateError.message}</p> : calculateData?.map((item, index) => (
+                  <div className="item" key={index}>
+                    <div className="about">
+                      {topCalculateLoading ? <BiLoader /> : <>
+                        <div className="title">{item.title}</div>
+                        <div className="description" style={{ color: descriptionColors[index] }}>
+                          UZS {item.value}
+                        </div>
+                      </>}
+                    </div>
+                    <div className="img">
+                      <img src={item.img} alt={item.title} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="benefit-branch">
+                <div className="item">
                   <div className="about">
-                    {topCalculateLoading ? <BiLoader /> : <>
-                      <div className="title">{item.title}</div>
-                      <div className="description" style={{ color: descriptionColors[index] }}>
-                        UZS {item.value}
+                    {benefitBranchLoading ? <BiLoader /> : <>
+                      <div className="title">Branch: {benefitBranch?.branch.name}</div>
+                      <div className="description" style={{ color: 'blue' }}>
+                        Balans {benefitBranch?.branch.balance}
                       </div>
                     </>}
                   </div>
                   <div className="img">
-                    <img src={item.img} alt={item.title} />
+                    <img src={img3} alt='daromad' />
                   </div>
                 </div>
-              ))}
+              </div>
               <div className="filter-section">
                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker

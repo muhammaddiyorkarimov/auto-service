@@ -158,7 +158,9 @@ function AddOrder() {
                 options: managers?.map((p) => ({ value: p.id, label: p.first_name + ' ' + p.last_name })),
             },
 
-            { type: 'number', label: 'Yurgan masofasi', name: 'car_kilometers' },
+            { type: 'number', label: 'Yurgan masofasi EV', name: 'car_kilometers_ev' },
+            { type: 'number', label: 'Yurgan masofasi HEV', name: 'car_kilometers_hev' },
+            { type: 'number', label: 'Yurgan masofasi OBO', name: 'car_kilometers_odo' },
             { type: 'text', label: 'Tavsif', name: 'description' },
         ]);
     };
@@ -259,7 +261,9 @@ function AddOrder() {
             total: total,
             paid: parseInt(paid),
             debt: debt,
-            car_kilometers: formData.car_kilometers || 0,
+            car_kilometers_odo: formData.car_kilometers_odo || 0,
+            car_kilometers_ev: formData.car_kilometers_ev || 0,
+            car_kilometers_hev: formData.car_kilometers_hev || 0,
             customer: formData.customer,
             description: formData.description
         };
@@ -276,7 +280,7 @@ function AddOrder() {
             order: null,
             part: service.part,
             service: service.service,
-            staff: service.staff,
+            worker: service.worker,
             total: service.total,
         }));
 
@@ -392,8 +396,10 @@ function AddOrder() {
                                                     <th>Mijoz</th>
                                                     <th>Mashina</th>
                                                     <th>Boshqaruvchi</th>
-                                                    <th>Yurgan masofasi</th>
-                                                    <th>Tavsif</th>
+                                                    {formData.car_kilometers_odo ? <th>Odo bo'yicha yurgan masofa</th> : null}
+                                                    {formData.car_kilometers_ev ? <th>EV bo'yicha yurgan masofa</th> : null}
+                                                    {formData.car_kilometers_hev ? <th>HEV bo'yicha yurgan masofa</th> : null}
+                                                    {formData.description ? <th>Tavsif</th> : null}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -401,11 +407,14 @@ function AddOrder() {
                                                     <td>{formData.customerName}</td>
                                                     <td>{formData.carName}</td>
                                                     <td>{managerById.first_name + ' ' + managerById.last_name}</td>
-                                                    <td>{formData.car_kilometers}</td>
-                                                    <td>{formData.description}</td>
+                                                    {formData.car_kilometers_odo ? <td>{formData.car_kilometers_odo}</td> : null}
+                                                    {formData.car_kilometers_ev ? <td>{formData.car_kilometers_ev}</td> : null}
+                                                    {formData.car_kilometers_hev ? <td>{formData.car_kilometers_hev}</td> : null}
+                                                    {formData.description ? <td>{formData.description}</td> : null}
                                                 </tr>
                                             </tbody>
                                         </table>
+
                                     </div>
                                     <div className="order-wrapper">
                                         <OrderProduct onTotalChange={handleAddProductTotal} onSave={setOrderFormProducts} />

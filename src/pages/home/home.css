@@ -28,7 +28,7 @@
     font-weight: 300;
 }
 
-.custom-table  {
+.custom-table {
     border-collapse: collapse;
     width: 100%;
 }
@@ -94,9 +94,8 @@ main {
 .home main .extra-items .main .active-reports .title {
     color: var(--text-color);
 }
-.home main .extra-items .main .pie-chart-container .title
 
-.home main .extra-items .footer .cards {
+.home main .extra-items .main .pie-chart-container .title .home main .extra-items .footer .cards {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -112,11 +111,19 @@ main {
     background-color: aliceblue;
     border-radius: 10px;
 }
+
 .home main .extra-items .footer .cards .top-customers {
     padding: 20px;
     border-radius: 10px;
     flex: 1;
     background-color: aliceblue;
+}
+
+.home main .extra-items .header .items-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .home main .extra-items .header .items {
@@ -127,8 +134,19 @@ main {
     margin-bottom: 10px;
     flex-wrap: wrap;
 }
- 
+
 .home main .extra-items .header .items .item {
+    width: 250px;
+    display: flex;
+    align-items: center !important;
+    justify-content: space-between;
+    padding: 5px 10px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+.home main .extra-items .header .benefit-branch .item {
     width: 250px;
     display: flex;
     align-items: center !important;
@@ -150,6 +168,22 @@ main {
 }
 
 .home main .extra-items .header .items .item .description {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color);
+    /* color: #c70000; */
+}
+.home main .extra-items .header .benefit-branch .item:hover {
+    transform: scale(1.05);
+}
+
+.home main .extra-items .header .benefit-branch .item .title {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-lighter-color);
+}
+
+.home main .extra-items .header .benefit-branch .item .description {
     font-size: 18px;
     font-weight: 500;
     color: var(--text-color);

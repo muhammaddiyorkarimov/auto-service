@@ -8,6 +8,7 @@ import Navbar from '../../../components/navbar/Navbar';
 import Loader from '../../../helpers/loader/Loader';
 import OrdersManagers from '../../../services/landing/manager';
 import useFetch from '../../../hooks/useFetch';
+import OrderServices from '../../../services/landing/orderService';
 
 function DetailView() {
   const navigate = useNavigate();
@@ -23,6 +24,13 @@ function DetailView() {
     }
   }, [data?.manager]);
   const { data: managerById } = useFetch(fetchManagerForOrder);
+  const fetchWorkerForService = useCallback(() => {
+    if (data?.services?.id) {
+      return OrderServices.getOrdersById(data?.services?.id);
+    }
+  }, [data?.services?.id]);
+  const { data: workerById } = useFetch(fetchWorkerForService);
+  console.log(workerById, data?.services?.id)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +44,10 @@ function DetailView() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [id]);
+
+  console.log(data)
 
   const handlePrint = () => {
     setOpenModal(true);
@@ -61,7 +70,6 @@ function DetailView() {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
-  console.log(data)
 
   return (
     <div className='order-detail-view'>
@@ -157,12 +165,22 @@ function DetailView() {
                 <table className="oreder-details-wrapper">
                   <thead>
                     <tr>
-                      <th style={{ border: '1px solid black' }} rowspan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
-                      <th style={{ border: '1px solid black' }} rowspan="2">Vin code: <p>{data?.car?.code}</p></th>
+                      <th style={{ border: '1px solid black' }} rowSpan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
+                      <th style={{ border: '1px solid black' }} rowSpan="2">Vin code: <p>{data?.car?.code}</p></th>
                     </tr>
                     <tr>
                       <th style={{ border: '1px solid black' }}>Davlat raqami: <p>{data?.car?.state_number}</p></th>
-                      <th style={{ border: '1px solid black' }}>Yurgan kilometri: <p>{data?.car_kilometers} km</p></th>
+
+                      {/* Yurgan kilometrlari turlari shartga bog'liq ravishda */}
+                      {data?.car_kilometers_odo && (
+                        <th style={{ border: '1px solid black' }}>Odo bo'yicha yurgan masofa: <p>{data?.car_kilometers_odo} km</p></th>
+                      )}
+                      {data?.car_kilometers_ev && (
+                        <th style={{ border: '1px solid black' }}>EV bo'yicha yurgan masofa: <p>{data?.car_kilometers_ev} km</p></th>
+                      )}
+                      {data?.car_kilometers_hev && (
+                        <th style={{ border: '1px solid black' }}>HEV bo'yicha yurgan masofa: <p>{data?.car_kilometers_hev} km</p></th>
+                      )}
                     </tr>
                   </thead>
                 </table>
@@ -201,7 +219,7 @@ function DetailView() {
                   </tr>
                   {data?.services?.map((service, index) => (
                     <tr key={index}>
-                      <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
+                      <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td>
                       <td style={{ border: '1px solid black' }}>{service.part}</td>
                       <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
                       <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
@@ -231,18 +249,46 @@ function DetailView() {
             <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
             <Divider style={{ margin: '10px 0' }} />
             <Typography variant="subtitle1"><strong>Boshqaruvchi:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
-            <table className="oreder-details-wrapper">
+            <table className="order-details-wrapper">
               <thead>
                 <tr>
-                  <th style={{ border: '1px solid black' }} rowspan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
-                  <th style={{ border: '1px solid black' }} rowspan="2">Vin code: <p>{data?.car?.code}</p></th>
+                  <th style={{ border: '1px solid black' }} rowSpan="2">
+                    Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p>
+                  </th>
+                  <th style={{ border: '1px solid black' }} rowSpan="2">
+                    Vin code: <p>{data?.car?.code}</p>
+                  </th>
                 </tr>
                 <tr>
-                  <th style={{ border: '1px solid black' }}>Davlat raqami: <p>{data?.car?.state_number}</p></th>
-                  <th style={{ border: '1px solid black' }}>Yurgan kilometri: <p>{data?.car_kilometers} km</p></th>
+                  <th style={{ border: '1px solid black' }}>
+                    Davlat raqami: <p>{data?.car?.state_number}</p>
+                  </th>
+
+                  {/* Yurgan kilometrlari shart bo'yicha */}
+                  {data?.car_kilometers_odo && (
+                    <th style={{ border: '1px solid black' }}>
+                      Masofa (ODO): <p>{data?.car_kilometers_odo} km</p>
+                    </th>
+                  )}
+                  {data?.car_kilometers_ev && (
+                    <th style={{ border: '1px solid black' }}>
+                      Masofa (ED): <p>{data?.car_kilometers_ev} km</p>
+                    </th>
+                  )}
+                  {data?.car_kilometers_hev && (
+                    <th style={{ border: '1px solid black' }}>
+                      Mmasofa (HEV): <p>{data?.car_kilometers_hev} km</p>
+                    </th>
+                  )}
+
+                  {/* Umumiy yurgan kilometri */}
+                  {/* <th style={{ border: '1px solid black' }}>
+                    Yurgan kilometri: <p>{data?.car_kilometers} km</p>
+                  </th> */}
                 </tr>
               </thead>
             </table>
+
             {data?.products?.length > 0 && <table>
               <tr>
                 <th style={{ border: '1px solid black' }} colspan="4">Maxsulotlar</th>
@@ -274,7 +320,7 @@ function DetailView() {
               </tr>
               {data?.services?.map((service, index) => (
                 <tr key={index}>
-                  <td style={{ border: '1px solid black' }}>{service.staff.first_name + ' ' + service.staff.last_name}</td>
+                  <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td>
                   <td style={{ border: '1px solid black' }}>{service.part}</td>
                   <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
                   <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>

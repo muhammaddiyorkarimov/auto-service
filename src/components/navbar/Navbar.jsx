@@ -13,10 +13,8 @@ function Navbar({ title }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  // Dropdown holatini boshqarish
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Foydalanuvchi ma'lumotlarini localStorage'ga saqlash
   useEffect(() => {
     if (user) {
       localStorage.setItem('first_name', user.first_name);
@@ -25,18 +23,15 @@ function Navbar({ title }) {
     }
   }, [user]);
 
-  // localStorage'dan foydalanuvchi ma'lumotlarini olish
   const firstName = localStorage.getItem('first_name') || '';
   const lastName = localStorage.getItem('last_name') || '';
   const position = localStorage.getItem('position') || '';
 
-  // Chiqish funksiyasi
   const handleLogout = () => {
     dispatch(logoutUser());
     window.location.href = '/login';
   };
 
-  // Sahifadagi boshqa joyga bosilganda dropdown'ni yopish
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.navbar-in-user')) {
