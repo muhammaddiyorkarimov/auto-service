@@ -46,32 +46,34 @@ function Navbar({ title }) {
   }, []);
 
   return (
-    <div className='navbar'>
-      <div className="navbar-item">
-        <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
-        <div className="title">{title}</div>
-      </div>
-      <div className="navbar-in-user" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-        <div className="user-image">
-          <CiUser />
+    <>
+      <div className='navbar'>
+        <div className="navbar-item">
+          <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
+          <div className="title">{title}</div>
         </div>
-        <div className="user-info">
-          <p>{`${firstName} ${lastName}`}</p>
-          <span>{position}</span>
-        </div>
-        {isDropdownOpen && (
-          <>
-            <div className="overlay"></div>
-            <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={handleLogout}>
-                <FaSignOutAlt className="dropdown-icon" />
-                Выход
+        <div className="navbar-in-user" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <div className="user-image">
+            <CiUser />
+          </div>
+          <div className="user-info">
+            <p>{`${firstName} ${lastName}`}</p>
+            <span>{position}</span>
+          </div>
+          {isDropdownOpen && (
+            <>
+              <div className="dropdown-menu">
+                <div className="dropdown-item" onClick={handleLogout}>
+                  <FaSignOutAlt className="dropdown-icon" />
+                  Выход
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      <div className="overlay"></div>
+    </>
   );
 }
 

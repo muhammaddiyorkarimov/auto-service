@@ -79,7 +79,7 @@ function SideBar() {
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/import'>
-                    <span>• Приход товара</span>
+                    <span>• История</span>
                   </NavLink>
                 </div>
 

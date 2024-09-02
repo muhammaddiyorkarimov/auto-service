@@ -179,6 +179,7 @@ function AutoService() {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             onRowClick={handleRowClick}
+                            showEditDelete={true}
                         />
                     </section>
                 </div>

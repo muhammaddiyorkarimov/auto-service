@@ -47,8 +47,8 @@ function OrderingService({ onTotalChange, onSave }) {
                 label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
             })), required: true },
             { type: 'select', label: 'Услуга', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Партия', name: 'part', required: true },
-            { type: 'number', label: 'Общий', name: 'total', required: true, disabled: true },
+            { type: 'number', label: 'Н/Ч', name: 'part', required: true },
+            { type: 'number', label: 'Итого', name: 'total', required: true, disabled: true },
         ]);
         setShowAddButton(false);
     };
@@ -91,8 +91,8 @@ function OrderingService({ onTotalChange, onSave }) {
                         <tr>
                             <th>Услуга</th>
                             <th>Сотрудник</th>
-                            <th>Партия</th>
-                            <th>Общий</th>
+                            <th>Н/Ч</th>
+                            <th>Итого</th>
                         </tr>
                     </thead>
                     <tbody>

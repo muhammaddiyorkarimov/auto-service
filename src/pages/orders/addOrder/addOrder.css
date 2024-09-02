@@ -103,6 +103,12 @@ main section {
     flex-wrap: wrap;
     align-items: center !important;
     gap: 10px;
+    margin-bottom: 20px;
+}
+
+.css-1bekzow-MuiFormControl-root {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .add-itemBtn {

@@ -153,7 +153,6 @@ function Salary() {
     };
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
                 name: formData.name ? formData.name : formData.name,
@@ -208,7 +207,7 @@ function Salary() {
         <div className='expenses'>
             <SideBar />
             <main>
-                <Navbar title='Расходы' />
+                <Navbar title='Зарплата' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -218,7 +217,7 @@ function Salary() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Добавить расход" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить Зарплата" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -230,6 +229,7 @@ function Salary() {
                             onDelete={handleDelete}
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination
@@ -243,7 +243,7 @@ function Salary() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
-                    expensesType={true}
+                    expensesType={false}
                     name="Добавить расход"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}

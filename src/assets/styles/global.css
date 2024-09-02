@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  /* background-color: aliceblue; */
+  background-color: aliceblue;
 }
 
 * {
@@ -37,7 +37,8 @@ main {
 }
 
 main .extra-items {
-    min-height: 85vh !important;
+    min-height: 100vh !important;
+    height: auto !important;
 }
 
 .MuiPagination-root {

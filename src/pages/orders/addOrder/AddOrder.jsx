@@ -62,7 +62,6 @@ function AddOrder() {
     const { data: customerCar } = useFetch(fetchCarsForCustomer);
     const { data: allCar } = useFetch(CarsService.getCars);
 
-    console.log(managerById)
     useEffect(() => {
         if (managerById?.part === null) {
             alert('Menejerning ulushi belgilanmagan')
@@ -192,17 +191,13 @@ function AddOrder() {
     const handlePaidChange = (e) => {
         let inputValue = e.target.value;
 
-        // Remove existing spaces from the input value
         const plainNumber = inputValue.replace(/\s/g, '');
 
-        // Check if it's a valid number
         if (/^\d*$/.test(plainNumber)) {
             const formattedValue = formatNumberWithCommas(plainNumber);
 
-            // Convert plainNumber to number type before saving to state
-            setPaid(Number(plainNumber)); // now storing as number type
+            setPaid(Number(plainNumber));
 
-            // Set the formatted value in the input (for display purposes)
             e.target.value = formattedValue;
         }
     };
@@ -313,7 +308,6 @@ function AddOrder() {
             alert("Заказ успешно добавлен");
             navigate(`/orders/${orderId}`); // Navigate qilish
         } catch (error) {
-            console.log(error);
             alert(`Ошибка при отправке данных: ${error.message}`);
         } finally {
             setLoading(false);
@@ -328,26 +322,26 @@ function AddOrder() {
         <div className='adding-order'>
             <SideBar />
             <main>
-                <Navbar title='Создание заказа' />
+                <Navbar title='Новый чек' />
                 <div className="extra-items">
                     {loading ? <Loader /> : <>
                         <div className="create-btn">
-                            {!createOpen && <AddItemBtn name='Создание заказа' onClick={handleCreateOpen} />}
+                            {!createOpen && <AddItemBtn name='Новый чек' onClick={handleCreateOpen} />}
                         </div>
                         {createOpen &&
                             <section className="information">
                                 <div className="created-about">
                                     <div className="header">
                                         <div className="title">Детали заказа</div>
-                                        <Button onClick={handleSubmit} variant='contained'>{loading ? 'Отправляется...' : 'Отправить'}</Button>
+                                        <Button onClick={handleSubmit} variant='contained'>{loading ? 'Отправляется...' : 'Сохранить'}</Button>
                                     </div>
                                     <table>
                                         <thead>
                                             <tr>
                                                 <th>Дата создания</th>
                                                 <th>Оплаченная сумма</th>
-                                                <th>ДоЗадолженностьлг</th>
-                                                <th>Общий</th>
+                                                <th>Задолженность</th>
+                                                <th>Итого</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -355,9 +349,11 @@ function AddOrder() {
                                                 <td>{currentDate}</td>
                                                 <td>
                                                     <TextField
+                                                        size='small'
+                                                        fullWidth
                                                         type="text"
                                                         id="standard-basic"
-                                                        variant="standard"
+                                                        variant="outlined"
                                                         value={formatNumberWithCommas(paid)}
                                                         onChange={handlePaidChange}
                                                     />

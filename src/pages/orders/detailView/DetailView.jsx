@@ -30,7 +30,6 @@ function DetailView() {
     }
   }, [data?.services?.id]);
   const { data: workerById } = useFetch(fetchWorkerForService);
-  console.log(workerById, data?.services?.id)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +46,6 @@ function DetailView() {
     fetchData();
   }, [id]);
 
-  console.log(data)
 
   const handlePrint = () => {
     setOpenModal(true);
@@ -210,7 +208,7 @@ function DetailView() {
                   </tr>
                   <tr>
                     {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
-                    <th style={{ border: '1px solid black' }}>Партия</th>
+                    <th style={{ border: '1px solid black' }}>Н/Ч</th>
                     <th style={{ border: '1px solid black' }}>Название услуги</th>
                     <th style={{ border: '1px solid black' }}>Общий</th>
                   </tr>
@@ -311,7 +309,7 @@ function DetailView() {
               </tr>
               <tr>
                 {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
-                <th style={{ border: '1px solid black' }}>Партия</th>
+                <th style={{ border: '1px solid black' }}>Н/Ч</th>
                 <th style={{ border: '1px solid black' }}>Название услуги</th>
                 <th style={{ border: '1px solid black' }}>Общий</th>
               </tr>

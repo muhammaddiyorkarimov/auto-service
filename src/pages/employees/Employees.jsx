@@ -13,6 +13,7 @@ import AddItemModal from '../../components/addItemModal/AddItemModal'
 import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import { Alert, Snackbar } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 function Employees() {
     const headers = tableHeaders['employees']
@@ -145,6 +146,8 @@ function Employees() {
         }
     };
 
+    const { user } = useSelector((state) => state.auth);
+
     return (
         <div className='employees'>
             <SideBar />
@@ -169,6 +172,7 @@ function Employees() {
                             onDelete={handleDelete}
                             // onRowClick={handleRowClick}
                             dNone={false}
+                            showEditDelete={user?.role === 'Admin'}
                         />
                     </section>
                 </div>

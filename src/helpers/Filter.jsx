@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const Filter = ({ selectedFilter, onFilterChange, options }) => {
+const Filter = ({ selectedFilter, onFilterChange, options, selectedFilterDebt }) => {
   const handleChange = (event) => {
     onFilterChange(event.target.value);
   };
 
   return (
     <FormControl size='small' fullWidth>
-      <InputLabel>Сортировка</InputLabel>
+      <InputLabel>Фильтр</InputLabel>
       <Select
         fullWidth
-        value={selectedFilter}
+        value={selectedFilter || selectedFilterDebt}
         onChange={handleChange}
         label="Сортировка"
         size='small'

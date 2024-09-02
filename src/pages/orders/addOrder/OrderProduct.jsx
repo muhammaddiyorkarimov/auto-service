@@ -47,7 +47,6 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
     }, [productById]);
 
     const handleSave = (data) => {
-        console.log(data)
         setFormData(prevData => {
             const updatedData = [...prevData, { ...data }];
             onSave(updatedData);
@@ -65,7 +64,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
             { type: 'select', label: 'Товар', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
             { type: 'number', label: 'Количество', name: 'amount', required: true },
             { type: 'number', label: 'Скидка', name: 'discount' },
-            { type: 'number', label: 'Общий', name: 'total', required: true, disabled: true },
+            { type: 'number', label: 'Итого', name: 'total', required: true, disabled: true },
         ]);
         setIsAdding(true);
     };
@@ -121,7 +120,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
                             <th>Товар</th>
                             <th>Количество</th>
                             <th>Скидка</th>
-                            <th>Общий</th>
+                            <th>Итого</th>
                         </tr>
                     </thead>
                     <tbody>

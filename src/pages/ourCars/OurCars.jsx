@@ -236,6 +236,7 @@ function OurCars() {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             onRowClick={handleRowClick}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination

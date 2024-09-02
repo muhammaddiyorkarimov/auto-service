@@ -8,6 +8,12 @@ import { BiLoader, BiPrinter } from 'react-icons/bi'; // Print iconni import qil
 function PieChartC({ startDate, endDate }) {
     const [filteredData, setFilteredData] = useState([]);
 
+    console.log(filteredData)
+
+    function formatNumberWithCommas(number) {
+        return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+      
     const { data: pieChartData, loading, error } = useFetch(() =>
         Statistics.pieChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')), [startDate, endDate]
     );
@@ -93,7 +99,7 @@ function PieChartC({ startDate, endDate }) {
 
     return (
         <div className="pie-chart-container">
-            <div className="title">статистика по расходам
+            <div className="title">Расходы
                 <BiPrinter onClick={handlePrint} style={{ cursor: 'pointer', fontSize: '25px', marginLeft: '10px' }} /></div>
             {loading ? <BiLoader /> : error ? <p>{error.message}</p> : (
                 <>

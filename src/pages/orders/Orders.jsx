@@ -30,7 +30,6 @@ function Orders() {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
-    console.log(ordersC)
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
@@ -193,6 +192,8 @@ function Orders() {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             onRowClick={handleRowClick}
+                            dDelete={false}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination

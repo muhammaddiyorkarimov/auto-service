@@ -30,7 +30,7 @@ function ActiveReports() {
 
     return (
         <div className='active-reports-wrapper'>
-            <div className="title">месячная статистика продаж</div>
+            <div className="title">Ежемесячный отчет о продажах</div>
             {loading ? (
                 <div className="loader-wrapper">
                     <BiLoader className="loader-icon" />

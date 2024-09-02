@@ -225,6 +225,7 @@ function ProviderC() {
                             onDelete={handleDelete}
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination

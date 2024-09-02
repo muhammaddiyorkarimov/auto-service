@@ -41,6 +41,7 @@ function OurProduct() {
 
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
     const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'name');
+    const [selectedFilterDebt, setSelectedFilterDebt] = useState(params.get('order_by') || '');
     const [availableFilter, setAvailableFilter] = useState(params.get('import_required') || 'false');
 
     const fetchOrderProduct = useCallback((query) => {
@@ -67,8 +68,8 @@ function OurProduct() {
     ]
 
     const debtOptions = [
+        { value: 'false', label: '-' },
         { value: 'true', label: 'Заканчивающиеся товары' },
-        { value: 'false', label: 'Продукт' },
     ]
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -259,7 +260,7 @@ function OurProduct() {
                         <div>
                             <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} />
                             <Filter selectedFilter={selectedFilter} onFilterChange={handleFilterChange} options={sortedOptions} />
-                            <Filter selectedFilter={selectedFilter} onFilterChange={handleFilterChange2} options={debtOptions} />
+                            <Filter selectedFilterDebt={selectedFilterDebt} onFilterChange={handleFilterChange2} options={debtOptions} />
                         </div>
                         <div className="header-items-add">
                             <AddItemBtn name="Добавить продукт" onClick={handleAdd} />
@@ -275,6 +276,7 @@ function OurProduct() {
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
                             dDelete={false}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination

@@ -28,7 +28,6 @@ function Managers() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
 
-    console.log(employessData)
 
     const [params, setQueryParams] = useQueryParams();
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
@@ -164,7 +163,6 @@ function Managers() {
 
     const { user } = useSelector((state) => state.auth);
 
-    console.log(user)
 
     return (
         <div className='employees'>
@@ -177,7 +175,7 @@ function Managers() {
                             {/* <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} /> */}
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Добавить менеджера" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -189,7 +187,6 @@ function Managers() {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             dNone={false}
-                            stateNone={user?.role === 'Admin'}
                             showEditDelete={user?.role === 'Admin'}
                         />
                     </section>

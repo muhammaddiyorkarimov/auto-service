@@ -85,15 +85,15 @@ function Brand() {
     };
 
     const sortedOptions = [
+        { value: 'total', label: '-' },
+        { value: 'created_at', label: 'По дате (+)' },
+        { value: '-created_at', label: 'По дате (-)' },
         { value: 'amount', label: 'Количество' },
-        { value: 'import_price', label: 'Сумма закупки' },
-        { value: 'total', label: 'Общий' },
+        { value: 'import_price', label: 'Цена покупки' },
         { value: 'debt', label: 'Задолженность' },
-        { value: 'created_at', label: 'Время создания' },
-        { value: '-created_at', label: '-Время создания' }
     ]
 
-    // Handle deleting a product
+   // Handle deleting a product
     const handleDelete = (item) => {
         setCurrentItem(item.id);
         setDeleteOpen(true);
@@ -162,7 +162,6 @@ function Brand() {
 
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
                 amount: formData.amount,
@@ -221,7 +220,7 @@ function Brand() {
         <div className='brand'>
             <SideBar />
             <main>
-                <Navbar title='Приход товаров' />
+                <Navbar title='История' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -234,9 +233,6 @@ function Brand() {
                                 onFilterChange={handleFilterChange}
                                 options={sortedOptions}
                             />
-                        </div>
-                        <div className="header-items-add">
-                            <AddItemBtn name="Добавить продукт" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -258,6 +254,7 @@ function Brand() {
                             ]}
                             onSave={createProduct}
                             dDelete={false}
+                            showEditDelete={false}
                         />
                     </section>
                     <CustomPagination

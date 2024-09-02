@@ -24,9 +24,8 @@ function Home() {
   const { data: topProducts, loading: topProductsLoading, error: topProductsError } = useFetch(Statistics.getTopProducts);
   const { data: topCalculate, loading: topCalculateLoading, error: topCalculateError } = useFetch(Statistics.getTopCalculate);
   const { data: benefitBranch, loading: benefitBranchLoading, error: benefitBranchError } = useFetch(getUser)
-  console.log(benefitBranch)
 
-  const productColumns = ["название", "количество", "общая прибыль"];
+  const productColumns = ["Название", "Количество", "Прибыль"];
 
   const productData = topProducts ? topProducts.map(product => ({
     name: product.product.name,
@@ -35,9 +34,9 @@ function Home() {
   })) : [];
 
   const calculateData = topCalculate ? [
-    { title: "расход", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
-    { title: "приход", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
-    { title: "чистый доход", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
+    { title: "Расход", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
+    { title: "Приход", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
+    { title: "Чистый доход", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
   ] : [];
 
   function formatNumberWithCommas(number) {
@@ -61,7 +60,7 @@ function Home() {
                       {topCalculateLoading ? <BiLoader /> : <>
                         <div className="title">{item.title}</div>
                         <div className="description" style={{ color: descriptionColors[index] }}>
-                          СУМ {item.value}
+                           {item.value} СУМ
                         </div>
                       </>}
                     </div>
@@ -77,7 +76,7 @@ function Home() {
                     {benefitBranchLoading ? <BiLoader /> : <>
                       <div className="title">Касса</div>
                       <div className="description" style={{ color: 'blue' }}>
-                        СУМ {formatNumberWithCommas(benefitBranch?.branch.balance)}
+                         {formatNumberWithCommas(benefitBranch?.branch.balance)} СУМ
                       </div>
                     </>}
                   </div>
@@ -115,7 +114,7 @@ function Home() {
           <div className="footer">
             <div className="cards">
               <div className="top-products">
-                <div className="title">топ товары</div>
+                <div className="title">Топ товары</div>
                 <TopTableComponent loading={topProductsLoading} error={topProductsError} columns={productColumns} data={productData} />
               </div>
             </div>

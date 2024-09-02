@@ -14,6 +14,7 @@ import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import { Alert, Snackbar } from '@mui/material'
 import OrdersManagers from '../../services/landing/manager'
 import WorkersService from '../../services/landing/workers'
+import { useSelector } from 'react-redux'
 
 function Workers() {
     const headers = tableHeaders['managers']
@@ -159,18 +160,20 @@ function Workers() {
         }
     };
 
+    const { user } = useSelector((state) => state.auth);
+
     return (
         <div className='employees'>
             <SideBar />
             <main>
-                <Navbar title='Рабочие' />
+                <Navbar title='Мастера' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
                             {/* <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} /> */}
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Добавить рабочего" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -182,6 +185,7 @@ function Workers() {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             dNone={false}
+                            showEditDelete={user?.role === 'Admin'}
                         // onRowClick={handleRowClick}
                         />
                     </section>
@@ -190,7 +194,7 @@ function Workers() {
 
             {addOpen &&
                 <AddItemModal
-                    name="Добавить нового рабочего"
+                    name="Добавить нового Мастера"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -198,7 +202,7 @@ function Workers() {
                 />}
             {editOpen &&
                 <EditItem
-                    name="Редактировать существующего рабочего"
+                    name="Редактировать существующего Мастера"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={formConfig}
@@ -207,7 +211,7 @@ function Workers() {
                 />}
             {deleteOpen &&
                 <DeleteProduct
-                    name="Этого рабочего"
+                    name="Этого Мастера"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

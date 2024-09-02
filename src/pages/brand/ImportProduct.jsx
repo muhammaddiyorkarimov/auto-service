@@ -499,7 +499,7 @@ function Import() {
                                                         <th>Цена покупки</th>
                                                         <th>Цена продажи</th>
                                                         <th>Итого</th>
-                                                        <th>Статус</th>
+                                                        <th>Действия</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

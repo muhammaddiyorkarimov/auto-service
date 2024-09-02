@@ -135,7 +135,6 @@ function Expenses() {
     };
 
     const updateProduct = async (formData) => {
-        console.log(formData)
         try {
             const updatedData = {
                 name: formData.name ? formData.name : formData.name,
@@ -212,6 +211,7 @@ function Expenses() {
                             onDelete={handleDelete}
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
+                            showEditDelete={true}
                         />
                     </section>
                     <CustomPagination
