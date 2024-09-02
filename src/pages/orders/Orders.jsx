@@ -74,7 +74,7 @@ function Orders() {
         setFormConfig([
             { type: 'number', label: "Оплачено", name: 'paid', required: true },
             { type: 'number', label: 'Задолженность', name: 'debt', required: true },
-            { type: 'select', label: 'Покупатель', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Клиент', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Общий', name: 'total', required: true },
         ]);
         navigate('/add-order')
@@ -108,7 +108,7 @@ function Orders() {
         setFormConfig([
             { type: 'number', label: "Оплачено", name: 'paid', value: item.paid },
             { type: 'number', label: 'Задолженность', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Покупатель', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'select', label: 'Клиент', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
             { type: 'number', label: 'Общий', name: 'total', value: computedTotal },
         ]);
         

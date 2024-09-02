@@ -4,7 +4,7 @@ import AddItemBtn from '../../../components/addItemBtn/AddItemBtn';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Alert, AlertTitle, Snackbar } from '@mui/material';
 import ExpensesTypeService from '../../../services/landing/expensesTypeSerive';
 
-function ExpensesType() {
+function ExpensesType({ onNewExpenseType }) {
     const [open, setOpen] = useState(false);
     const [formConfig] = useState([
         { type: 'text', label: 'Название', name: 'name' },
@@ -48,6 +48,9 @@ function ExpensesType() {
             setSuccess(true);
             setOpen(false);
             setSnackbarOpen(true)
+            if (onNewExpenseType) {
+                onNewExpenseType(response);
+            }
         } catch (error) {
             setError(true);
 

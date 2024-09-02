@@ -11,7 +11,7 @@ const Filter = ({ selectedFilter, onFilterChange, options, selectedFilterDebt })
       <InputLabel>Фильтр</InputLabel>
       <Select
         fullWidth
-        value={selectedFilter || selectedFilterDebt}
+        value={selectedFilter}
         onChange={handleChange}
         label="Сортировка"
         size='small'

@@ -11,7 +11,7 @@ function AddCustomerModal({ open, onClose, onSuccess }) {
         { type: 'text', label: 'Серийные номера паспорта', name: 'passport_serial_numbers' },
         { type: 'text', label: 'Серийные буквы паспорта', name: 'passport_serial_letters' },
         { type: 'text', label: 'Адрес', name: 'address' },
-        { type: 'number', label: 'Задолженность', name: 'debt', required: true },
+        { type: 'number', label: 'Задолженность', name: 'debt', required: true, value: 0 },
     ]);
 
     const [formData, setFormData] = useState({
@@ -101,7 +101,7 @@ function AddCustomerModal({ open, onClose, onSuccess }) {
                 label={field.label}
                 name={field.name}
                 type={field.type}
-                value={formData[field.name]}
+                value={formData[field.name] || field.value}
                 onChange={handleChange}
                 fullWidth
                 size="small"

@@ -173,7 +173,7 @@ function SideBar() {
                   <div className="li-item">
                     <span></span>
                     <NavLink to='/managers'>
-                      <span>• Менеджер</span>
+                      <span>• Менеджеры</span>
                     </NavLink>
                   </div>
                 </li>

@@ -205,10 +205,8 @@ function AddOrder() {
     const handleAddCustomerSuccess = (newCustomer) => {
         const newOption = { value: newCustomer.id, label: newCustomer.first_name };
 
-        // Yangi mijozni ro'yxatning yuqori qismiga qo'shish va eski mijozlarni saqlab qolish
         setCustomers((prevCustomers) => [newOption, ...prevCustomers]);
 
-        // Formani qayta render qilish, eski va yangi mijozlarni birlashtirish
         setFormConfig((prevConfig) =>
             prevConfig.map((configItem) =>
                 configItem.name === 'customer'

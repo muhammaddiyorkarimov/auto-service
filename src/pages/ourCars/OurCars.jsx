@@ -108,7 +108,7 @@ function OurCars() {
             { type: 'text', label: 'Бренд', name: 'brand', required: true },
             { type: 'text', label: 'Цвет', name: 'color', required: true },
             { type: 'text', label: 'Государственный номер', name: 'state_number', required: true },
-            { type: 'select', label: 'Покупатель', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'select', label: 'Клиент', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
         ]);
         setAddOpen(true);
     };
@@ -138,7 +138,7 @@ function OurCars() {
             { type: 'text', label: 'Бренд', name: 'brand', value: item.brand },
             { type: 'text', label: 'Цвет', name: 'color', value: item.color },
             { type: 'text', label: 'Государственный номер', name: 'state_number', value: item.state_number },
-            { type: 'select', label: 'Покупатель', name: 'customer', value: item.customer.id, options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'select', label: 'Клиент', name: 'customer', value: item.customer.id, options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
         ]);
         setEditOpen(true);
     };

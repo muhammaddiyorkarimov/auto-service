@@ -20,7 +20,7 @@ function AutoService() {
     const navigate = useNavigate()
 
     const params = new URLSearchParams(location.search);
-    const orderBy = params.get('order_by') || 'name';
+    const orderBy = params.get('order_by') || 'created_at';
 
     const headers = tableHeaders['autoService']
     const { data, loading, error } = useFetch(AutoServices.getAutoService, `order_by=${orderBy}`)
@@ -156,7 +156,7 @@ function AutoService() {
         <div className='auto-service'>
             <SideBar />
             <main>
-                <Navbar title='Автоуслуги' />
+                <Navbar title='Сервисы' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>

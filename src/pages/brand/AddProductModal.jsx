@@ -32,8 +32,8 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                     { type: 'number', label: 'Количество', name: 'amount', required: true },
                     { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
                     { type: 'select', label: 'Единица измерения', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
-                    { type: 'number', label: 'Импортная цена', name: 'import_price', required: true },
-                    { type: 'number', label: 'Экспортная цена', name: 'export_price' },
+                    { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
+                    { type: 'number', label: 'Цена продажи', name: 'export_price' },
                     { type: 'number', label: 'Скидка', name: 'max_discount', required: true },
                 ]);
             } catch (error) {

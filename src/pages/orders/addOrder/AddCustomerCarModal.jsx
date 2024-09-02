@@ -6,7 +6,7 @@ import CarsService from '../../../services/landing/carsService';
 
 function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
     const [formConfig, setFormConfig] = useState([
-        { type: 'text', label: 'Артикул', name: 'code', required: true },
+        { type: 'text', label: 'VINCODE', name: 'code', required: true },
         { type: 'text', label: 'Название', name: 'name', required: true },
         { type: 'text', label: 'Бренд', name: 'brand', required: true },
         { type: 'text', label: 'Цвет', name: 'color', required: true },

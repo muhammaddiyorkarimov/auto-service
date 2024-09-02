@@ -159,25 +159,22 @@ function Import() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-    
-        // Remove any existing spaces from the value
+
         const plainNumber = value.replace(/\s/g, '');
-    
+
         if (/^\d*$/.test(plainNumber)) {
-            // Save the plain number value without formatting
             setFormData(prevData => ({
                 ...prevData,
                 [name]: plainNumber
             }));
-    
-            // Update validation errors
+
             setValidationErrors(prevErrors => ({
                 ...prevErrors,
                 [name]: ''
             }));
         }
     };
-    
+
 
 
 
@@ -222,17 +219,15 @@ function Import() {
     };
 
     const handlePaidAmountChange = (event) => {
-        // Raqam bo'lmagan belgilarni olib tashlash
         const value = event.target.value.replace(/\s/g, '');
 
-        // Agar qiymat faqat raqamlardan iborat bo'lsa
         if (/^\d*\.?\d*$/.test(value)) {
             const paidAmount = parseFloat(value) || 0;
             const newDebt = overallTotal - paidAmount;
 
             setFormData(prevData => ({
                 ...prevData,
-                paidAmount: value, // Formatlanmagan qiymatni saqlash
+                paidAmount: value,
                 debt: newDebt,
                 productById
             }));
@@ -334,9 +329,7 @@ function Import() {
                                 label={field.label}
                                 name={field.name}
                                 type="text"
-                                value={field.name === 'export_price'
-                                    ? formatNumberWithCommas(formData.export_price || '')
-                                    : (formData[field.name] || '')}
+                                value={formatNumberWithCommas(formData[field.name] || '')} // Formatlangan qiymat
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
@@ -344,6 +337,7 @@ function Import() {
                                 error={formSubmitted && !!validationErrors[field.name]}
                             />
                         </FormControl>
+
 
 
                     );

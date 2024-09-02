@@ -93,7 +93,7 @@ function Brand() {
         { value: 'debt', label: 'Задолженность' },
     ]
 
-   // Handle deleting a product
+    // Handle deleting a product
     const handleDelete = (item) => {
         setCurrentItem(item.id);
         setDeleteOpen(true);
@@ -190,7 +190,6 @@ function Brand() {
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
-
     const formattedData = product?.map((item, index) => {
         return (
             {
@@ -198,10 +197,16 @@ function Brand() {
                 row: (
                     <>
                         <td>{index + 1}</td>
+                        <td>{item.product ? item.product.name : ''}</td>
+                        <td>{new Date(item.created_at).toLocaleDateString('en-GB', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })}</td>
+
                         <td>{item.amount}</td>
                         <td>{formatNumberWithCommas(item.import_price)}</td>
                         <td>{formatNumberWithCommas(item.debt)}</td>
-                        <td>{item.product ? item.product.name : ''}</td>
                         <td>{item.provider ? item.provider.name : ''}</td>
                         <td>{formatNumberWithCommas(item.total)}</td>
                     </>
@@ -339,7 +344,7 @@ function Brand() {
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Typography variant="body1"><strong>Название продукта:</strong> {currentItem.name}</Typography>
                         <Typography variant="body1"><strong>Количество:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Импортная цена:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Цена покупки:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
                         <Typography variant="body1"><strong>Задолженность:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
                         <Typography variant="body1"><strong>Общий:</strong> {formatNumberWithCommas(currentItem.total)}</Typography>
                         <Typography variant="body1"><strong>Поставщик:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
