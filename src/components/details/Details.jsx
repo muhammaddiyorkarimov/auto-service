@@ -14,14 +14,14 @@ export const tableHeaders = {
   importProduct: [
     "Количество",
     "Цена покупки",
-    "Долг",
+    "Задолженность",
     "Продукт",
     "Поставшик",
     "Итого",
   ],
   orders: [
     "Оплачено",
-    "Долг",
+    "Задолженность",
     "Клиент",
     "Итого"
   ],
@@ -39,7 +39,7 @@ export const tableHeaders = {
   customers: [
     'Имя Фамилия',
     'Номер телефона',
-    'Долг',
+    'Задолженность',
     'Адрес'
   ],
   cars: [
@@ -58,7 +58,7 @@ export const tableHeaders = {
   provider: [
     'Имя',
     'Номер телефона',
-    'Долг',
+    'Задолженность',
   ],
   employees: [
     'Юзернейм',
@@ -76,4 +76,9 @@ export const tableHeaders = {
       "часть",
       "баланс" 
   ],
+  salary: [
+    "Xodim",
+    "Miqdor",
+    "Tavsif",
+  ]
 }

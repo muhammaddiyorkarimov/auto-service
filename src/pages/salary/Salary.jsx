@@ -1,27 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-import Navbar from '../../components/navbar/Navbar';
-import SideBar from '../../components/sidebar/SideBar';
-import useFetch from '../../hooks/useFetch';
-import AddProvider from './../../components/addProvider/AddProvider';
-import './providerC.css';
-import DataTable from '../../components/dataTable/DataTable';
-import { tableHeaders } from '../../components/details/Details';
-import DeleteProduct from '../../components/deleteProduct/DeleteProduct';
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material';
-import AddItemModal from '../../components/addItemModal/AddItemModal';
-import Provider from './../../services/landing/provider';
-import EditItem from '../../components/editItem/EditItem';
-import { Close, Edit } from '@mui/icons-material';
-import SearchInput from './../../helpers/SearchInput';
-import Filter from './../../helpers/Filter';
-import { useNavigate } from 'react-router-dom';
-import useQueryParams from '../../helpers/useQueryParams';
-import CustomPagination from '../../helpers/CustomPagination';
-import AddItemBtn from '../../components/addItemBtn/AddItemBtn';
+import { useCallback, useEffect, useState } from 'react'
+import AddItemBtn from '../../components/addItemBtn/AddItemBtn'
+import DataTable from '../../components/dataTable/DataTable'
+import { tableHeaders } from '../../components/details/Details'
+import Navbar from '../../components/navbar/Navbar'
+import SideBar from '../../components/sidebar/SideBar'
+import CustomPagination from '../../helpers/CustomPagination'
+import SearchInput from '../../helpers/SearchInput'
+import useQueryParams from '../../helpers/useQueryParams'
+import '../expenses/expenses.css'
+import useFetch from '../../hooks/useFetch'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Snackbar, Typography } from '@mui/material'
+import { Close, Edit } from '@mui/icons-material'
+import AddItemModal from '../../components/addItemModal/AddItemModal'
+import EditItem from '../../components/editItem/EditItem'
+import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
+import EmployeesService from '../../services/landing/employees'
+import SalaryService from '../../services/landing/salary'
+import Users from '../../services/landing/users'
 
-function ProviderC() {
-    const headers = tableHeaders['provider'];
-    const navigate = useNavigate();
+function Salary() {
+
+    const headers = tableHeaders['salary']
 
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
@@ -35,24 +34,30 @@ function ProviderC() {
     const [editFormConfig, setEditFormConfig] = useState([]);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
 
-
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(100);
+    const [pageSize] = useState(10);
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
-    const [selectedFilter, setSelectedFilter] = useState(params.get('debt') || '');
 
     const fetchOrders = useCallback((query) => {
-        return Provider.getProvider(query);
+        return SalaryService.getSalary(query);
     }, []);
 
-    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery, debt: selectedFilter });
+    const { data, loading, error } = useFetch(fetchOrders, { page, page_size: pageSize, search: searchQuery });
+    const { data: usersData } = useFetch(Users.getUser)
+
+    // const fetchUser = useCallback(() => {
+    //     if () {
+    //         return Users.getUserById();
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (data) {
-            setProduct(data);
+            setProduct(data)
         }
-    }, [data]);
+    }, [data])
+
 
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -61,10 +66,7 @@ function ProviderC() {
         if (params.get('search') !== searchQuery) {
             setQueryParams({ search: searchQuery });
         }
-        if (params.get('debt') !== selectedFilter) {
-            setQueryParams({ debt: selectedFilter });
-        }
-    }, [page, searchQuery, selectedFilter, params, setQueryParams]);
+    }, [page, searchQuery, params, setQueryParams]);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -76,18 +78,6 @@ function ProviderC() {
         setPage(1);
     };
 
-    const handleFilterChange = (value) => {
-        setSelectedFilter(value);
-        setQueryParams({ debt: value });
-        setPage(1);
-    };
-
-    const sortedOptions = [
-        { value: '', label: 'Все' },
-        { value: 'true', label: 'В Задолженность' },
-        { value: 'false', label: 'Без Задолженностьа' },
-    ]
-
     // Handle deleting a product
     const handleDelete = (item) => {
         setCurrentItem(item.id);
@@ -96,7 +86,7 @@ function ProviderC() {
 
     const handleDeleteConfirm = async () => {
         try {
-            await Provider.deleteProvider(currentItem);
+            await SalaryService.deleteSalary(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
             setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
@@ -111,56 +101,75 @@ function ProviderC() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Имя', name: 'name', required: true },
-            { type: 'number', label: 'Номер телефона', name: 'phone_number', required: true },
-            { type: 'number', label: 'Задолженность', name: 'debt', required: true },
+            {
+                type: 'select',
+                label: 'Xodim',
+                name: 'employee',
+                options: usersData?.map(p => ({
+                    value: p.id,
+                    label: p.first_name && p.last_name
+                        ? `${p.first_name} ${p.last_name}`
+                        : p.username
+                })),
+                required: true
+            },
+            { type: 'number', label: 'Miqdor', name: 'amount', required: true },
+            { type: 'text', label: 'Описание', name: 'description', required: true },
         ]);
         setAddOpen(true);
     };
 
     const createProduct = async (item) => {
+        const postProduct = {
+            type: item.name,
+            price: item.price,
+            description: item.description,
+        }
         try {
-            const newProduct = await Provider.postProvider(item);
-            setProduct((prevProducts) => [...prevProducts, newProduct]); // Yangi mahsulotni jadvalga qo'shish
-            setSuccessMsg("Поставщик успешно добавлен!");
+            const newProduct = await SalaryService.postSalary(postProduct);
+            setProduct([...product, newProduct]);
+            setSuccessMsg("Расход успешно добавлен!");
             setSnackbarOpen(true);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         } catch (error) {
-            setErrorMsg(error.message || "Ошибка при добавлении поставщика!");
+            setErrorMsg(error.message || "Ошибка при добавлении расхода!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
         }
     };
 
-
     // Handle editing a product
     const handleEdit = (item) => {
         setCurrentItem(item);
         setEditFormConfig([
-            { type: 'text', label: 'Имя', name: 'name', value: item.name },
-            { type: 'number', label: 'Номер телефона', name: 'phone_number', value: item.phone_number },
-            { type: 'number', label: 'Задолженность', name: 'debt', required: true, value: item.debt },
+            { type: 'select', label: 'Xodim', name: 'name', value: item.name, options: usersData?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Miqdor', name: 'amount', value: item.price, required: true },
+            { type: 'text', label: 'Описание', name: 'description', value: item.description, required: true },
         ]);
         setEditOpen(true);
     };
 
     const updateProduct = async (formData) => {
+        console.log(formData)
         try {
             const updatedData = {
-                name: formData.name,
-                phone_number: formData.phone_number,
-                debt: formData.debt,
+                name: formData.name ? formData.name : formData.name,
+                price: formData.price,
+                description: formData.description,
             };
 
-            await Provider.putProviderById(currentItem.id, updatedData);
+            await SalaryService.putSalaryById(currentItem.id, updatedData);
 
-            const updatedItem = await Provider.getProviderById(currentItem.id);
+            const updatedItem = await SalaryService.getSalaryById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
-            setSuccessMsg("Поставщик успешно обновлен!");
+            setSuccessMsg("Расход успешно обновлен!");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Ошибка при обновлении поставщика!");
+            setErrorMsg(error.message || "Ошибка при обновлении расхода!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -172,33 +181,34 @@ function ProviderC() {
     }
 
     const formattedData = product?.map((item, index) => {
-        return (
-            {
-                ...item,
-                row: (
-                    <>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>{item.phone_number}</td>
-                        <td>{formatNumberWithCommas(item.debt)}</td>
-                    </>
-                ),
-            }
-        );
+        return {
+            ...item,
+            row: (
+                <>
+                    <td>{index + 1}</td>
+                    <td>{item.employee}</td>
+                    <td>{formatNumberWithCommas(item.amount)}</td>
+                    <td>
+                        {item.description?.length > 30
+                            ? `${item.description?.slice(0, 30)}...`
+                            : item.description}
+                    </td>
+                </>
+            ),
+        };
     });
+
 
     const handleRowClick = (item) => {
         setCurrentItem(item);
         setRowDetailOpen(true);
     };
 
-
-
     return (
-        <div className='brand'>
+        <div className='expenses'>
             <SideBar />
             <main>
-                <Navbar title="Поставщик" />
+                <Navbar title='Расходы' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -206,14 +216,9 @@ function ProviderC() {
                                 searchValue={searchQuery}
                                 onSearchChange={handleSearchChange}
                             />
-                            <Filter
-                                selectedFilter={selectedFilter}
-                                onFilterChange={handleFilterChange}
-                                options={sortedOptions}
-                            />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn onClick={handleAdd} name="Поставщик" />
+                            <AddItemBtn name="Добавить расход" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -228,7 +233,7 @@ function ProviderC() {
                         />
                     </section>
                     <CustomPagination
-                        count={data?.length ? Math.ceil(data?.length / pageSize) : 0}
+                        count={data?.count ? Math.ceil(data.count / pageSize) : 0}
                         page={page}
                         onChange={handlePageChange}
                     />
@@ -238,33 +243,34 @@ function ProviderC() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
+                    expensesType={true}
+                    name="Добавить расход"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createProduct}
-                    name="Добавить поставщика"
                 />
             }
 
             {/* Edit Item Modal */}
             {editOpen &&
                 <EditItem
-                    name="Редактировать поставщика"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={editFormConfig}
                     onSave={updateProduct}
                     initialData={currentItem}
+                    name="Изменить эту расход"
                 />
             }
 
             {/* Delete Confirmation Dialog */}
             {deleteOpen &&
                 <DeleteProduct
-                    name="Этого поставщика"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
+                    name='Этот расход'
                 />
             }
 
@@ -303,16 +309,16 @@ function ProviderC() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Детали Поставщик</Typography>
+                        <Typography variant="h6">Детали расхода</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Имя:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Номер телефона:</strong> {currentItem.phone_number}</Typography>
-                        <Typography variant="body1"><strong>Задолженность:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
+                        <Typography variant="body1"><strong>Xodim:</strong> {currentItem?.employee}</Typography>
+                        <Typography variant="body1"><strong>Цена:</strong> {formatNumberWithCommas(currentItem.amount)}</Typography>
+                        <Typography variant="body1"><strong>Описание:</strong> {currentItem.description ? currentItem.description : "Bo'sh"}</Typography>
                         <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
@@ -326,7 +332,8 @@ function ProviderC() {
                 </Dialog>
             )}
         </div>
-    );
+
+    )
 }
 
-export default ProviderC;
+export default Salary

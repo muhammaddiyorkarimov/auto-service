@@ -30,6 +30,7 @@ function Orders() {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
+    console.log(ordersC)
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
@@ -73,7 +74,7 @@ function Orders() {
     const handleAdd = () => {
         setFormConfig([
             { type: 'number', label: "Оплачено", name: 'paid', required: true },
-            { type: 'number', label: 'Долг', name: 'debt', required: true },
+            { type: 'number', label: 'Задолженность', name: 'debt', required: true },
             { type: 'select', label: 'Покупатель', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
             { type: 'number', label: 'Общий', name: 'total', required: true },
         ]);
@@ -107,7 +108,7 @@ function Orders() {
         setCurrentItem(updatedItem);
         setFormConfig([
             { type: 'number', label: "Оплачено", name: 'paid', value: item.paid },
-            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
+            { type: 'number', label: 'Задолженность', name: 'debt', value: item.debt },
             { type: 'select', label: 'Покупатель', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
             { type: 'number', label: 'Общий', name: 'total', value: computedTotal },
         ]);

@@ -11,7 +11,7 @@ function AddCustomerModal({ open, onClose, onSuccess }) {
         { type: 'text', label: 'Серийные номера паспорта', name: 'passport_serial_numbers' },
         { type: 'text', label: 'Серийные буквы паспорта', name: 'passport_serial_letters' },
         { type: 'text', label: 'Адрес', name: 'address' },
-        { type: 'number', label: 'Долг', name: 'debt', required: true },
+        { type: 'number', label: 'Задолженность', name: 'debt', required: true },
     ]);
 
     const [formData, setFormData] = useState({

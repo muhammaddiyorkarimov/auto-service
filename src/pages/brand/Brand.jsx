@@ -88,7 +88,7 @@ function Brand() {
         { value: 'amount', label: 'Количество' },
         { value: 'import_price', label: 'Сумма закупки' },
         { value: 'total', label: 'Общий' },
-        { value: 'debt', label: 'Долг' },
+        { value: 'debt', label: 'Задолженность' },
         { value: 'created_at', label: 'Время создания' },
         { value: '-created_at', label: '-Время создания' }
     ]
@@ -118,7 +118,7 @@ function Brand() {
         setFormConfig([
             { type: 'number', label: 'Количество', name: 'amount', required: true },
             { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
-            { type: 'number', label: 'Долг', name: 'debt' },
+            { type: 'number', label: 'Задолженность', name: 'debt' },
             { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
             { type: 'select', label: 'Поставщик', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
             { type: 'number', label: 'Общий', name: 'total', required: true },
@@ -152,7 +152,7 @@ function Brand() {
         setEditFormConfig([
             { type: 'number', label: 'Количество', name: 'amount', value: item.amount, disabled: true },
             { type: 'number', label: 'Сумма закупки', name: 'import_price', value: item.import_price, disabled: true },
-            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
+            { type: 'number', label: 'Задолженность', name: 'debt', value: item.debt },
             { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id, disabled: true },
             { type: 'select', label: 'Поставщик', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })), disabled: true },
             { type: 'number', label: 'Общий', name: 'total', value: calculatedTotal, disabled: true },
@@ -251,7 +251,7 @@ function Brand() {
                             formConfig={[
                                 { type: 'number', label: 'Количество', name: 'amount', required: true },
                                 { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
-                                { type: 'number', label: 'Долг', name: 'debt' },
+                                { type: 'number', label: 'Задолженность', name: 'debt' },
                                 { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
                                 { type: 'select', label: 'Поставщик', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
                                 { type: 'number', label: 'Общий', name: 'total', required: true },
@@ -342,7 +342,7 @@ function Brand() {
                         <Typography variant="body1"><strong>Название продукта:</strong> {currentItem.name}</Typography>
                         <Typography variant="body1"><strong>Количество:</strong> {currentItem.amount}</Typography>
                         <Typography variant="body1"><strong>Импортная цена:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
-                        <Typography variant="body1"><strong>Долг:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
+                        <Typography variant="body1"><strong>Задолженность:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
                         <Typography variant="body1"><strong>Общий:</strong> {formatNumberWithCommas(currentItem.total)}</Typography>
                         <Typography variant="body1"><strong>Поставщик:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
                         <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>

@@ -86,7 +86,7 @@ function Customers() {
             { type: 'text', label: 'Серия паспорта', name: 'passport_serial_numbers' },
             { type: 'text', label: 'Номер паспорта', name: 'passport_serial_letters' },
             { type: 'text', label: 'Адрес', name: 'address' },
-            { type: 'number', label: 'Долг', name: 'debt', required: true },
+            { type: 'number', label: 'Задолженность', name: 'debt', required: true },
         ]);
         setAddOpen(true);
     };
@@ -115,7 +115,7 @@ function Customers() {
             { type: 'text', label: 'Серия паспорта', name: 'passport_serial_numbers', value: item.passport_serial_numbers },
             { type: 'text', label: 'Номер паспорта', name: 'passport_serial_letters', value: item.passport_serial_letters },
             { type: 'text', label: 'Адрес', name: 'address', value: item.address },
-            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
+            { type: 'number', label: 'Задолженность', name: 'debt', value: item.debt },
         ]);
         setEditOpen(true);
     };
@@ -275,7 +275,7 @@ function Customers() {
                         <Typography><strong>Серия паспорта:</strong> {currentItem?.passport_serial_numbers}</Typography>
                         <Typography><strong>Номер паспорта:</strong> {currentItem?.passport_serial_letters}</Typography>
                         <Typography><strong>Адрес:</strong> {currentItem?.address}</Typography>
-                        <Typography><strong>Долг:</strong> {formatNumberWithCommas(currentItem?.debt)}</Typography>
+                        <Typography><strong>Задолженность:</strong> {formatNumberWithCommas(currentItem?.debt)}</Typography>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setRowDetailOpen(false)}>Закрыть</Button>

@@ -90,9 +90,9 @@ function Import() {
             setFormConfig([
                 { type: 'select', label: 'Продукт', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
                 { type: 'number', label: 'Количество', name: 'amount', },
-                { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
-                { type: 'number', label: 'Сумма продажи', name: 'export_price', required: true },
-                { type: 'number', label: 'Общий', name: 'total', disabled: true },
+                { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
+                { type: 'number', label: 'Цена продажи', name: 'export_price', required: true },
+                { type: 'number', label: 'Итого', name: 'total', disabled: true },
             ]);
         }
     }, [productData, providerData]);
@@ -398,7 +398,7 @@ function Import() {
                 <Navbar title='Приход товаров' />
                 <div className="extra-items">
                     {!openDetail && <div className="add-product-btn">
-                        <Button onClick={handleClick} variant='outlined'>Добавить продукт</Button>
+                        <Button onClick={handleClick} variant='outlined'>Новый чек</Button>
                     </div>}
                     {openDetail &&
                         <section className="order-details">
@@ -421,8 +421,8 @@ function Import() {
                                         <tr>
                                             <th>Дата</th>
                                             <th>Оплаченная сумма</th>
-                                            <th>Долг</th>
-                                            <th>Общий</th>
+                                            <th>Задолженность</th>
+                                            <th>Итого</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -431,7 +431,7 @@ function Import() {
                                             <td>
                                                 <TextField
                                                     margin="dense"
-                                                    label="Оплаченная сумма *"
+                                                    label="Введите сумму *"
                                                     type="text" // Change to 'text' to allow formatted input
                                                     value={formatNumberWithCommas(formData.paidAmount || '')}
                                                     onChange={handlePaidAmountChange}
@@ -460,7 +460,7 @@ function Import() {
                                                 onChange={(event, newValue) => {
                                                     setSelectedProvider(newValue ? newValue.value : '');
                                                 }}
-                                                renderInput={(params) => <TextField {...params} label="Поставщик" />}
+                                                renderInput={(params) => <TextField {...params} label="Выберите" />}
                                             />
                                         </FormControl>
 
@@ -496,9 +496,9 @@ function Import() {
                                                     <tr>
                                                         <th>Продукт</th>
                                                         <th>MiqКоличествоdor</th>
-                                                        <th>Сумма закупки</th>
-                                                        <th>Сумма продажи</th>
-                                                        <th>Общий</th>
+                                                        <th>Цена покупки</th>
+                                                        <th>Цена продажи</th>
+                                                        <th>Итого</th>
                                                         <th>Статус</th>
                                                     </tr>
                                                 </thead>

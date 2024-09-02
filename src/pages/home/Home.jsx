@@ -35,9 +35,9 @@ function Home() {
   })) : [];
 
   const calculateData = topCalculate ? [
-    { title: "общий импорт", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
-    { title: "общий экспорт", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
-    { title: "доход", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
+    { title: "расход", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
+    { title: "приход", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
+    { title: "чистый доход", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
   ] : [];
 
   function formatNumberWithCommas(number) {
@@ -75,9 +75,9 @@ function Home() {
                 <div className="item">
                   <div className="about">
                     {benefitBranchLoading ? <BiLoader /> : <>
-                      <div className="title">Филиал: {benefitBranch?.branch.name}</div>
+                      <div className="title">Касса</div>
                       <div className="description" style={{ color: 'blue' }}>
-                        Баланс {formatNumberWithCommas(benefitBranch?.branch.balance)}
+                        СУМ {formatNumberWithCommas(benefitBranch?.branch.balance)}
                       </div>
                     </>}
                   </div>

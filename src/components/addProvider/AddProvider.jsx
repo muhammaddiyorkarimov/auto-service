@@ -8,7 +8,7 @@ function AddProvider({ addProvider, onSuccess }) {
     const [formConfig] = useState([
         { type: 'text', label: 'Название', name: 'name' },
         { type: 'text', label: 'Номер телефона', name: 'phone_number' },
-        { type: 'number', label: 'Долг', name: 'debt' },
+        { type: 'number', label: 'Задолженность', name: 'debt' },
     ]);
     const [formData, setFormData] = useState({
         name: '',

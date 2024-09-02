@@ -150,7 +150,7 @@ function DetailView() {
                 <Typography variant="subtitle1"><strong>Время создания:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
                 <Typography variant="subtitle1"><strong>Общий:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
                 <Typography variant="subtitle1"><strong>Оплачено:</strong> {formatNumberWithCommas(data.paid)}</Typography>
-                <Typography variant="subtitle1"><strong>Долг:</strong> {formatNumberWithCommas(data.debt)}</Typography>
+                <Typography variant="subtitle1"><strong>Задолженность:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
                 <Typography variant="h6" className="typography-section">Информация о клиенте</Typography>
                 <Divider style={{ margin: '10px 0' }} />
@@ -169,8 +169,6 @@ function DetailView() {
                     </tr>
                     <tr>
                       <th style={{ border: '1px solid black' }}>Госномер: <p>{data?.car?.state_number}</p></th>
-
-                      {/* Yurgan kilometrlari turlari shartga bog'liq ravishda */}
                       {data?.car_kilometers_odo && (
                         <th style={{ border: '1px solid black' }}>Пробег по одометру: <p>{data?.car_kilometers_odo} км</p></th>
                       )}
@@ -211,14 +209,14 @@ function DetailView() {
                     <th colspan="4">Услуги</th>
                   </tr>
                   <tr>
-                    <th style={{ border: '1px solid black' }}>Сотрудник</th>
+                    {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
                     <th style={{ border: '1px solid black' }}>Партия</th>
                     <th style={{ border: '1px solid black' }}>Название услуги</th>
                     <th style={{ border: '1px solid black' }}>Общий</th>
                   </tr>
                   {data?.services?.map((service, index) => (
                     <tr key={index}>
-                      <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td>
+                      {/* <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td> */}
                       <td style={{ border: '1px solid black' }}>{service.part}</td>
                       <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
                       <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
@@ -238,7 +236,7 @@ function DetailView() {
             <Typography variant="subtitle1"><strong>Время создания:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
             <Typography variant="subtitle1"><strong>Общий:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
             <Typography variant="subtitle1"><strong>Оплачено:</strong> {formatNumberWithCommas(data.paid)}</Typography>
-            <Typography variant="subtitle1"><strong>Долг:</strong> {formatNumberWithCommas(data.debt)}</Typography>
+            <Typography variant="subtitle1"><strong>Задолженность:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
             <Typography variant="h6" className="typography-section">Информация о клиенте</Typography>
             <Divider style={{ margin: '10px 0' }} />
@@ -312,14 +310,14 @@ function DetailView() {
                 <th style={{ border: '1px solid black' }} colspan="4">Услуги</th>
               </tr>
               <tr>
-                <th style={{ border: '1px solid black' }}>Сотрудник</th>
+                {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
                 <th style={{ border: '1px solid black' }}>Партия</th>
                 <th style={{ border: '1px solid black' }}>Название услуги</th>
                 <th style={{ border: '1px solid black' }}>Общий</th>
               </tr>
               {data?.services?.map((service, index) => (
                 <tr key={index}>
-                  <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td>
+                  {/* <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td> */}
                   <td style={{ border: '1px solid black' }}>{service.part}</td>
                   <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
                   <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
