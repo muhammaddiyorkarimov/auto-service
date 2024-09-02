@@ -304,7 +304,7 @@ function Import() {
             }
 
             await handleEditExportPrice();
-            alert('Данные успешно отправлены');
+            alert('Успешно сохранено!');
 
             // setSelectedProducts([]);
             // setSelectedProvider(null);
@@ -410,7 +410,7 @@ function Import() {
                                         onClick={handleSubmit}
                                         disabled={loading}
                                     >
-                                        {loading ? 'Отправляется...' : 'Отправить'}
+                                        {loading ? 'Отправляется...' : 'Сохранить'}
                                     </Button>
                                 </div>
 
@@ -495,7 +495,7 @@ function Import() {
                                                 <thead>
                                                     <tr>
                                                         <th>Продукт</th>
-                                                        <th>MiqКоличествоdor</th>
+                                                        <th>Количество</th>
                                                         <th>Цена покупки</th>
                                                         <th>Цена продажи</th>
                                                         <th>Итого</th>

@@ -5,7 +5,7 @@ import Loader from '../../helpers/loader/Loader';
 import './DataTable.css';
 import NotAvailable from './../../helpers/notAvailable/NotAvailale';
 
-function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick, onSave, formConfig, dNone, stateNone }) {
+function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick, onSave, formConfig, dNone, stateNone, dDelete }) {
     console.log(stateNone)
     const [inputValues, setInputValues] = useState({});
     const [validationErrors, setValidationErrors] = useState({});
@@ -77,9 +77,9 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                                     <IconButton onClick={() => onEdit(item)}>
                                         <i className="fa-regular fa-pen-to-square" style={{ color: 'orange', fontSize: '18px' }}></i>
                                     </IconButton>
-                                    <IconButton onClick={() => onDelete(item)}>
+                                    {dDelete === false ? '' : <IconButton onClick={() => onDelete(item)}>
                                         <i className="fa-regular fa-trash-can" style={{ color: 'red', fontSize: '18px' }}></i>
-                                    </IconButton>
+                                    </IconButton>}
                                 </>}
                                 {dNone === false ? '' : <IconButton onClick={() => onRowClick(item)}>
                                     <i className="fa-regular fa-eye" style={{ color: '#425BDD', fontSize: '18px' }}></i>

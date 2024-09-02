@@ -183,11 +183,22 @@ main section {
 
 .provider-about .enter-product .header {
     display: grid;
-    grid-template-columns: auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto;
     align-items: center;
 }
 
 .provider-about .enter-product .header .btn {
     width: 100%;
     margin-bottom: -5px;
+}
+
+@media (min-width: 1290px) {
+    .provider-about .enter-product .header {
+        grid-template-columns: auto auto auto auto auto auto;
+    }
+}
+@media (max-width: 1740px) {
+    .provider-about .enter-product .header {
+        grid-template-columns: auto auto auto auto auto;
+    }
 }

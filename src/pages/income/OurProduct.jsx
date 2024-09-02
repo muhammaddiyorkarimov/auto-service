@@ -274,6 +274,7 @@ function OurProduct() {
                             onDelete={handleDelete}
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
+                            dDelete={false}
                         />
                     </section>
                     <CustomPagination

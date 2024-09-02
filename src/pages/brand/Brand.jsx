@@ -257,6 +257,7 @@ function Brand() {
                                 { type: 'number', label: 'Общий', name: 'total', required: true },
                             ]}
                             onSave={createProduct}
+                            dDelete={false}
                         />
                     </section>
                     <CustomPagination
