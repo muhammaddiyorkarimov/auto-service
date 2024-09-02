@@ -150,7 +150,6 @@ function AddOrder() {
                 type: 'select',
                 label: 'Менеджер',
                 name: 'manager',
-                required: true,
                 options: managers?.map((p) => ({ value: p.id, label: p.first_name + ' ' + p.last_name })),
             },
 
@@ -379,7 +378,7 @@ function AddOrder() {
                                                 <tr>
                                                     <th>Клиент</th>
                                                     <th>Автомобиль</th>
-                                                    <th>Менеджер</th>
+                                                    {managerById && <th>Менеджер</th>}
                                                     {formData.car_kilometers_odo ? <th>Пробег по одометру</th> : null}
                                                     {formData.car_kilometers_ev ? <th>Пробег EV</th> : null}
                                                     {formData.car_kilometers_hev ? <th>Пробег HEV</th> : null}
@@ -390,7 +389,7 @@ function AddOrder() {
                                                 <tr>
                                                     <td>{formData.customerName}</td>
                                                     <td>{formData.carName}</td>
-                                                    <td>{managerById?.first_name + ' ' + managerById?.last_name}</td>
+                                                    {managerById && <td>{managerById?.first_name + ' ' + managerById?.last_name}</td>}
                                                     {formData.car_kilometers_odo ? <td>{formData.car_kilometers_odo}</td> : null}
                                                     {formData.car_kilometers_ev ? <td>{formData.car_kilometers_ev}</td> : null}
                                                     {formData.car_kilometers_hev ? <td>{formData.car_kilometers_hev}</td> : null}

@@ -11,7 +11,7 @@ function OrderingService({ onTotalChange, onSave }) {
     const [formData, setFormData] = useState([]);
     const [selectedServiceId, setSelectedServiceId] = useState(null);
     const [price, setPrice] = useState(0);
-    const [showAddButton, setShowAddButton] = useState(true); 
+    const [showAddButton, setShowAddButton] = useState(true);
 
     const fetchService = useCallback(() => {
         if (selectedServiceId) {
@@ -42,10 +42,12 @@ function OrderingService({ onTotalChange, onSave }) {
 
     const handleAddService = () => {
         setFormConfig([
-            { type: 'select', label: 'Сотрудник', name: 'worker', options: staffData?.map(p => ({
-                value: p.id,
-                label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
-            })), required: true },
+            {
+                type: 'select', label: 'Сотрудник', name: 'worker', options: staffData?.map(p => ({
+                    value: p.id,
+                    label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
+                })), required: true
+            },
             { type: 'select', label: 'Услуга', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
             { type: 'text', label: 'Н/Ч', name: 'part', required: true },
             { type: 'number', label: 'Итого', name: 'total', required: true, disabled: true },
@@ -99,7 +101,7 @@ function OrderingService({ onTotalChange, onSave }) {
                         {formData.map((item, index) => (
                             <tr key={index}>
                                 <td>{item.serviceName}</td>
-                                <td>{item.staffName}</td>
+                                <td>{item.workerName}</td>
                                 <td>{item.part}</td>
                                 <td>{formatNumberWithCommas(item.total)}</td>
                             </tr>
