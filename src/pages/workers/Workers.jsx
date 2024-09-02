@@ -181,6 +181,7 @@ function Workers() {
                             data={formattedData}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
+                            dNone={false}
                         // onRowClick={handleRowClick}
                         />
                     </section>

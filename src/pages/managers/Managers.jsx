@@ -14,6 +14,7 @@ import EditItem from '../../components/editItem/EditItem'
 import DeleteProduct from '../../components/deleteProduct/DeleteProduct'
 import { Alert, Snackbar } from '@mui/material'
 import OrdersManagers from '../../services/landing/manager'
+import { useSelector } from 'react-redux'
 
 function Managers() {
     const headers = tableHeaders['managers']
@@ -161,6 +162,10 @@ function Managers() {
         }
     };
 
+    const { user } = useSelector((state) => state.auth);
+
+    console.log(user)
+
     return (
         <div className='employees'>
             <SideBar />
@@ -183,7 +188,9 @@ function Managers() {
                             data={formattedData}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
-                        // onRowClick={handleRowClick}
+                            dNone={false}
+                            stateNone={user?.role === 'Admin'}
+                            showEditDelete={user?.role === 'Admin'}
                         />
                     </section>
                 </div>
