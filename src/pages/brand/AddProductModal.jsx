@@ -16,9 +16,9 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
     const [formConfig, setFormConfig] = useState([]);
 
     const unitOptions = [
-        {id: 1, name: 'Dona'},
-        {id: 2, name: 'Komplekt'},
-        {id: 3, name: 'Litr'},
+        {id: 1, name: 'Штука'},
+        {id: 2, name: 'Комплект'},
+        {id: 3, name: 'Литр'},
     ]
     
     useEffect(() => {
@@ -27,17 +27,17 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                 const response = await Provider.getProvider();
                 setProvider(response);
                 setFormConfig([
-                    { type: 'text', label: 'Kod', name: 'code' },
-                    { type: 'text', label: 'Nomi', name: 'name', required: true },
-                    { type: 'number', label: 'Miqdori', name: 'amount', required: true },
-                    { type: 'number', label: 'Min miqdor', name: 'min_amount', required: true },
-                    { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
-                    { type: 'number', label: 'Import narxi', name: 'import_price', required: true },
-                    { type: 'number', label: 'Eksport narxi', name: 'export_price' },
-                    { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
+                    { type: 'text', label: 'Код', name: 'code' },
+                    { type: 'text', label: 'Название', name: 'name', required: true },
+                    { type: 'number', label: 'Количество', name: 'amount', required: true },
+                    { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
+                    { type: 'select', label: 'Единица измерения', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
+                    { type: 'number', label: 'Импортная цена', name: 'import_price', required: true },
+                    { type: 'number', label: 'Экспортная цена', name: 'export_price' },
+                    { type: 'number', label: 'Скидка', name: 'max_discount', required: true },
                 ]);
             } catch (error) {
-                alert("Ta’minotchilarni olishda xatolik:", error);
+                alert("Ошибка при получении поставщиков:", error);
             }
         };
 
@@ -58,7 +58,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
         const errors = {};
         formConfig.forEach((field) => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `${field.label} maydoni to'ldirilishi shart!`;
+                errors[field.name] = `${field.label} Поле обязательно для заполнения!`;
             }
         });
     
@@ -72,12 +72,12 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
             const dataToSend = { ...formData, provider: providerById };
             const newProduct = await OurProduct.postProduct(dataToSend);
             onSave(newProduct);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
             const updatedProvider = await Provider.getProvider();
             setProvider(updatedProvider);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении продукта!");
             setSnackbarOpen(true);
         } finally {
             onClose();
@@ -164,11 +164,11 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
     return (
         <Dialog open={open} onClose={onClose}>
             <div className="dialog-wrapper">
-                <DialogTitle>{name ? name : 'Yangi maxsulot qo\'shish'}</DialogTitle>
+                <DialogTitle>{name ? name : 'Добавить новый продукт'}</DialogTitle>
                 <DialogContent className='dialog-content'>{renderFields()}</DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose}>Bekor qilish</Button>
-                    <Button onClick={handleSave}>Saqlash</Button>
+                    <Button onClick={onClose}>Отменить</Button>
+                    <Button onClick={handleSave}>Сохранить</Button>
                 </DialogActions>
             </div>
         </Dialog>

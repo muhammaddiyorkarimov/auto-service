@@ -126,11 +126,11 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{name ? name : 'Maxsulotni tahrirlash'}</DialogTitle>
+      <DialogTitle>{name ? name : 'Редактировать продукт'}</DialogTitle>
       <DialogContent>{renderFields()}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Bekor qilish</Button>
-        <Button onClick={handleSave}>Saqlash</Button>
+        <Button onClick={onClose}>Отменить</Button>
+        <Button onClick={handleSave}>Сохранить</Button>
       </DialogActions>
     </Dialog>
   );

@@ -13,24 +13,24 @@ function ActiveReports() {
 
     const transformedData = activeReports
         ? [
-            { name: "Yan", profit: activeReports.jan },
-            { name: "Fev", profit: activeReports.feb },
-            { name: "Mart", profit: activeReports.mar },
-            { name: "Apr", profit: activeReports.apr },
-            { name: "May", profit: activeReports.may },
-            { name: "Iyun", profit: activeReports.jun },
-            { name: "Iyul", profit: activeReports.jul },
-            { name: "Avg", profit: activeReports.aug },
-            { name: "Sen", profit: activeReports.sep },
-            { name: "Okt", profit: activeReports.oct },
-            { name: "Noy", profit: activeReports.nov },
-            { name: "Dek", profit: activeReports.dec },
+            { name: "Янв", profit: activeReports.jan },
+            { name: "Фев", profit: activeReports.feb },
+            { name: "Март", profit: activeReports.mar },
+            { name: "Апр", profit: activeReports.apr },
+            { name: "Май", profit: activeReports.may },
+            { name: "Июн", profit: activeReports.jun },
+            { name: "Июл", profit: activeReports.jul },
+            { name: "Авг", profit: activeReports.aug },
+            { name: "Сен", profit: activeReports.sep },
+            { name: "Окт", profit: activeReports.oct },
+            { name: "Ноя", profit: activeReports.nov },
+            { name: "Дек", profit: activeReports.dec },
         ]
         : [];
 
     return (
         <div className='active-reports-wrapper'>
-            <div className="title">Sotuv bo'yicha oylik statistika</div>
+            <div className="title">месячная статистика продаж</div>
             {loading ? (
                 <div className="loader-wrapper">
                     <BiLoader className="loader-icon" />
@@ -57,7 +57,7 @@ function ActiveReports() {
                             stroke="#8884d8" 
                             fillOpacity={1} 
                             fill="url(#colorUv)" 
-                            isAnimationActive={!loading} // Animatsiya ma'lumot kelgandan keyin faqat ishlaydi
+                            isAnimationActive={!loading}
                         />
                     </AreaChart>
                 </ResponsiveContainer>

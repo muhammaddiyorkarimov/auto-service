@@ -43,8 +43,8 @@ function Login() {
         <div className='login-page'>
             {error && <ValidationError/>}
             <div className="title">
-                <h1>Kirish</h1>
-                <p>Hisob ma'lumotlarini kiritish orqali ilovaga kiring</p>
+                <h1>Вход</h1>
+                <p>Войдите в приложение, введя данные учетной записи</p>
             </div>
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit}>
@@ -66,19 +66,19 @@ function Login() {
                             type="text"
                             state={username}
                             setState={setUsername}
-                            placeholder="Username..."
+                            placeholder="Имя пользователя..."
                         />
                     </label>
                     <label className="input-wrapper">
                         <img src={images.password} alt="" />
                         <UiInput
                             type="password"
-                            placeholder="Password"
+                            placeholder="Пароль..."
                             state={password}
                             setState={setPassword}
                         />
                     </label>
-                    <button type="submit" disabled={loading}>{loading ? 'Yuklanmoqda...' : 'Kirish'}</button>
+                    <button type="submit" disabled={loading}>{loading ? 'Загрузка...' : 'Вход'}</button>
                 </form>
             </div>
         </div>

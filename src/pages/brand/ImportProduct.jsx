@@ -36,7 +36,7 @@ function Import() {
                     setProviderById(response);
                 })
                 .catch(error => {
-                    alert('Error fetching provider by ID:', error.message);
+                    alert('Ошибка при получении поставщика по ID:', error.message);
                 });
         }
         if (productId) {
@@ -49,11 +49,11 @@ function Import() {
                             export_price: response.export_price || '' // export_price ni value ga joylash
                         }));
                     } else {
-                        alert('Product not found or ID is invalid');
+                        alert('Продукт не найден или ID недействителен');
                     }
                 })
                 .catch(error => {
-                    alert('Error fetching product by ID:', error.message);
+                    alert('Ошибка при получении продукта по ID:', error.message);
                 });
         }
     }, [selectedProvider, productId]);
@@ -88,11 +88,11 @@ function Import() {
     useEffect(() => {
         if (productData && providerData) {
             setFormConfig([
-                { type: 'select', label: 'Maxsulot', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
-                { type: 'number', label: 'Miqdor', name: 'amount', },
-                { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-                { type: 'number', label: 'Sotish summasi', name: 'export_price', required: true },
-                { type: 'number', label: 'Umumiy', name: 'total', disabled: true },
+                { type: 'select', label: 'Продукт', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
+                { type: 'number', label: 'Количество', name: 'amount', },
+                { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
+                { type: 'number', label: 'Сумма продажи', name: 'export_price', required: true },
+                { type: 'number', label: 'Общий', name: 'total', disabled: true },
             ]);
         }
     }, [productData, providerData]);
@@ -133,7 +133,7 @@ function Import() {
         const errors = {};
         formConfig.forEach((field) => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `${field.label} maydoni to'ldirilishi shart!`;
+                errors[field.name] = `${field.label} Поле обязательно для заполнения!`;
             }
         });
 
@@ -198,7 +198,7 @@ function Import() {
         let errors = {};
         formConfig.forEach(field => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `${field.label} maydonini to'ldirish majburiy`;
+                errors[field.name] = `${field.label} Обязательное для заполнения поле`;
             }
         });
         setValidationErrors(errors);
@@ -207,7 +207,7 @@ function Import() {
 
     const handleAddProduct = () => {
         if (!isTableValid()) {
-            alert('Jadvaldagi barcha kerakli maydonlarni to\'ldiring');
+            alert('Заполните все необходимые поля в таблице');
             return;
         }
         if (!validateForm()) {
@@ -268,7 +268,7 @@ function Import() {
             // fetchProducts();
 
         } catch (error) {
-            alert('Xato:', error.message);
+            alert('Ошибка:', error.message);
         }
     };
 
@@ -277,7 +277,7 @@ function Import() {
         const providerId = selectedProvider;
 
         if (!formData.paidAmount || formData.paidAmount <= 0) {
-            alert("Iltimos, to'langan summani kiriting!");
+            alert("Пожалуйста, введите оплаченную сумму!");
             return;
         }
 
@@ -298,19 +298,19 @@ function Import() {
             for (const productData of postData) {
                 const response = await ImportProduct.postImportProduct(productData);
                 if (!response) {
-                    alert('Failed to post data');
+                    alert('Не удалось отправить данные');
                     return;
                 }
             }
 
             await handleEditExportPrice();
-            alert('Data successfully posted');
+            alert('Данные успешно отправлены');
 
             // setSelectedProducts([]);
             // setSelectedProvider(null);
             // setFormData({});
         } catch (error) {
-            alert(`Error posting data: ${error.message}`);
+            alert(`Ошибка при отправке данных: ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -395,22 +395,22 @@ function Import() {
         <div className='import-product'>
             <SideBar />
             <main>
-                <Navbar title='Kirim tovarlar' />
+                <Navbar title='Приход товаров' />
                 <div className="extra-items">
                     {!openDetail && <div className="add-product-btn">
-                        <Button onClick={handleClick} variant='outlined'>Maxsulot qo'shish</Button>
+                        <Button onClick={handleClick} variant='outlined'>Добавить продукт</Button>
                     </div>}
                     {openDetail &&
                         <section className="order-details">
                             <div className="top-items">
-                                <div className="title">Kirim buyurtma tafsilotlari</div>
+                                <div className="title">Детали приходного заказа</div>
                                 <div className="btns">
                                     <Button
                                         variant="contained"
                                         onClick={handleSubmit}
                                         disabled={loading}
                                     >
-                                        {loading ? 'Yuborilmoqda...' : 'Yuborish'}
+                                        {loading ? 'Отправляется...' : 'Отправить'}
                                     </Button>
                                 </div>
 
@@ -419,10 +419,10 @@ function Import() {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Sana</th>
-                                            <th>To'langan summa</th>
-                                            <th>Qarz</th>
-                                            <th>Umumiy</th>
+                                            <th>Дата</th>
+                                            <th>Оплаченная сумма</th>
+                                            <th>Долг</th>
+                                            <th>Общий</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -431,7 +431,7 @@ function Import() {
                                             <td>
                                                 <TextField
                                                     margin="dense"
-                                                    label="To'langan summa *"
+                                                    label="Оплаченная сумма *"
                                                     type="text" // Change to 'text' to allow formatted input
                                                     value={formatNumberWithCommas(formData.paidAmount || '')}
                                                     onChange={handlePaidAmountChange}
@@ -447,7 +447,7 @@ function Import() {
                                 </table>
                                 <div className="provider-about">
                                     <div className="header">
-                                        <div className="title">Ta'minotchi</div>
+                                        <div className="title">Поставщик</div>
                                         <FormControl fullWidth margin="dense" size="small">
                                             <Autocomplete
                                                 sx={{ minWidth: '150px' }}
@@ -460,7 +460,7 @@ function Import() {
                                                 onChange={(event, newValue) => {
                                                     setSelectedProvider(newValue ? newValue.value : '');
                                                 }}
-                                                renderInput={(params) => <TextField {...params} label="Ta'minotchi" />}
+                                                renderInput={(params) => <TextField {...params} label="Поставщик" />}
                                             />
                                         </FormControl>
 
@@ -471,8 +471,8 @@ function Import() {
                                         {selectedProvider && <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Ism</th>
-                                                    <th>Telefon raqam</th>
+                                                    <th>Имя</th>
+                                                    <th>Номер телефона</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -485,21 +485,21 @@ function Import() {
                                         </table>}
                                     </div>
                                     {selectedProvider && <div className="enter-product">
-                                        <div className="title">Maxsulot qo'shish</div>
+                                        <div className="title">Добавить продукт</div>
                                         <div className="header">
                                             {renderFields()}
-                                            <Button className='btn' variant='contained' onClick={handleAddProduct} >Tasdiqlash</Button>
+                                            <Button className='btn' variant='contained' onClick={handleAddProduct} >Подтвердить</Button>
                                         </div>
                                         <div className="render-fields-table">
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th>Maxsulot</th>
-                                                        <th>Miqdor</th>
-                                                        <th>Kelish summasi</th>
-                                                        <th>Sotish summasi</th>
-                                                        <th>Umumiy</th>
-                                                        <th>Holat</th>
+                                                        <th>Продукт</th>
+                                                        <th>MiqКоличествоdor</th>
+                                                        <th>Сумма закупки</th>
+                                                        <th>Сумма продажи</th>
+                                                        <th>Общий</th>
+                                                        <th>Статус</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -517,7 +517,7 @@ function Import() {
                                                                     color='error'
                                                                     size='small'
                                                                 >
-                                                                    O'chirish
+                                                                    Удалить
                                                                 </Button>
                                                             </td>
                                                         </tr>

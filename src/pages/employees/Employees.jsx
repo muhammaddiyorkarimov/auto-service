@@ -53,11 +53,11 @@ function Employees() {
 
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: "Username", name: 'username', required: true },
-            { type: 'text', label: "Ism", name: 'first_name' },
-            { type: 'text', label: "Familiya", name: 'last_name' },
-            { type: 'text', label: "Telefon raqam", name: 'phone_number' },
-            { type: 'text', label: "Kasbi", name: 'position' },
+            { type: 'text', label: "Имя пользователя", name: 'username', required: true },
+            { type: 'text', label: "Имя", name: 'first_name' },
+            { type: 'text', label: "Фамилия", name: 'last_name' },
+            { type: 'text', label: "Номер телефона", name: 'phone_number' },
+            { type: 'text', label: "Профессия", name: 'position' },
         ])
         setAddOpen(true);
     }
@@ -66,10 +66,10 @@ function Employees() {
         try {
             const newStaff = await EmployeesService.postEmployees(item);
             setEmployeesData([...employessData, newStaff]);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Сотрудник добавлен");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении сотрудника!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -79,11 +79,11 @@ function Employees() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: "Username", name: 'username', value: 'username' },
-            { type: 'text', label: "Ism", name: 'first_name', value: 'first_name' },
-            { type: 'text', label: "Familiya", name: 'last_name', value: 'last_name' },
-            { type: 'text', label: "Telefon raqam", name: 'phone_number', value: 'phone_number' },
-            { type: 'text', label: "Kasbi", name: 'position', value: 'position' },
+            { type: 'text', label: "Имя пользователя", name: 'username', value: 'username' },
+            { type: 'text', label: "Имя", name: 'first_name', value: 'first_name' },
+            { type: 'text', label: "Фамилия", name: 'last_name', value: 'last_name' },
+            { type: 'text', label: "Номер телефона", name: 'phone_number', value: 'phone_number' },
+            { type: 'text', label: "Профессия", name: 'position', value: 'position' },
         ])
         setEditOpen(true);
     };
@@ -102,10 +102,10 @@ function Employees() {
         try {
             const updatedStaff = await EmployeesService.putEmployeesById(currentItem.id, formattedData);
             setEmployeesData(employessData.map(o => o.id === currentItem.id ? updatedStaff : o));
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Успешно обновлено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -135,10 +135,10 @@ function Employees() {
         try {
             await EmployeesService.deleteEmployees(currentItem);
             setEmployeesData(employessData?.filter(o => o.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -149,14 +149,14 @@ function Employees() {
         <div className='employees'>
             <SideBar />
             <main>
-                <Navbar title='Xodimlar' />
+                <Navbar title='Сотрудники' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
                             {/* <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} /> */}
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Xodim qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить сотрудника" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -167,7 +167,8 @@ function Employees() {
                             data={formattedData}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
-                        // onRowClick={handleRowClick}
+                            // onRowClick={handleRowClick}
+                            dNone={false}
                         />
                     </section>
                 </div>
@@ -175,7 +176,7 @@ function Employees() {
 
             {addOpen &&
                 <AddItemModal
-                    name="Yangi buyurtma qo'shish"
+                    name="Добавить сотрудника"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -183,7 +184,7 @@ function Employees() {
                 />}
             {editOpen &&
                 <EditItem
-                    name="Buyurtmani tahrirlash"
+                    name="Редактировать существующего сотрудника"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={formConfig}
@@ -192,7 +193,7 @@ function Employees() {
                 />}
             {deleteOpen &&
                 <DeleteProduct
-                    name="Ushbu buyurtmani"
+                    name="Этого сотрудника"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

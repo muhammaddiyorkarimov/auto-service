@@ -7,7 +7,7 @@ import ExpensesTypeService from '../../../services/landing/expensesTypeSerive';
 function ExpensesType() {
     const [open, setOpen] = useState(false);
     const [formConfig] = useState([
-        { type: 'text', label: 'Nomi', name: 'name' },
+        { type: 'text', label: 'Название', name: 'name' },
     ]);
     const [formData, setFormData] = useState({
         name: '',
@@ -32,7 +32,7 @@ function ExpensesType() {
     const validateForm = () => {
         const errors = {};
         if (!formData.name) {
-            errors.name = 'Ushbu maydoni to\'ldirilishi shart';
+            errors.name = 'Это поле обязательно для заполнения';
         }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
@@ -82,7 +82,7 @@ function ExpensesType() {
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
                     <Alert onClose={() => setSnackbarOpen(false)} severity={success ? "success" : "error"} sx={{ width: '100%' }}>
-                        Muvaffaqiyatli qo'shildi
+                        Успешно добавлено
                     </Alert>
                 </Snackbar>
             )}
@@ -94,11 +94,11 @@ function ExpensesType() {
             <AddItemBtn className='flex-expenses-type' onClick={() => setOpen(true)} />
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
-                    <DialogTitle>Xarajat turi qo'shish</DialogTitle>
+                    <DialogTitle>Добавить тип расхода</DialogTitle>
                     <DialogContent className="dialog-content">{renderFields()}</DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setOpen(false)}>Bekor qilish</Button>
-                        <Button onClick={handleSubmit}>Saqlash</Button>
+                        <Button onClick={() => setOpen(false)}>Отменить</Button>
+                        <Button onClick={handleSubmit}>Сохранить</Button>
                     </DialogActions>
                 </div>
             </Dialog>

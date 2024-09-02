@@ -39,10 +39,10 @@ function AutoService() {
     const [selectedFilter, setSelectedFilter] = useState('')
 
     const sortedOptions = [
-        { value: 'name', label: 'Nomi' },
-        { value: 'price', label: 'Narxi' },
-        { value: 'created_at', label: 'Yaratilgan sana' },
-        { value: '-created_at', label: '- Yaratilgan sana' }
+        { value: 'name', label: 'Название' },
+        { value: 'price', label: 'Цена' },
+        { value: 'created_at', label: 'Дата создания' },
+        { value: '-created_at', label: '-Дата создания' }
     ];
 
     useEffect(() => {
@@ -68,8 +68,8 @@ function AutoService() {
     // handle add
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: "Xizmat turi", name: 'name', required: true },
-            { type: 'number', label: 'Narx', name: 'price', required: true },
+            { type: 'text', label: "Тип услуги", name: 'name', required: true },
+            { type: 'number', label: 'Цена', name: 'price', required: true },
         ]);
         setAddOpen(true);
     };
@@ -78,10 +78,10 @@ function AutoService() {
         try {
             const newService = await AutoServices.postAutoService(item);
             setAutoServiceItem([...autoServiceItem, newService]);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении услуги!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -92,8 +92,8 @@ function AutoService() {
     const handleEdit = async (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: "Xixmat turi", name: 'name', value: item.name },
-            { type: 'number', label: 'Narx', name: 'price', value: item.price },
+            { type: 'text', label: "Тип услуги", name: 'name', value: item.name },
+            { type: 'number', label: 'Цена', name: 'price', value: item.price },
         ]);
         setEditOpen(true);
     };
@@ -107,10 +107,10 @@ function AutoService() {
         try {
             const updatedOrder = await AutoServices.putAutoServiceById(currentItem.id, formattedData);
             setAutoServiceItem(autoServiceItem.map(o => o.id === currentItem.id ? updatedOrder : o));
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Услуга успешно обновлена!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении услуги!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -127,10 +127,10 @@ function AutoService() {
         try {
             await AutoServices.deleteAutoService(currentItem);
             setAutoServiceItem(autoServiceItem?.filter(o => o.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -156,7 +156,7 @@ function AutoService() {
         <div className='auto-service'>
             <SideBar />
             <main>
-                <Navbar title='Avto xizmatlar' />
+                <Navbar title='Автоуслуги' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -167,7 +167,7 @@ function AutoService() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Xizmat qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить услугу" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -190,7 +190,7 @@ function AutoService() {
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createProduct}
-                    name="Xizmat qo'shish"
+                    name="Добавить услугу"
                 />}
             {editOpen &&
                 <EditItem
@@ -199,14 +199,14 @@ function AutoService() {
                     formConfig={formConfig}
                     onSave={updateProduct}
                     initialData={currentItem}
-                    name="Xizmatni tahrirlash"
+                    name="Редактировать услугу"
                 />}
             {deleteOpen &&
                 <DeleteProduct
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
-                    name="ushbu xizmatni"
+                    name="Эту услугу"
                 />}
 
             {rowDetailOpen && (
@@ -231,23 +231,23 @@ function AutoService() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Xizmat Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали услуги</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Xizmat turi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Narx:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
-                        <Typography variant="body1"><strong>Yaratilgan sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
+                        <Typography variant="body1"><strong>Тип услуги:</strong> {currentItem.name}</Typography>
+                        <Typography variant="body1"><strong>Цена:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
+                        <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
                         <IconButton onClick={() => handleEdit(currentItem)}>
                             <Edit style={{ color: 'orange', fontSize: '28px' }} />
                         </IconButton>
                         <Button onClick={() => setRowDetailOpen(false)} sx={{ color: '#1e88e5', fontWeight: 'bold' }}>
-                            Yopish
+                        Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

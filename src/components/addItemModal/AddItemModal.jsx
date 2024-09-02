@@ -13,7 +13,7 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
   useEffect(() => {
     const initialData = formConfig?.reduce((acc, field) => {
       if (field.type === 'number' && (field.name === 'discount' || field.name === 'debt')) {
-        acc[field.name] = '0'; // Default value of 0 for discount and debt
+        acc[field.name] = '0';
       } else {
         acc[field.name] = '';
       }
@@ -22,7 +22,6 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
     setFormData(initialData);
   }, [formConfig]);
 
-  // Helper function to format numbers with spaces
   const formatNumberWithSpaces = (number) => {
     return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
@@ -30,19 +29,17 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
-    // If input type is 'number', format the value with spaces
     if (type === 'text' && formConfig?.find((field) => field.name === name && field.type === 'number')) {
-      const rawValue = value.replace(/\s/g, ''); // Remove spaces to get raw number
-      if (/^\d*$/.test(rawValue)) { // Only allow digits
+      const rawValue = value.replace(/\s/g, '');
+      if (/^\d*$/.test(rawValue)) { 
         const formattedValue = formatNumberWithSpaces(rawValue);
         setFormData({ ...formData, [name]: formattedValue });
       }
     } else {
-      // If input is 'text', handle normally
       setFormData({ ...formData, [name]: value });
     }
 
-    setValidationErrors({ ...validationErrors, [name]: '' }); // Clear validation error
+    setValidationErrors({ ...validationErrors, [name]: '' });
   };
 
   const handleFileChange = (e) => {
@@ -53,7 +50,7 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
     const errors = {};
     formConfig.forEach((field) => {
       if (field.required && !formData[field.name]) {
-        errors[field.name] = `${field.label} maydoni to'ldirilishi shart!`;
+        errors[field.name] = `${field.label} поле обязательно для заполнения!`;
       }
     });
 
@@ -66,10 +63,10 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
     const rawData = { ...formData };
     Object.keys(rawData).forEach(key => {
       if (formConfig.some(f => f.type === 'number' && f.name === key)) {
-        rawData[key] = rawData[key].replace(/\s/g, ''); // Remove spaces for number fields
+        rawData[key] = rawData[key].replace(/\s/g, '');
       }
       if (key === 'discount' || key === 'debt') {
-        rawData[key] = rawData[key] || '0'; // Ensure default value of 0
+        rawData[key] = rawData[key] || '0';
       }
     });
 
@@ -87,7 +84,7 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
                 margin="dense"
                 label={field.label}
                 name={field.name}
-                type="text" // Always render as text to allow formatting for number types
+                type="text" 
                 value={formData[field.name] || ''}
                 onChange={handleChange}
                 fullWidth
@@ -161,11 +158,11 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="dialog-wrapper">
-        <DialogTitle>{name ? name : 'Yangi maxsulot qo\'shish'}</DialogTitle>
+        <DialogTitle>{name ? name : 'Добавить новый продукт'}</DialogTitle>
         <DialogContent>{renderFields()}</DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Bekor qilish</Button>
-          <Button onClick={handleSave}>Saqlash</Button>
+          <Button onClick={onClose}>Отменить</Button>
+          <Button onClick={handleSave}>Сохранить</Button>
         </DialogActions>
       </div>
     </Dialog>

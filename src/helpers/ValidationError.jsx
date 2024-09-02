@@ -30,8 +30,8 @@ function ValidationError() {
         <div className='validation-error'>
             {errorMessage().map((err, index) => (
                 <div key={index}>
-                    {err === 'detail - No active account found with the given credentials' ? 
-                        "Bunday foydalanuvchi mavjud emas" : err}
+                    {err === 'detail - Активная учетная запись с указанными учетными данными не найдена' ? 
+                        "Такой пользователь не найден" : err}
                 </div>
             ))}
         </div>

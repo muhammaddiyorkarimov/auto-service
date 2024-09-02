@@ -5,7 +5,7 @@ import Loader from '../../helpers/loader/Loader';
 import './DataTable.css';
 import NotAvailable from './../../helpers/notAvailable/NotAvailale';
 
-function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick, onSave, formConfig }) {
+function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowClick, onSave, formConfig, dNone }) {
     const [inputValues, setInputValues] = useState({});
     const [validationErrors, setValidationErrors] = useState({});
 
@@ -22,11 +22,11 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
     }
 
     if (error) {
-        return <NotAvailable message="Xatolik yuz berdi, ma'lumotni olishda muammo mavjud." />;
+        return <NotAvailable message="Произошла ошибка, проблема с получением данных." />;
     }
 
     if (!data || data.length === 0) {
-        return <NotAvailable message="Ma'lumot topilmadi" />;
+        return <NotAvailable message="Данные не найдены" />;
     }
 
     const handleInputChange = (name, value) => {
@@ -179,9 +179,9 @@ function DataTable({ loading, error, tableHead, data, onDelete, onEdit, onRowCli
                                 <IconButton onClick={() => onDelete(item)}>
                                     <i className="fa-regular fa-trash-can" style={{ color: 'red', fontSize: '18px' }}></i>
                                 </IconButton>
-                                <IconButton onClick={() => onRowClick(item)}>
+                                {dNone === false ? '' :  <IconButton onClick={() => onRowClick(item)}>
                                     <i className="fa-regular fa-eye" style={{ color: '#425BDD', fontSize: '18px' }}></i>
-                                </IconButton>
+                                </IconButton>}
                             </td>
                         </tr>
                     ))}

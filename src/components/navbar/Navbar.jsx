@@ -65,7 +65,7 @@ function Navbar({ title }) {
             <div className="dropdown-menu">
               <div className="dropdown-item" onClick={handleLogout}>
                 <FaSignOutAlt className="dropdown-icon" />
-                Chiqish
+                Выход
               </div>
             </div>
           </>

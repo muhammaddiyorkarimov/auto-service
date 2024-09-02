@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-// Helper function to format numbers with spaces
 const formatNumberWithSpaces = (number) => {
   return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 };
@@ -37,10 +36,9 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
       }
     }
 
-    // Apply number formatting only if field type is 'number'
     if (formConfig.find((field) => field.name === name && field.type === 'number')) {
-      const rawValue = value.replace(/\s/g, ''); // Remove spaces to get raw number
-      if (/^\d*$/.test(rawValue)) { // Only allow digits
+      const rawValue = value.replace(/\s/g, '');
+      if (/^\d*$/.test(rawValue)) { 
         updatedFormData[name] = formatNumberWithSpaces(rawValue);
       }
     }
@@ -58,14 +56,12 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
   };
 
   const handleSave = () => {
-    // Remove spaces from number fields before saving
     const rawData = { ...formData };
     Object.keys(rawData).forEach(key => {
       if (formConfig.some(f => f.type === 'number' && f.name === key)) {
         const value = rawData[key];
-        // Faqat string bo'lgan qiymatlarga replace qo'llanadi
         if (typeof value === 'string') {
-          rawData[key] = value.replace(/\s/g, ''); // Remove spaces for number fields
+          rawData[key] = value.replace(/\s/g, ''); 
         }
       }
     });
@@ -86,7 +82,7 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
               margin="dense"
               label={field.label}
               name={field.name}
-              type="text" // Always render as text to allow formatting for number types
+              type="text"
               value={formData[field.name] || ''}
               onChange={handleChange}
               fullWidth
@@ -154,11 +150,11 @@ function EditItem({ name, open, onClose, onSave, formConfig, initialData }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{name ? name : 'Maxsulotni tahrirlash'}</DialogTitle>
+      <DialogTitle>{name ? name : 'Редактирование продукта'}</DialogTitle>
       <DialogContent>{renderFields()}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Bekor qilish</Button>
-        <Button onClick={handleSave}>Saqlash</Button>
+        <Button onClick={onClose}>Отменить</Button>
+        <Button onClick={handleSave}>Сохранить</Button>
       </DialogActions>
     </Dialog>
   );

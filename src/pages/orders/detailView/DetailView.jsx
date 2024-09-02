@@ -39,7 +39,7 @@ function DetailView() {
         const result = await OrdersService.getOrdersById(id);
         setData(result);
       } catch (err) {
-        setError(err.message || "Ma'lumotni olishda xatolik yuz berdi.");
+        setError(err.message || "Ошибка при получении данных");
       } finally {
         setLoading(false);
       }
@@ -58,7 +58,6 @@ function DetailView() {
   };
 
   const handlePrintAction = () => {
-    // Chop etish funksiyasini bu yerda qo'llang
     window.print();
     setOpenModal(false);
   };
@@ -137,49 +136,49 @@ function DetailView() {
       </style>
       <SideBar />
       <main>
-        <Navbar title="To'liq ma'lumotni ko'rish" />
+        <Navbar title="Просмотреть полную информацию" />
         <section className="oreder-details-wrapper">
           {loading ? <Loader /> : error ? <p>{error}</p> : (
             <Card>
               <CardContent className="card-content">
                 <div className="header-content">
-                  <Typography variant="h5" className="subtitle">Buyurtma Tafsilotlari</Typography>
-                  <Button variant="outlined" onClick={handlePrint}><i className="fa-solid fa-print" style={{ paddingRight: '10px' }}></i>Chop etish</Button>
+                  <Typography variant="h5" className="subtitle">Детали заказа</Typography>
+                  <Button variant="outlined" onClick={handlePrint}><i className="fa-solid fa-print" style={{ paddingRight: '10px' }}></i>Печать</Button>
                 </div>
                 <Divider style={{ margin: '20px 0' }} />
 
-                <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
-                <Typography variant="subtitle1"><strong>Umumiy:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
-                <Typography variant="subtitle1"><strong>To'langan:</strong> {formatNumberWithCommas(data.paid)}</Typography>
-                <Typography variant="subtitle1"><strong>Qarz:</strong> {formatNumberWithCommas(data.debt)}</Typography>
+                <Typography variant="subtitle1"><strong>Время создания:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
+                <Typography variant="subtitle1"><strong>Общий:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
+                <Typography variant="subtitle1"><strong>Оплачено:</strong> {formatNumberWithCommas(data.paid)}</Typography>
+                <Typography variant="subtitle1"><strong>Долг:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
-                <Typography variant="h6" className="typography-section">Mijoz haqida ma'lumot</Typography>
+                <Typography variant="h6" className="typography-section">Информация о клиенте</Typography>
                 <Divider style={{ margin: '10px 0' }} />
-                <Typography variant="subtitle1"><strong>Ism:</strong> {data.customer?.first_name}</Typography>
-                <Typography variant="subtitle1"><strong>Familiya:</strong> {data.customer?.last_name}</Typography>
-                <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
-                <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
+                <Typography variant="subtitle1"><strong>Имя:</strong> {data.customer?.first_name}</Typography>
+                <Typography variant="subtitle1"><strong>Фамилия:</strong> {data.customer?.last_name}</Typography>
+                <Typography variant="subtitle1"><strong>Номер телефона:</strong> {data.customer?.phone_number}</Typography>
+                <Typography variant="subtitle1"><strong>Комментарий:</strong> {data.description}</Typography>
 
                 <Divider style={{ margin: '10px 0' }} />
-                <Typography variant="subtitle1"><strong>Boshqaruvchi:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
+                <Typography variant="subtitle1"><strong>Менеджер:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
                 <table className="oreder-details-wrapper">
                   <thead>
                     <tr>
-                      <th style={{ border: '1px solid black' }} rowSpan="2">Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
-                      <th style={{ border: '1px solid black' }} rowSpan="2">Vin code: <p>{data?.car?.code}</p></th>
+                      <th style={{ border: '1px solid black' }} rowSpan="2">Модель: <p>{data?.car?.name + ' ' + data?.car?.brand}</p></th>
+                      <th style={{ border: '1px solid black' }} rowSpan="2">VIN-код: <p>{data?.car?.code}</p></th>
                     </tr>
                     <tr>
-                      <th style={{ border: '1px solid black' }}>Davlat raqami: <p>{data?.car?.state_number}</p></th>
+                      <th style={{ border: '1px solid black' }}>Госномер: <p>{data?.car?.state_number}</p></th>
 
                       {/* Yurgan kilometrlari turlari shartga bog'liq ravishda */}
                       {data?.car_kilometers_odo && (
-                        <th style={{ border: '1px solid black' }}>Odo bo'yicha yurgan masofa: <p>{data?.car_kilometers_odo} km</p></th>
+                        <th style={{ border: '1px solid black' }}>Пробег по одометру: <p>{data?.car_kilometers_odo} км</p></th>
                       )}
                       {data?.car_kilometers_ev && (
-                        <th style={{ border: '1px solid black' }}>EV bo'yicha yurgan masofa: <p>{data?.car_kilometers_ev} km</p></th>
+                        <th style={{ border: '1px solid black' }}>Пробег по EV: <p>{data?.car_kilometers_ev} км</p></th>
                       )}
                       {data?.car_kilometers_hev && (
-                        <th style={{ border: '1px solid black' }}>HEV bo'yicha yurgan masofa: <p>{data?.car_kilometers_hev} km</p></th>
+                        <th style={{ border: '1px solid black' }}>Пробег по HEV: <p>{data?.car_kilometers_hev} км</p></th>
                       )}
                     </tr>
                   </thead>
@@ -188,13 +187,13 @@ function DetailView() {
                   {data?.products?.length > 0 &&
                     <>
                       <tr>
-                        <th style={{ border: '1px solid black' }} colspan="4">Maxsulotlar</th>
+                        <th style={{ border: '1px solid black' }} colspan="4">Продукты</th>
                       </tr>
                       <tr>
-                        <th style={{ border: '1px solid black' }}>Nomi</th>
-                        <th style={{ border: '1px solid black' }}>Miqdor</th>
-                        <th style={{ border: '1px solid black' }}>Umumiy</th>
-                        <th style={{ border: '1px solid black' }}>Chegirma</th>
+                        <th style={{ border: '1px solid black' }}>Название</th>
+                        <th style={{ border: '1px solid black' }}>Количество</th>
+                        <th style={{ border: '1px solid black' }}>Общий</th>
+                        <th style={{ border: '1px solid black' }}>Скидка</th>
                       </tr>
                       {data?.products?.map((product, index) => (
                         <tr key={index}>
@@ -209,13 +208,13 @@ function DetailView() {
                 </table>
                 <table>
                   <tr>
-                    <th colspan="4">Xizmatlar</th>
+                    <th colspan="4">Услуги</th>
                   </tr>
                   <tr>
-                    <th style={{ border: '1px solid black' }}>Xodim</th>
-                    <th style={{ border: '1px solid black' }}>Xizmat qismi</th>
-                    <th style={{ border: '1px solid black' }}>Xizmat nomi</th>
-                    <th style={{ border: '1px solid black' }}>Umumiy</th>
+                    <th style={{ border: '1px solid black' }}>Сотрудник</th>
+                    <th style={{ border: '1px solid black' }}>Партия</th>
+                    <th style={{ border: '1px solid black' }}>Название услуги</th>
+                    <th style={{ border: '1px solid black' }}>Общий</th>
                   </tr>
                   {data?.services?.map((service, index) => (
                     <tr key={index}>
@@ -233,51 +232,51 @@ function DetailView() {
       </main>
 
       <Dialog open={openModal} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>Buyurtma tafsilotlari</DialogTitle>
+        <DialogTitle>Детали заказа</DialogTitle>
         <DialogContent className='oreder-details-wrapper' dividers>
           <CardContent>
-            <Typography variant="subtitle1"><strong>Yaratilgan vaqti:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
-            <Typography variant="subtitle1"><strong>Umumiy:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
-            <Typography variant="subtitle1"><strong>To'langan:</strong> {formatNumberWithCommas(data.paid)}</Typography>
-            <Typography variant="subtitle1"><strong>Qarz:</strong> {formatNumberWithCommas(data.debt)}</Typography>
+            <Typography variant="subtitle1"><strong>Время создания:</strong> {new Date(data.created_at).toLocaleString()}</Typography>
+            <Typography variant="subtitle1"><strong>Общий:</strong> {formatNumberWithCommas(data.paid + data.debt)}</Typography>
+            <Typography variant="subtitle1"><strong>Оплачено:</strong> {formatNumberWithCommas(data.paid)}</Typography>
+            <Typography variant="subtitle1"><strong>Долг:</strong> {formatNumberWithCommas(data.debt)}</Typography>
 
-            <Typography variant="h6" className="typography-section">Mijoz haqida ma'lumot</Typography>
+            <Typography variant="h6" className="typography-section">Информация о клиенте</Typography>
             <Divider style={{ margin: '10px 0' }} />
-            <Typography variant="subtitle1"><strong>Ism:</strong> {data.customer?.first_name}</Typography>
-            <Typography variant="subtitle1"><strong>Familiya:</strong> {data.customer?.last_name}</Typography>
-            <Typography variant="subtitle1"><strong>Telefon raqam:</strong> {data.customer?.phone_number}</Typography>
-            <Typography variant="subtitle1"><strong>Izoh:</strong> {data.description}</Typography>
+            <Typography variant="subtitle1"><strong>Имя:</strong> {data.customer?.first_name}</Typography>
+            <Typography variant="subtitle1"><strong>Фамилия:</strong> {data.customer?.last_name}</Typography>
+            <Typography variant="subtitle1"><strong>Номер телефона:</strong> {data.customer?.phone_number}</Typography>
+            <Typography variant="subtitle1"><strong>Комментарий:</strong> {data.description}</Typography>
             <Divider style={{ margin: '10px 0' }} />
-            <Typography variant="subtitle1"><strong>Boshqaruvchi:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
+            <Typography variant="subtitle1"><strong>Менеджер:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
             <table className="order-details-wrapper">
               <thead>
                 <tr>
                   <th style={{ border: '1px solid black' }} rowSpan="2">
-                    Model: <p>{data?.car?.name + ' ' + data?.car?.brand}</p>
+                    Модель: <p>{data?.car?.name + ' ' + data?.car?.brand}</p>
                   </th>
                   <th style={{ border: '1px solid black' }} rowSpan="2">
-                    Vin code: <p>{data?.car?.code}</p>
+                    VIN-код: <p>{data?.car?.code}</p>
                   </th>
                 </tr>
                 <tr>
                   <th style={{ border: '1px solid black' }}>
-                    Davlat raqami: <p>{data?.car?.state_number}</p>
+                  Госномер: <p>{data?.car?.state_number}</p>
                   </th>
 
                   {/* Yurgan kilometrlari shart bo'yicha */}
                   {data?.car_kilometers_odo && (
                     <th style={{ border: '1px solid black' }}>
-                      Masofa (ODO): <p>{data?.car_kilometers_odo} km</p>
+                      Пробег по одометру: <p>{data?.car_kilometers_odo} км</p>
                     </th>
                   )}
                   {data?.car_kilometers_ev && (
                     <th style={{ border: '1px solid black' }}>
-                      Masofa (ED): <p>{data?.car_kilometers_ev} km</p>
+                      Пробег по EV: <p>{data?.car_kilometers_ev} км</p>
                     </th>
                   )}
                   {data?.car_kilometers_hev && (
                     <th style={{ border: '1px solid black' }}>
-                      Mmasofa (HEV): <p>{data?.car_kilometers_hev} km</p>
+                      Пробег по HEV: <p>{data?.car_kilometers_hev} км</p>
                     </th>
                   )}
 
@@ -291,13 +290,13 @@ function DetailView() {
 
             {data?.products?.length > 0 && <table>
               <tr>
-                <th style={{ border: '1px solid black' }} colspan="4">Maxsulotlar</th>
+                <th style={{ border: '1px solid black' }} colspan="4">Продукты</th>
               </tr>
               <tr>
-                <th style={{ border: '1px solid black' }}>Nomi</th>
-                <th style={{ border: '1px solid black' }}>Miqdor</th>
-                <th style={{ border: '1px solid black' }}>Umumiy</th>
-                <th style={{ border: '1px solid black' }}>Chegirma</th>
+                <th style={{ border: '1px solid black' }}>Название</th>
+                <th style={{ border: '1px solid black' }}>Количество</th>
+                <th style={{ border: '1px solid black' }}>Общий</th>
+                <th style={{ border: '1px solid black' }}>Скидка</th>
               </tr>
               {data?.products?.map((product, index) => (
                 <tr key={index}>
@@ -310,13 +309,13 @@ function DetailView() {
             </table>}
             <table>
               <tr>
-                <th style={{ border: '1px solid black' }} colspan="4">Xizmatlar</th>
+                <th style={{ border: '1px solid black' }} colspan="4">Услуги</th>
               </tr>
               <tr>
-                <th style={{ border: '1px solid black' }}>Xodim</th>
-                <th style={{ border: '1px solid black' }}>Xizmat qismi</th>
-                <th style={{ border: '1px solid black' }}>Xizmat nomi</th>
-                <th style={{ border: '1px solid black' }}>Umumiy</th>
+                <th style={{ border: '1px solid black' }}>Сотрудник</th>
+                <th style={{ border: '1px solid black' }}>Партия</th>
+                <th style={{ border: '1px solid black' }}>Название услуги</th>
+                <th style={{ border: '1px solid black' }}>Общий</th>
               </tr>
               {data?.services?.map((service, index) => (
                 <tr key={index}>

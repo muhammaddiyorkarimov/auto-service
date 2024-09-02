@@ -12,7 +12,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [price, setPrice] = useState(0);
     const [amountProduct, setAmountProduct] = useState(0);
-    const [isAdding, setIsAdding] = useState(false); // Yangi holat qo'shildi
+    const [isAdding, setIsAdding] = useState(false);
 
     const fetchProduct = useCallback(() => {
         if (selectedProductId) {
@@ -57,17 +57,17 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
         setSelectedProductId(null);
         setPrice(0);
         setAmountProduct(0);
-        setIsAdding(false); // Formdan keyin holatni yangilash
+        setIsAdding(false);
     };
 
     const handleAddProduct = () => {
         setFormConfig([
-            { type: 'select', label: 'Maxsulot', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
-            { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Chegirma', name: 'discount' },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
+            { type: 'select', label: 'Товар', name: 'product', options: products?.map(p => ({ label: p.name, value: p.id })), required: true },
+            { type: 'number', label: 'Количество', name: 'amount', required: true },
+            { type: 'number', label: 'Скидка', name: 'discount' },
+            { type: 'number', label: 'Общий', name: 'total', required: true, disabled: true },
         ]);
-        setIsAdding(true); // Tugma bosilganda form qo'shish holati o'zgaradi
+        setIsAdding(true);
     };
 
     const onProductChange = (id) => {
@@ -76,7 +76,7 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
 
     const handleSubmit = async () => {
         if (!orderId) {
-            alert('Order ID not set');
+            alert('ID заказа не установлен');
             return;
         }
 
@@ -92,16 +92,14 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
             for (const productData of postData) {
                 const response = await OrderProducts.postOrders(productData);
                 if (!response) {
-                    alert('Failed to post data');
+                    alert('Не удалось отправить данные');
                     return;
                 }
             }
-            alert('Data successfully posted');
+            alert('Данные успешно отправлены');
         } catch (error) {
-            alert(`Error posting data: ${error.message}`);
-        } finally {
-            // If you have a loading state, set it to false here
-        }
+            alert(`Ошибка при отправке данных: ${error.message}`);
+        } 
     };
 
     function formatNumberWithCommas(number) {
@@ -111,8 +109,8 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
     return (
         <div className='order-product'>
             <div className="header">
-                {!isAdding && ( // Agar form qo'shilsa, tugma ko'rinmaydi
-                    <AddItemBtn name='Maxsulot qoshish' onClick={handleAddProduct} />
+                {!isAdding && (
+                    <AddItemBtn name='Добавить товар' onClick={handleAddProduct} />
                 )}
             </div>
             <div className="order-product-content">
@@ -120,10 +118,10 @@ function OrderProduct({ onTotalChange, orderId, onSave }) {
                 <table>
                     <thead>
                         <tr>
-                            <th>Maxsulot</th>
-                            <th>Miqdor</th>
-                            <th>Chegirma</th>
-                            <th>Umumiy</th>
+                            <th>Товар</th>
+                            <th>Количество</th>
+                            <th>Скидка</th>
+                            <th>Общий</th>
                         </tr>
                     </thead>
                     <tbody>

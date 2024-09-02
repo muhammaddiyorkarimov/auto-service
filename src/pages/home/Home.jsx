@@ -26,7 +26,7 @@ function Home() {
   const { data: benefitBranch, loading: benefitBranchLoading, error: benefitBranchError } = useFetch(getUser)
   console.log(benefitBranch)
 
-  const productColumns = ["Name", "Amount", "Total Benefit"];
+  const productColumns = ["название", "количество", "общая прибыль"];
 
   const productData = topProducts ? topProducts.map(product => ({
     name: product.product.name,
@@ -35,9 +35,9 @@ function Home() {
   })) : [];
 
   const calculateData = topCalculate ? [
-    { title: "Jami Import", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
-    { title: "Jami Export", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
-    { title: "Daromad", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
+    { title: "общий импорт", value: formatNumberWithCommas(topCalculate.total_import), img: img1 },
+    { title: "общий экспорт", value: formatNumberWithCommas(topCalculate.total_export), img: img2 },
+    { title: "доход", value: formatNumberWithCommas(topCalculate.total_benefit), img: img3 },
   ] : [];
 
   function formatNumberWithCommas(number) {
@@ -50,7 +50,7 @@ function Home() {
     <div className="home">
       <SideBar />
       <main>
-        <Navbar title="Asosiy" />
+        <Navbar title="Базовый" />
         <div className="extra-items">
           <div className="header">
             <div className="items-wrapper">
@@ -115,7 +115,7 @@ function Home() {
           <div className="footer">
             <div className="cards">
               <div className="top-products">
-                <div className="title">Top tovarlar</div>
+                <div className="title">топ товары</div>
                 <TopTableComponent loading={topProductsLoading} error={topProductsError} columns={productColumns} data={productData} />
               </div>
             </div>

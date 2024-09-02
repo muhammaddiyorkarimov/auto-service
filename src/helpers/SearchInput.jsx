@@ -17,7 +17,7 @@ const SearchInput = ({ searchValue, onSearchChange }) => {
 
   return (
     <TextField
-      label="Search"
+      label="Поиск"
       variant="outlined"
       value={localSearchValue}
       onKeyDown={handleKeyDown}

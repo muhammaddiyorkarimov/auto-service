@@ -34,7 +34,7 @@ function ProviderC() {
     const [formConfig, setFormConfig] = useState([]);
     const [editFormConfig, setEditFormConfig] = useState([]);
     const [rowDetailOpen, setRowDetailOpen] = useState(false);
-    
+
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
@@ -83,9 +83,9 @@ function ProviderC() {
     };
 
     const sortedOptions = [
-        { value: '', label: 'Barchasi' },
-        { value: 'true', label: 'Qarzdor' },
-        { value: 'false', label: 'Qarz emas' },
+        { value: '', label: 'Все' },
+        { value: 'true', label: 'В долг' },
+        { value: 'false', label: 'Без долга' },
     ]
 
     // Handle deleting a product
@@ -98,10 +98,10 @@ function ProviderC() {
         try {
             await Provider.deleteProvider(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -111,9 +111,9 @@ function ProviderC() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Ism', name: 'name', required: true },
-            { type: 'number', label: 'Telefon raqam', name: 'phone_number', required: true },
-            { type: 'number', label: 'Qarz', name: 'debt', required: true },
+            { type: 'text', label: 'Имя', name: 'name', required: true },
+            { type: 'number', label: 'Номер телефона', name: 'phone_number', required: true },
+            { type: 'number', label: 'Долг', name: 'debt', required: true },
         ]);
         setAddOpen(true);
     };
@@ -122,24 +122,24 @@ function ProviderC() {
         try {
             const newProduct = await Provider.postProvider(item);
             setProduct((prevProducts) => [...prevProducts, newProduct]); // Yangi mahsulotni jadvalga qo'shish
-            setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
+            setSuccessMsg("Поставщик успешно добавлен!");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении поставщика!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
         }
     };
-    
+
 
     // Handle editing a product
     const handleEdit = (item) => {
         setCurrentItem(item);
         setEditFormConfig([
-            { type: 'text', label: 'Ism', name: 'name', value: item.name },
-            { type: 'number', label: 'Telefon raqam', name: 'phone_number', value: item.phone_number },
-            { type: 'number', label: 'Qarz', name: 'debt', required: true, value: item.debt },
+            { type: 'text', label: 'Имя', name: 'name', value: item.name },
+            { type: 'number', label: 'Номер телефона', name: 'phone_number', value: item.phone_number },
+            { type: 'number', label: 'Долг', name: 'debt', required: true, value: item.debt },
         ]);
         setEditOpen(true);
     };
@@ -157,10 +157,10 @@ function ProviderC() {
             const updatedItem = await Provider.getProviderById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
-            setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
+            setSuccessMsg("Поставщик успешно обновлен!");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении поставщика!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -198,7 +198,7 @@ function ProviderC() {
         <div className='brand'>
             <SideBar />
             <main>
-                <Navbar title="Ta'minlovchi" />
+                <Navbar title="Поставщик" />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -213,7 +213,7 @@ function ProviderC() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn onClick={handleAdd} name="Ta'minotchi"/>
+                            <AddItemBtn onClick={handleAdd} name="Поставщик" />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -238,18 +238,18 @@ function ProviderC() {
             {/* Add Item Modal */}
             {addOpen &&
                 <AddItemModal
-                open={addOpen}
-                onClose={() => setAddOpen(false)}
-                formConfig={formConfig}
-                onSave={createProduct}
-                name="Ta'minlovchi qo'shish"
+                    open={addOpen}
+                    onClose={() => setAddOpen(false)}
+                    formConfig={formConfig}
+                    onSave={createProduct}
+                    name="Добавить поставщика"
                 />
             }
 
             {/* Edit Item Modal */}
             {editOpen &&
                 <EditItem
-                    name="Ta'minlovchini tahrirlash"
+                    name="Редактировать поставщика"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={editFormConfig}
@@ -261,7 +261,7 @@ function ProviderC() {
             {/* Delete Confirmation Dialog */}
             {deleteOpen &&
                 <DeleteProduct
-                    name="ushbu ta'minlovchini"
+                    name="Этого поставщика"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
@@ -303,24 +303,24 @@ function ProviderC() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Mahsulot Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали Поставщик</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Ismi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Telefon raqami:</strong> {currentItem.phone_number}</Typography>
-                        <Typography variant="body1"><strong>Qarzi:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
-                        <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
+                        <Typography variant="body1"><strong>Имя:</strong> {currentItem.name}</Typography>
+                        <Typography variant="body1"><strong>Номер телефона:</strong> {currentItem.phone_number}</Typography>
+                        <Typography variant="body1"><strong>Долг:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
+                        <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
                         <IconButton onClick={() => handleEdit(currentItem)}>
                             <Edit style={{ color: 'orange', fontSize: '28px' }} />
                         </IconButton>
                         <Button onClick={() => setRowDetailOpen(false)} sx={{ color: '#1e88e5', fontWeight: 'bold' }}>
-                            Yopish
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

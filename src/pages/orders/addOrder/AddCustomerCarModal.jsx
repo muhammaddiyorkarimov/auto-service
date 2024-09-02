@@ -6,11 +6,11 @@ import CarsService from '../../../services/landing/carsService';
 
 function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
     const [formConfig, setFormConfig] = useState([
-        { type: 'text', label: 'Code', name: 'code', required: true },
-        { type: 'text', label: 'Name', name: 'name', required: true },
-        { type: 'text', label: 'Brand', name: 'brand', required: true },
-        { type: 'text', label: 'Color', name: 'color', required: true },
-        { type: 'text', label: 'State Number', name: 'state_number', required: true },
+        { type: 'text', label: 'Код', name: 'code', required: true },
+        { type: 'text', label: 'Название', name: 'name', required: true },
+        { type: 'text', label: 'Бренд', name: 'brand', required: true },
+        { type: 'text', label: 'Цвет', name: 'color', required: true },
+        { type: 'text', label: 'Госномер', name: 'state_number', required: true },
     ]);
 
     const [formData, setFormData] = useState({
@@ -41,7 +41,7 @@ function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
         const errors = {};
         formConfig.forEach((field) => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `${field.label} to'ldirilishi shart`;
+                errors[field.name] = `${field.label} обязательно к заполнению`;
             }
         });
         setValidationErrors(errors);
@@ -73,8 +73,8 @@ function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
                 setError(true);
             }
         } catch (error) {
-            if (error.response.data.customer[0] === "This field may not be null.") {
-                setError("Iltimos, mijozni tanlang");
+            if (error.response.data.customer[0] === "Это поле не может быть пустым.") {
+                setError("Пожалуйста, выберите клиента");
             }
         }
     };
@@ -110,25 +110,25 @@ function AddCustomerCarModal({ open, onClose, onSuccess, selectedCustomerId }) {
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Mashina qo'shish</DialogTitle>
+            <DialogTitle>Добавить автомобиль</DialogTitle>
             <DialogContent>
                 {success && (
                     <Alert severity="success" onClose={() => setSuccess(false)}>
-                        <AlertTitle>Muvaffaqiyatli</AlertTitle>
-                        Mashina muvaffaqiyatli qo'shildi
+                        <AlertTitle>Успешно</AlertTitle>
+                        Автомобиль успешно добавлен
                     </Alert>
                 )}
                 {error && (
                     <Alert severity="error" onClose={() => setError(false)}>
-                        <AlertTitle>Xato</AlertTitle>
-                        Mashina qo'shishda xato yuz berdi. Iltimos Mijoz tanlanganligini tekshirib ko'ring!
+                        <AlertTitle>Ошибка</AlertTitle>
+                        Произошла ошибка при добавлении автомобиля. Пожалуйста, проверьте, выбран ли клиент!
                     </Alert>
                 )}
                 {renderFields()}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Bekor qilish</Button>
-                <Button onClick={handleSubmit}>Saqlash</Button>
+                <Button onClick={onClose}>Отмена</Button>
+                <Button onClick={handleSubmit}>Сохранить</Button>
             </DialogActions>
         </Dialog>
     );

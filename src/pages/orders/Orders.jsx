@@ -72,10 +72,10 @@ function Orders() {
 
     const handleAdd = () => {
         setFormConfig([
-            { type: 'number', label: "To'langan", name: 'paid', required: true },
-            { type: 'number', label: 'Qarz', name: 'debt', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true },
+            { type: 'number', label: "Оплачено", name: 'paid', required: true },
+            { type: 'number', label: 'Долг', name: 'debt', required: true },
+            { type: 'select', label: 'Покупатель', name: 'customer', options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'number', label: 'Общий', name: 'total', required: true },
         ]);
         navigate('/add-order')
         // setAddOpen(true);
@@ -85,13 +85,13 @@ function Orders() {
         try {
             const newOrder = await OrdersSerivce.postOrders(item);
             setOrdersC([...ordersC, newOrder]);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Произошла ошибка!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -106,10 +106,10 @@ function Orders() {
         };
         setCurrentItem(updatedItem);
         setFormConfig([
-            { type: 'number', label: "To'langan", name: 'paid', value: item.paid },
-            { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
-            { type: 'number', label: 'Umumiy', name: 'total', value: computedTotal },
+            { type: 'number', label: "Оплачено", name: 'paid', value: item.paid },
+            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
+            { type: 'select', label: 'Покупатель', name: 'customer', value: item.customer.id, options: customersData?.results?.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'number', label: 'Общий', name: 'total', value: computedTotal },
         ]);
         
         setEditOpen(true);
@@ -127,10 +127,10 @@ function Orders() {
         try {
             const updatedOrder = await OrdersSerivce.putOrdersById(currentItem.id, formattedData);
             setOrdersC(ordersC.map(o => o.id === currentItem.id ? updatedOrder : o));
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Успешно обновлено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -146,10 +146,10 @@ function Orders() {
         try {
             await OrdersSerivce.deleteOrders(currentItem);
             setOrdersC(ordersC?.filter(o => o.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -177,11 +177,11 @@ function Orders() {
         <div className="orders">
             <SideBar />
             <main>
-                <Navbar title="Buyurtmalar"/>
+                <Navbar title="Заказы"/>
                 <div className="extra-items">
                     <div className="header-items">
                         <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} />
-                        <AddItemBtn name="Buyurtma qo'shish" onClick={handleAdd} />
+                        <AddItemBtn name="Добавить заказ" onClick={handleAdd} />
                     </div>
                     <section className="details-wrapper">
                         <DataTable
@@ -204,7 +204,7 @@ function Orders() {
 
             {addOpen &&
                 <AddItemModal
-                    name="Yangi buyurtma qo'shish"
+                    name="Добавить новый заказ"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -212,7 +212,7 @@ function Orders() {
                 />}
             {editOpen &&
                 <EditItem
-                    name="Buyurtmani tahrirlash"
+                    name="Редактировать заказ"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={formConfig}
@@ -221,7 +221,7 @@ function Orders() {
                 />}
             {deleteOpen &&
                 <DeleteProduct
-                    name="Ushbu buyurtmani"
+                    name="Этот заказ"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

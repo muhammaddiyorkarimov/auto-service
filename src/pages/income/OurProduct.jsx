@@ -53,22 +53,22 @@ function OurProduct() {
     useEffect(() => {
         if (data) {
             setOurProduct(data.results);
-        } 
+        }
         if (providersData) {
             setProvider(providersData);
         }
     }, [data, providersData]);
 
     const sortedOptions = [
-        { value: 'name', label: 'Nomi' },
-        { value: 'code', label: 'Kod' },
-        { value: 'amount', label: 'Miqdori' },
-        { value: 'max_discount', label: 'Chegirma' }
+        { value: 'name', label: 'Название' },
+        { value: 'code', label: 'Код' },
+        { value: 'amount', label: 'Количество' },
+        { value: 'max_discount', label: 'Скидка' }
     ]
 
     const debtOptions = [
-        { value: 'true', label: 'Kam qolgan maxsulotlar' },
-        { value: 'false', label: 'Maxsulot' },
+        { value: 'true', label: 'Заканчивающиеся товары' },
+        { value: 'false', label: 'Продукт' },
     ]
     useEffect(() => {
         if (params.get('page') !== page.toString()) {
@@ -107,23 +107,23 @@ function OurProduct() {
     };
 
     const unitOptions = [
-        {id: 1, name: 'Dona'},
-        {id: 2, name: 'Komplekt'},
-        {id: 3, name: 'Litr'},
+        { id: 1, name: 'Штука' },
+        { id: 2, name: 'Комплект' },
+        { id: 3, name: 'Литр' },
     ]
 
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Kod', name: 'code' },
-            { type: 'text', label: 'Nomi', name: 'name', required: true },
-            { type: 'number', label: 'Miqdori', name: 'amount', required: true },
-            { type: 'number', label: 'Min miqdor', name: 'min_amount', required: true },
-            { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
-            { type: 'number', label: 'Import narxi', name: 'import_price', required: true },
-            { type: 'number', label: 'Eksport narxi', name: 'export_price' },
-            { type: 'number', label: 'Chegirma', name: 'max_discount', required: true },
+            { type: 'text', label: 'Код', name: 'code' },
+            { type: 'text', label: 'Название', name: 'name', required: true },
+            { type: 'number', label: 'Количество', name: 'amount', required: true },
+            { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
+            { type: 'select', label: 'Единица', name: 'unit', required: true, options: unitOptions.map(p => ({ value: p.id, label: p.name })) },
+            { type: 'number', label: 'Импортная цена', name: 'import_price', required: true },
+            { type: 'number', label: 'Экспортная цена', name: 'export_price' },
+            { type: 'number', label: 'Скидка', name: 'max_discount', required: true },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', required: true, options: provider?.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Поставщик', name: 'provider', required: true, options: provider?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setAddOpen(true);
@@ -135,34 +135,34 @@ function OurProduct() {
             setOurProduct([...ourProduct, newProduct]);
             const updatedProvider = await Provider.getProvider(); // Yangi ma'lumotlarni olish
             setProvider(updatedProvider);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении продукта!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
         }
     };
-    
-    
+
+
 
     const handleEdit = (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: 'Kod', name: 'code', value: item.code },
-            { type: 'text', label: 'Nomi', name: 'name', value: item.name },
-            { type: 'number', label: 'Min miqdor', name: 'min_amount', value: item.min_amount },
-            { type: 'number', label: 'Miqdori', name: 'amount', value: item.amount },
-            { type: 'select', label: 'Birlik', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name})), value: item.unit},
-            { type: 'number', label: 'Import narxi', name: 'import_price', value: item.import_price },
-            { type: 'number', label: 'Eksport narxi', name: 'export_price', value: item.export_price },
-            { type: 'number', label: 'Chegirma', name: 'max_discount', value: item.max_discount },
+            { type: 'text', label: 'Код', name: 'code', value: item.code },
+            { type: 'text', label: 'Название', name: 'name', value: item.name },
+            { type: 'number', label: 'Количествоr', name: 'min_amount', value: item.min_amount },
+            { type: 'number', label: 'Минимальное количество', name: 'amount', value: item.amount },
+            { type: 'select', label: 'Единица', name: 'unit', required: true, options: unitOptions.map(p => ({ value: p.id, label: p.name })), value: item.unit },
+            { type: 'number', label: 'Импортная цена', name: 'import_price', value: item.import_price },
+            { type: 'number', label: 'Экспортная цена', name: 'export_price', value: item.export_price },
+            { type: 'number', label: 'Скидка', name: 'max_discount', value: item.max_discount },
             {
-                type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider?.id, options: provider?.map(p => ({ value: p.id, label: p.name }))
+                type: 'select', label: 'Поставщик', name: 'provider', value: item.provider?.id, options: provider?.map(p => ({ value: p.id, label: p.name }))
             }
         ]);
         setEditOpen(true);
@@ -183,15 +183,15 @@ function OurProduct() {
         try {
             const updatedProduct = await OurProductService.putProductById(currentItem.id, formattedData);
             setOurProduct(ourProduct.map(o => o.id === currentItem.id ? updatedProduct : o));
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Продукт успешно обновлен!');
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Продукт успешно обновлен!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении продукта!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -208,10 +208,10 @@ function OurProduct() {
         try {
             await OurProductService.deleteProduct(currentItem);
             setOurProduct(ourProduct.filter(o => o.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -239,7 +239,7 @@ function OurProduct() {
                 <td>{item.max_discount}%</td>
                 <td>{formatNumberWithCommas(item.export_price * item.max_discount / 100)}</td>
                 <td>{item.provider ? item.provider.name : '0'}</td>
-                <td>{formatNumberWithCommas(item.total_benefit ? item.total_benefit : '0'  )}</td>
+                <td>{formatNumberWithCommas(item.total_benefit ? item.total_benefit : '0')}</td>
             </>
         )
     }));
@@ -253,7 +253,7 @@ function OurProduct() {
         <div className='income'>
             <SideBar />
             <main>
-                <Navbar title='Tovarlar' />
+                <Navbar title='Товары' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -262,7 +262,7 @@ function OurProduct() {
                             <Filter selectedFilter={selectedFilter} onFilterChange={handleFilterChange2} options={debtOptions} />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить продукт" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className='details-wrapper'>
@@ -340,29 +340,29 @@ function OurProduct() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Mahsulot Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали продукта</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Mahsulot Nomi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Kod:</strong> {currentItem.code}</Typography>
-                        <Typography variant="body1"><strong>Miqdori:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Birlik:</strong> {currentItem.unit}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
-                        <Typography variant="body1"><strong>Eksport Narxi:</strong> {formatNumberWithCommas(currentItem.export_price)}</Typography>
-                        <Typography variant="body1"><strong>Chegirma:</strong> {currentItem.max_discount}%</Typography>
-                        <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
-                        <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
+                        <Typography variant="body1"><strong>Название продукта:</strong> {currentItem.name}</Typography>
+                        <Typography variant="body1"><strong>Код:</strong> {currentItem.code}</Typography>
+                        <Typography variant="body1"><strong>Количество:</strong> {currentItem.amount}</Typography>
+                        <Typography variant="body1"><strong>Единица:</strong> {currentItem.unit}</Typography>
+                        <Typography variant="body1"><strong>Импортная цена:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Экспортная цена:</strong> {formatNumberWithCommas(currentItem.export_price)}</Typography>
+                        <Typography variant="body1"><strong>Скидка:</strong> {currentItem.max_discount}%</Typography>
+                        <Typography variant="body1"><strong>Поставщик:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
+                        <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
                         <IconButton onClick={() => handleEdit(currentItem)}>
                             <Edit style={{ color: 'orange', fontSize: '28px' }} />
                         </IconButton>
                         <Button onClick={() => setRowDetailOpen(false)} sx={{ color: '#1e88e5', fontWeight: 'bold' }}>
-                            Yopish
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

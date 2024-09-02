@@ -8,12 +8,12 @@ const Filter = ({ selectedFilter, onFilterChange, options }) => {
 
   return (
     <FormControl size='small' fullWidth>
-      <InputLabel>Sortlash</InputLabel>
+      <InputLabel>Сортировка</InputLabel>
       <Select
         fullWidth
         value={selectedFilter}
         onChange={handleChange}
-        label="Sortlash"
+        label="Сортировка"
         size='small'
       >
         {options?.map(option => (

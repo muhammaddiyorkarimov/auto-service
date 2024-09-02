@@ -27,8 +27,6 @@ function Workers() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
 
-    console.log(employessData)
-
     const [params, setQueryParams] = useQueryParams();
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
 
@@ -44,8 +42,6 @@ function Workers() {
         }
     }, [data])
 
-    console.log(employessData)
-
     useEffect(() => {
         if (params.get('search') !== searchQuery) {
             setQueryParams({ search: searchQuery });
@@ -58,13 +54,13 @@ function Workers() {
 
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: "Username", name: 'username', required: true },
-            { type: 'text', label: "Ism", name: 'first_name' },
-            { type: 'text', label: "Familiya", name: 'last_name' },
-            { type: 'text', label: "Telefon raqam", name: 'phone_number' },
-            { type: 'text', label: "Kasbi", name: 'position' },
+            { type: 'text', label: "Имя пользователя", name: 'username', required: true },
+            { type: 'text', label: "Имя", name: 'first_name' },
+            { type: 'text', label: "Фамилия", name: 'last_name' },
+            { type: 'text', label: "Номер телефона", name: 'phone_number' },
+            { type: 'text', label: "Профессия", name: 'position' },
             { type: 'number', label: "часть", name: 'part' },
-            { type: 'number', label: "Maosh", name: 'balance' },
+            { type: 'number', label: "Зарплата", name: 'balance' },
         ])
         setAddOpen(true);
     }
@@ -75,10 +71,10 @@ function Workers() {
 
             const newStaff = await WorkersService.postWorkers(staffWithPassword);
             setEmployeesData([...employessData, newStaff]);
-            setSuccessMsg("Muvaffaqiyatli qo'shildi");
+            setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении рабочего!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -89,13 +85,13 @@ function Workers() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: "Username", name: 'username', value: 'username' },
-            { type: 'text', label: "Ism", name: 'first_name', value: 'first_name' },
-            { type: 'text', label: "Familiya", name: 'last_name', value: 'last_name' },
-            { type: 'text', label: "Telefon raqam", name: 'phone_number', value: 'phone_number' },
-            { type: 'text', label: "Kasbi", name: 'position', value: 'position' },
-            { type: 'number', label: "Maosh", name: 'part', value: 'part' },
-            { type: 'number', label: "Maosh", name: 'balance', value: 'balance' },
+            { type: 'text', label: "Имя пользователя", name: 'username', value: 'username' },
+            { type: 'text', label: "Имя", name: 'first_name', value: 'first_name' },
+            { type: 'text', label: "Фамилия", name: 'last_name', value: 'last_name' },
+            { type: 'text', label: "Номер телефона", name: 'phone_number', value: 'phone_number' },
+            { type: 'text', label: "Профессия", name: 'position', value: 'position' },
+            { type: 'number', label: "часть", name: 'part', value: 'part' },
+            { type: 'number', label: "Зарплата", name: 'balance', value: 'balance' },
         ])
         setEditOpen(true);
     };
@@ -114,10 +110,10 @@ function Workers() {
         try {
             const updatedStaff = await WorkersService.putWorkersById(currentItem.id, formattedData);
             setEmployeesData(employessData?.map(o => o.id === currentItem.id ? updatedStaff : o));
-            setSuccessMsg('Mahsulot muvaffaqiyatli yangilandi!');
+            setSuccessMsg('Успешно обновлено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -153,10 +149,10 @@ function Workers() {
         try {
             await WorkersService.deleteWorkers(currentItem);
             setEmployeesData(employessData?.filter(o => o.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -167,14 +163,14 @@ function Workers() {
         <div className='employees'>
             <SideBar />
             <main>
-                <Navbar title='Xodimlar' />
+                <Navbar title='Рабочие' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
                             {/* <SearchInput searchValue={searchQuery} onSearchChange={handleSearchChange} /> */}
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Ishchi qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить рабочего" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -193,7 +189,7 @@ function Workers() {
 
             {addOpen &&
                 <AddItemModal
-                    name="Yangi buyurtma qo'shish"
+                    name="Добавить нового рабочего"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -201,7 +197,7 @@ function Workers() {
                 />}
             {editOpen &&
                 <EditItem
-                    name="Buyurtmani tahrirlash"
+                    name="Редактировать существующего рабочего"
                     open={editOpen}
                     onClose={() => setEditOpen(false)}
                     formConfig={formConfig}
@@ -210,7 +206,7 @@ function Workers() {
                 />}
             {deleteOpen &&
                 <DeleteProduct
-                    name="Ushbu buyurtmani"
+                    name="Этого рабочего"
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}

@@ -11,7 +11,7 @@ function OrderingService({ onTotalChange, onSave }) {
     const [formData, setFormData] = useState([]);
     const [selectedServiceId, setSelectedServiceId] = useState(null);
     const [price, setPrice] = useState(0);
-    const [showAddButton, setShowAddButton] = useState(true); // State to control AddItemBtn visibility
+    const [showAddButton, setShowAddButton] = useState(true); 
 
     const fetchService = useCallback(() => {
         if (selectedServiceId) {
@@ -42,15 +42,15 @@ function OrderingService({ onTotalChange, onSave }) {
 
     const handleAddService = () => {
         setFormConfig([
-            { type: 'select', label: 'Xodim', name: 'worker', options: staffData?.map(p => ({
+            { type: 'select', label: 'Сотрудник', name: 'worker', options: staffData?.map(p => ({
                 value: p.id,
                 label: p.last_name ? `${p.first_name} ${p.last_name}` : `Ismsiz`
             })), required: true },
-            { type: 'select', label: 'Xizmat', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Part', name: 'part', required: true },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true, disabled: true },
+            { type: 'select', label: 'Услуга', name: 'service', options: services?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Партия', name: 'part', required: true },
+            { type: 'number', label: 'Общий', name: 'total', required: true, disabled: true },
         ]);
-        setShowAddButton(false); // Hide AddItemBtn after click
+        setShowAddButton(false);
     };
 
     const handleSave = (data) => {
@@ -62,7 +62,7 @@ function OrderingService({ onTotalChange, onSave }) {
         setFormConfig([]);
         setSelectedServiceId(null);
         setPrice(0);
-        setShowAddButton(true); // Show AddItemBtn again after saving
+        setShowAddButton(true);
     };
 
     const onServiceChange = (id) => {
@@ -76,7 +76,7 @@ function OrderingService({ onTotalChange, onSave }) {
     return (
         <div className='order-service'>
             <div className="header">
-                {showAddButton && <AddItemBtn name='Xizmat qoshish' onClick={handleAddService} />}
+                {showAddButton && <AddItemBtn name='Добавить услугу' onClick={handleAddService} />}
             </div>
             <div className="order-product-content">
                 <FormData
@@ -89,10 +89,10 @@ function OrderingService({ onTotalChange, onSave }) {
                 <table>
                     <thead>
                         <tr>
-                            <th>Xizmat</th>
-                            <th>Xodim</th>
-                            <th>part</th>
-                            <th>Umumiy</th>
+                            <th>Услуга</th>
+                            <th>Сотрудник</th>
+                            <th>Партия</th>
+                            <th>Общий</th>
                         </tr>
                     </thead>
                     <tbody>

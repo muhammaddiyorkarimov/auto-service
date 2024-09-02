@@ -81,10 +81,10 @@ function Expenses() {
         try {
             await ExpensesService.deleteExpensesService(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'O\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -94,9 +94,9 @@ function Expenses() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'select', label: 'Xarajat turi', name: 'name', options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Narxi', name: 'price', required: true },
-            { type: 'text', label: 'Tavsif', name: 'description', required: true },
+            { type: 'select', label: 'Тип расхода', name: 'name', options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Цена', name: 'price', required: true },
+            { type: 'text', label: 'Описание', name: 'description', required: true },
         ]);
         setAddOpen(true);
     };
@@ -110,13 +110,13 @@ function Expenses() {
         try {
             const newProduct = await ExpensesService.postExpensesService(postProduct);
             setProduct([...product, newProduct]);
-            setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
+            setSuccessMsg("Расход успешно добавлен!");
             setSnackbarOpen(true);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении расхода!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -127,9 +127,9 @@ function Expenses() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setEditFormConfig([
-            { type: 'select', label: 'Xarajat turi', name: 'name', value: item.name, options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Narxi', name: 'price', value: item.price, required: true },
-            { type: 'text', label: 'Tavsif', name: 'description', value: item.description, required: true },
+            { type: 'select', label: 'Тип расхода', name: 'name', value: item.name, options: expensesType?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Цена', name: 'price', value: item.price, required: true },
+            { type: 'text', label: 'Описание', name: 'description', value: item.description, required: true },
         ]);
         setEditOpen(true);
     };
@@ -148,10 +148,10 @@ function Expenses() {
             const updatedItem = await ExpensesService.getExpensesServiceById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
-            setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
+            setSuccessMsg("Расход успешно обновлен!");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении расхода!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -190,7 +190,7 @@ function Expenses() {
         <div className='expenses'>
             <SideBar />
             <main>
-                <Navbar title='Xarajat' />
+                <Navbar title='Расходы' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -200,7 +200,7 @@ function Expenses() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Xarajat qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить расход" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -226,7 +226,7 @@ function Expenses() {
             {addOpen &&
                 <AddItemModal
                     expensesType={true}
-                    name="Xarajat qo'shish"
+                    name="Добавить расход"
                     open={addOpen}
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
@@ -242,6 +242,7 @@ function Expenses() {
                     formConfig={editFormConfig}
                     onSave={updateProduct}
                     initialData={currentItem}
+                    name="Изменить эту расход"
                 />
             }
 
@@ -251,6 +252,7 @@ function Expenses() {
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
+                    name='Этот расход'
                 />
             }
 
@@ -289,24 +291,24 @@ function Expenses() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Xarajat Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали расхода</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Xarajat turi:</strong> {currentItem?.type?.name}</Typography>
-                        <Typography variant="body1"><strong>Narxi:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
-                        <Typography variant="body1"><strong>Tavsif:</strong> {currentItem.description}</Typography>
-                        <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
+                        <Typography variant="body1"><strong>Тип расхода:</strong> {currentItem?.type?.name}</Typography>
+                        <Typography variant="body1"><strong>Цена:</strong> {formatNumberWithCommas(currentItem.price)}</Typography>
+                        <Typography variant="body1"><strong>Описание:</strong> {currentItem.description}</Typography>
+                        <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
                         <IconButton onClick={() => handleEdit(currentItem)}>
                             <Edit style={{ color: 'orange', fontSize: '28px' }} />
                         </IconButton>
                         <Button onClick={() => setRowDetailOpen(false)} sx={{ color: '#1e88e5', fontWeight: 'bold' }}>
-                            Yopish
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

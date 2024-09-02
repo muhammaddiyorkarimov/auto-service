@@ -79,14 +79,14 @@ function Customers() {
     // handle add
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'First Name', name: 'first_name', required: true },
-            { type: 'text', label: 'Last Name', name: 'last_name', required: true },
-            { type: 'text', label: 'Phone Number', name: 'phone_number', required: true },
-            { type: 'text', label: 'Phone Number Extra', name: 'phone_number_extra' },
-            { type: 'text', label: 'Passport Serial Numbers', name: 'passport_serial_numbers' },
-            { type: 'text', label: 'Passport Serial Letters', name: 'passport_serial_letters' },
-            { type: 'text', label: 'Address', name: 'address' },
-            { type: 'number', label: 'Debt', name: 'debt', required: true },
+            { type: 'text', label: 'Имя', name: 'first_name', required: true },
+            { type: 'text', label: 'Фамилия', name: 'last_name', required: true },
+            { type: 'text', label: 'Номер телефона', name: 'phone_number', required: true },
+            { type: 'text', label: 'Дополнительный номер телефона', name: 'phone_number_extra' },
+            { type: 'text', label: 'Серия паспорта', name: 'passport_serial_numbers' },
+            { type: 'text', label: 'Номер паспорта', name: 'passport_serial_letters' },
+            { type: 'text', label: 'Адрес', name: 'address' },
+            { type: 'number', label: 'Долг', name: 'debt', required: true },
         ]);
         setAddOpen(true);
     };
@@ -95,11 +95,11 @@ function Customers() {
         try {
             const newCustomer = await CustomersService.postCustomers(item);
             setCustomersItem([...customersItem, newCustomer]);
-            setSuccessMsg('Customer successfully added!');
+            setSuccessMsg('Клиент успешно добавлен!');
             setSnackbarOpen(true);
             setAddOpen(false);
         } catch (error) {
-            setErrorMsg(error.message || 'Error adding customer!');
+            setErrorMsg(error.message || 'Ошибка при добавлении клиента!');
             setSnackbarOpen(true);
         }
     };
@@ -108,14 +108,14 @@ function Customers() {
     const handleEdit = async (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: 'First Name', name: 'first_name', value: item.first_name },
-            { type: 'text', label: 'Last Name', name: 'last_name', value: item.last_name },
-            { type: 'text', label: 'Phone Number', name: 'phone_number', value: item.phone_number },
-            { type: 'text', label: 'Phone Number Extra', name: 'phone_number_extra', value: item.phone_number_extra },
-            { type: 'text', label: 'Passport Serial Numbers', name: 'passport_serial_numbers', value: item.passport_serial_numbers },
-            { type: 'text', label: 'Passport Serial Letters', name: 'passport_serial_letters', value: item.passport_serial_letters },
-            { type: 'text', label: 'Address', name: 'address', value: item.address },
-            { type: 'number', label: 'Debt', name: 'debt', value: item.debt },
+            { type: 'text', label: 'Имя', name: 'first_name', value: item.first_name },
+            { type: 'text', label: 'Фамилия', name: 'last_name', value: item.last_name },
+            { type: 'text', label: 'Номер телефона', name: 'phone_number', value: item.phone_number },
+            { type: 'text', label: 'Дополнительный номер телефона', name: 'phone_number_extra', value: item.phone_number_extra },
+            { type: 'text', label: 'Серия паспорта', name: 'passport_serial_numbers', value: item.passport_serial_numbers },
+            { type: 'text', label: 'Номер паспорта', name: 'passport_serial_letters', value: item.passport_serial_letters },
+            { type: 'text', label: 'Адрес', name: 'address', value: item.address },
+            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
         ]);
         setEditOpen(true);
     };
@@ -135,11 +135,11 @@ function Customers() {
         try {
             const updatedCustomer = await CustomersService.putCustomersById(currentItem.id, formattedData);
             setCustomersItem(customersItem.map(o => o.id === currentItem.id ? updatedCustomer : o));
-            setSuccessMsg('Customer successfully updated!');
+            setSuccessMsg('Клиент успешно обновлён!');
             setSnackbarOpen(true);
             setEditOpen(false);
         } catch (error) {
-            setErrorMsg(error.message || 'Error updating customer!');
+            setErrorMsg(error.message || 'Ошибка при обновлении клиента!');
             setSnackbarOpen(true);
         }
     };
@@ -154,11 +154,11 @@ function Customers() {
         try {
             await CustomersService.deleteCustomers(currentItem);
             setCustomersItem(customersItem?.filter(o => o.id !== currentItem));
-            setSuccessMsg('Customer successfully deleted!');
+            setSuccessMsg('Клиент успешно удалён!');
             setSnackbarOpen(true);
             setDeleteOpen(false);
         } catch (error) {
-            setErrorMsg(error.message || 'Error deleting customer!');
+            setErrorMsg(error.message || 'Ошибка при удалении клиента!');
             setSnackbarOpen(true);
         }
     };
@@ -184,7 +184,7 @@ function Customers() {
         <div className='customers'>
             <SideBar />
             <main>
-                <Navbar title='Mijozlar' />
+                <Navbar title='Клиенты' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -194,7 +194,7 @@ function Customers() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Add Customer" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить клиента" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -222,7 +222,7 @@ function Customers() {
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createCustomer}
-                    name="Mijoz qo'shish"
+                    name="Добавить клиента"
                 />}
             {editOpen &&
                 <EditItem
@@ -231,14 +231,14 @@ function Customers() {
                     formConfig={formConfig}
                     onSave={updateCustomer}
                     initialData={currentItem}
-                    name="Mijozni tahrirlash"
+                    name="Редактировать клиента"
                 />}
             {deleteOpen &&
                 <DeleteProduct
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
-                    name="Ushbu mijozni"
+                    name="Этого клиента"
                 />}
 
             {rowDetailOpen && (
@@ -261,7 +261,7 @@ function Customers() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Mijoz Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали клиента</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
@@ -270,15 +270,15 @@ function Customers() {
                         {/* Add details here */}
                         <Typography variant="h6" sx={{ marginTop: '18px' }}>{currentItem?.first_name} {currentItem?.last_name}</Typography>
                         <Divider />
-                        <Typography><strong>Telefon raqam:</strong> {currentItem?.phone_number}</Typography>
-                        <Typography><strong>Qo'shimcha telefon raqam:</strong> {currentItem?.phone_number_extra}</Typography>
-                        <Typography><strong>Passport Seriyasi:</strong> {currentItem?.passport_serial_numbers}</Typography>
-                        <Typography><strong>Passport Seriya Raqami:</strong> {currentItem?.passport_serial_letters}</Typography>
-                        <Typography><strong>Manzil:</strong> {currentItem?.address}</Typography>
-                        <Typography><strong>Qarz:</strong> {formatNumberWithCommas(currentItem?.debt)}</Typography>
+                        <Typography><strong>Номер телефона:</strong> {currentItem?.phone_number}</Typography>
+                        <Typography><strong>Дополнительный номер телефона:</strong> {currentItem?.phone_number_extra}</Typography>
+                        <Typography><strong>Серия паспорта:</strong> {currentItem?.passport_serial_numbers}</Typography>
+                        <Typography><strong>Номер паспорта:</strong> {currentItem?.passport_serial_letters}</Typography>
+                        <Typography><strong>Адрес:</strong> {currentItem?.address}</Typography>
+                        <Typography><strong>Долг:</strong> {formatNumberWithCommas(currentItem?.debt)}</Typography>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setRowDetailOpen(false)}>Close</Button>
+                        <Button onClick={() => setRowDetailOpen(false)}>Закрыть</Button>
                     </DialogActions>
                 </Dialog>
             )}

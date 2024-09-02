@@ -85,12 +85,12 @@ function Brand() {
     };
 
     const sortedOptions = [
-        { value: 'amount', label: 'Miqdor' },
-        { value: 'import_price', label: 'Kelish narxi' },
-        { value: 'total', label: 'Umumiy' },
-        { value: 'debt', label: 'Qarz' },
-        { value: 'created_at', label: 'Yaratilgan vaqti' },
-        { value: '-created_at', label: '-Yaratilgan vaqti' }
+        { value: 'amount', label: 'Количество' },
+        { value: 'import_price', label: 'Сумма закупки' },
+        { value: 'total', label: 'Общий' },
+        { value: 'debt', label: 'Долг' },
+        { value: 'created_at', label: 'Время создания' },
+        { value: '-created_at', label: '-Время создания' }
     ]
 
     // Handle deleting a product
@@ -103,10 +103,10 @@ function Brand() {
         try {
             await ImportProduct.deleteImportProduct(currentItem);
             setProduct(product.filter((c) => c.id !== currentItem));
-            setSuccessMsg('Muvaffaqiyatli o\'chirildi!');
+            setSuccessMsg('Успешно удалено!');
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || 'Mahsulotni o\'chirishda xatolik yuz berdi!');
+            setErrorMsg(error.message || 'Ошибка при удалении продукта!');
             setSnackbarOpen(true);
         } finally {
             setDeleteOpen(false);
@@ -116,12 +116,12 @@ function Brand() {
     // Handle adding a product
     const handleAdd = () => {
         setFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-            { type: 'number', label: 'Qarz', name: 'debt' },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'select', label: 'Yetkazib beruvchi', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
-            { type: 'number', label: 'Umumiy', name: 'total', required: true },
+            { type: 'number', label: 'Количество', name: 'amount', required: true },
+            { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
+            { type: 'number', label: 'Долг', name: 'debt' },
+            { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'select', label: 'Поставщик', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
+            { type: 'number', label: 'Общий', name: 'total', required: true },
         ]);
         setAddOpen(true);
     };
@@ -130,14 +130,14 @@ function Brand() {
         try {
             const newProduct = await ImportProduct.postImportProduct(item);
             setProduct([...product, newProduct]);
-            setSuccessMsg("Mahsulot muvaffaqiyatli qo'shildi!");
+            setSuccessMsg(" Продукт успешно добавлен!");
             setSnackbarOpen(true);
 
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni qo'shishda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при добавлении продукта!");
             setSnackbarOpen(true);
         } finally {
             setAddOpen(false);
@@ -150,12 +150,12 @@ function Brand() {
         const calculatedTotal = item.import_price * item.amount - item.debt;
 
         setEditFormConfig([
-            { type: 'number', label: 'Miqdor', name: 'amount', value: item.amount, disabled: true },
-            { type: 'number', label: 'Kelish summasi', name: 'import_price', value: item.import_price, disabled: true },
-            { type: 'number', label: 'Qarz', name: 'debt', value: item.debt },
-            { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id, disabled: true },
-            { type: 'select', label: 'Ta’minotchi', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })), disabled: true },
-            { type: 'number', label: 'Umumiy', name: 'total', value: calculatedTotal, disabled: true },
+            { type: 'number', label: 'Количество', name: 'amount', value: item.amount, disabled: true },
+            { type: 'number', label: 'Сумма закупки', name: 'import_price', value: item.import_price, disabled: true },
+            { type: 'number', label: 'Долг', name: 'debt', value: item.debt },
+            { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id, disabled: true },
+            { type: 'select', label: 'Поставщик', name: 'provider', value: item.provider.id, options: provider.map(p => ({ value: p.id, label: p.name })), disabled: true },
+            { type: 'number', label: 'Общий', name: 'total', value: calculatedTotal, disabled: true },
         ]);
         setEditOpen(true);
     };
@@ -178,10 +178,10 @@ function Brand() {
             const updatedItem = await ImportProduct.getImportProductById(currentItem.id);
 
             setProduct(product.map((p) => (p.id === currentItem.id ? updatedItem : p)));
-            setSuccessMsg("Mahsulot muvaffaqiyatli yangilandi!");
+            setSuccessMsg("Продукт успешно обновлен!");
             setSnackbarOpen(true);
         } catch (error) {
-            setErrorMsg(error.message || "Mahsulotni yangilashda xatolik yuz berdi!");
+            setErrorMsg(error.message || "Ошибка при обновлении продукта!");
             setSnackbarOpen(true);
         } finally {
             setEditOpen(false);
@@ -221,7 +221,7 @@ function Brand() {
         <div className='brand'>
             <SideBar />
             <main>
-                <Navbar title='Kirim Tovarlar' />
+                <Navbar title='Приход товаров' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -236,7 +236,7 @@ function Brand() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Maxsulot qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить продукт" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -249,12 +249,12 @@ function Brand() {
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
                             formConfig={[
-                                { type: 'number', label: 'Miqdor', name: 'amount', required: true },
-                                { type: 'number', label: 'Kelish summasi', name: 'import_price', required: true },
-                                { type: 'number', label: 'Qarz', name: 'debt' },
-                                { type: 'select', label: 'Maxsulot', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
-                                { type: 'select', label: 'Yetkazib beruvchi', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
-                                { type: 'number', label: 'Umumiy', name: 'total', required: true },
+                                { type: 'number', label: 'Количество', name: 'amount', required: true },
+                                { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
+                                { type: 'number', label: 'Долг', name: 'debt' },
+                                { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },
+                                { type: 'select', label: 'Поставщик', name: 'provider', options: provider && provider.map(p => ({ value: p.id, label: p.name })), required: true },
+                                { type: 'number', label: 'Общий', name: 'total', required: true },
                             ]}
                             onSave={createProduct}
                         />
@@ -332,27 +332,27 @@ function Brand() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Mahsulot Tafsilotlari</Typography>
+                        <Typography variant="h6">Детали продукта</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Typography variant="body1"><strong>Mahsulot Nomi:</strong> {currentItem.name}</Typography>
-                        <Typography variant="body1"><strong>Miqdor:</strong> {currentItem.amount}</Typography>
-                        <Typography variant="body1"><strong>Import Narxi:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
-                        <Typography variant="body1"><strong>Qarz:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
-                        <Typography variant="body1"><strong>Umumiy:</strong> {formatNumberWithCommas(currentItem.total)}</Typography>
-                        <Typography variant="body1"><strong>Ta’minotchi:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
-                        <Typography variant="body1"><strong>Yaratilgan Sana:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
+                        <Typography variant="body1"><strong>Название продукта:</strong> {currentItem.name}</Typography>
+                        <Typography variant="body1"><strong>Количество:</strong> {currentItem.amount}</Typography>
+                        <Typography variant="body1"><strong>Импортная цена:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Долг:</strong> {formatNumberWithCommas(currentItem.debt)}</Typography>
+                        <Typography variant="body1"><strong>Общий:</strong> {formatNumberWithCommas(currentItem.total)}</Typography>
+                        <Typography variant="body1"><strong>Поставщик:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
+                        <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'space-between', padding: '0 20px 20px 20px' }}>
                         <IconButton onClick={() => handleEdit(currentItem)}>
                             <Edit style={{ color: 'orange', fontSize: '28px' }} />
                         </IconButton>
                         <Button onClick={() => setRowDetailOpen(false)} sx={{ color: '#1e88e5', fontWeight: 'bold' }}>
-                            Yopish
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

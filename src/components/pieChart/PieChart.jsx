@@ -18,7 +18,7 @@ function PieChartC({ startDate, endDate }) {
 
             if (allZero) {
                 const defaultData = [
-                    { name: 'Xarajat mavjud emas', users: 100, fill: getRandomColor() },
+                    { name: 'расход отсутствует', users: 100, fill: getRandomColor() },
                 ];
                 setFilteredData(defaultData);
             } else {
@@ -70,8 +70,8 @@ function PieChartC({ startDate, endDate }) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Kategoriyalar</th>
-                                <th>Narxi</th>
+                                <th>категории</th>
+                                <th>цена</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,7 +93,7 @@ function PieChartC({ startDate, endDate }) {
 
     return (
         <div className="pie-chart-container">
-            <div className="title">Xarajat bo'yicha statistika 
+            <div className="title">статистика по расходам
                 <BiPrinter onClick={handlePrint} style={{ cursor: 'pointer', fontSize: '25px', marginLeft: '10px' }} /></div>
             {loading ? <BiLoader /> : error ? <p>{error.message}</p> : (
                 <>

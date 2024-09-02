@@ -42,9 +42,9 @@ function OurCars() {
 
 
     const sortedOptions = [
-        { label: "Kod", value: "code" },
-        { label: "Nomi", value: "name" },
-        { label: "Davlat raqami", value: "state_number" },
+        { label: "Код", value: "code" },
+        { label: "Название", value: "name" },
+        { label: "Государственный номер", value: "state_number" },
     ];
 
     const [page, setPage] = useState(Number(params.get('page')) || 1);
@@ -103,12 +103,12 @@ function OurCars() {
     // handle add
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Code', name: 'code', required: true },
-            { type: 'text', label: 'Name', name: 'name', required: true },
-            { type: 'text', label: 'Brand', name: 'brand', required: true },
-            { type: 'text', label: 'Color', name: 'color', required: true },
-            { type: 'text', label: 'State Number', name: 'state_number', required: true },
-            { type: 'select', label: 'Xaridor', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
+            { type: 'text', label: 'Код', name: 'code', required: true },
+            { type: 'text', label: 'Название', name: 'name', required: true },
+            { type: 'text', label: 'Бренд', name: 'brand', required: true },
+            { type: 'text', label: 'Цвет', name: 'color', required: true },
+            { type: 'text', label: 'Государственный номер', name: 'state_number', required: true },
+            { type: 'select', label: 'Покупатель', name: 'customer', options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })), required: true },
         ]);
         setAddOpen(true);
     };
@@ -117,14 +117,14 @@ function OurCars() {
         try {
             const newCar = await CarsService.postCars(item);
             setCarsItem([...carsItem, newCar]);
-            setSuccessMsg('Car successfully added!');
+            setSuccessMsg('Автомобиль успешно добавлен!');
             setSnackbarOpen(true);
             setAddOpen(false);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || 'Error adding car!');
+            setErrorMsg(error.message || 'Ошибка при добавлении автомобиля!');
             setSnackbarOpen(true);
         }
     };
@@ -133,12 +133,12 @@ function OurCars() {
     const handleEdit = async (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: 'Code', name: 'code', value: item.code },
-            { type: 'text', label: 'Name', name: 'name', value: item.name },
-            { type: 'text', label: 'Brand', name: 'brand', value: item.brand },
-            { type: 'text', label: 'Color', name: 'color', value: item.color },
-            { type: 'text', label: 'State Number', name: 'state_number', value: item.state_number },
-            { type: 'select', label: 'Xaridor', name: 'customer', value: item.customer.id, options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
+            { type: 'text', label: 'Код', name: 'code', value: item.code },
+            { type: 'text', label: 'Название', name: 'name', value: item.name },
+            { type: 'text', label: 'Бренд', name: 'brand', value: item.brand },
+            { type: 'text', label: 'Цвет', name: 'color', value: item.color },
+            { type: 'text', label: 'Государственный номер', name: 'state_number', value: item.state_number },
+            { type: 'select', label: 'Покупатель', name: 'customer', value: item.customer.id, options: customersData?.results.map(c => ({ value: c.id, label: (c.first_name + ' ' + c.last_name) })) },
         ]);
         setEditOpen(true);
     };
@@ -156,14 +156,14 @@ function OurCars() {
         try {
             const updatedCar = await CarsService.putCarsById(currentItem.id, formattedData);
             setCarsItem(carsItem.map(o => o.id === currentItem.id ? updatedCar : o));
-            setSuccessMsg('Car successfully updated!');
+            setSuccessMsg('Автомобиль успешно обновлен!');
             setSnackbarOpen(true);
             setEditOpen(false);
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
-            setErrorMsg(error.message || 'Error updating car!');
+            setErrorMsg(error.message || 'Ошибка при обновлении автомобиля!');
             setSnackbarOpen(true);
         }
     };
@@ -178,11 +178,11 @@ function OurCars() {
         try {
             await CarsService.deleteCars(currentItem);
             setCarsItem(carsItem.filter(o => o.id !== currentItem));
-            setSuccessMsg('Car successfully deleted!');
+            setSuccessMsg('Автомобиль успешно удалён!');
             setSnackbarOpen(true);
             setDeleteOpen(false);
         } catch (error) {
-            setErrorMsg(error.message || 'Error deleting car!');
+            setErrorMsg(error.message || 'Ошибка при удалении автомобиля!');
             setSnackbarOpen(true);
         }
     };
@@ -206,7 +206,7 @@ function OurCars() {
         <div className='customers'>
             <SideBar />
             <main>
-                <Navbar title='Mashinalar' />
+                <Navbar title='Автомобили' />
                 <div className="extra-items">
                     <div className="header-items">
                         <div>
@@ -224,7 +224,7 @@ function OurCars() {
                             />
                         </div>
                         <div className="header-items-add">
-                            <AddItemBtn name="Mashina qo'shish" onClick={handleAdd} />
+                            <AddItemBtn name="Добавить автомобиль" onClick={handleAdd} />
                         </div>
                     </div>
                     <section className="details-wrapper">
@@ -252,6 +252,7 @@ function OurCars() {
                     onClose={() => setAddOpen(false)}
                     formConfig={formConfig}
                     onSave={createCar}
+                    name="Добавить автомобиль"
                 />}
             {editOpen &&
                 <EditItem
@@ -260,12 +261,14 @@ function OurCars() {
                     formConfig={formConfig}
                     onSave={updateCar}
                     initialData={currentItem}
+                    name="Редактировать этот автомобиль"
                 />}
             {deleteOpen &&
                 <DeleteProduct
                     open={deleteOpen}
                     onClose={() => setDeleteOpen(false)}
                     onConfirm={handleDeleteConfirm}
+                    name="Этот автомобиль"
                 />}
 
             {rowDetailOpen && (
@@ -288,22 +291,22 @@ function OurCars() {
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15
                     }}>
-                        <Typography variant="h6">Car Details</Typography>
+                        <Typography variant="h6">Детали автомобиля</Typography>
                         <IconButton onClick={() => setRowDetailOpen(false)} style={{ color: '#fff' }}>
                             <Close />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent dividers>
-                        <Typography variant="body1" gutterBottom><strong>Code:</strong> {currentItem?.code}</Typography>
-                        <Typography variant="body1" gutterBottom><strong>Name:</strong> {currentItem?.name}</Typography>
-                        <Typography variant="body1" gutterBottom><strong>Brand:</strong> {currentItem?.brand}</Typography>
-                        <Typography variant="body1" gutterBottom><strong>Color:</strong> {currentItem?.color}</Typography>
-                        <Typography variant="body1" gutterBottom><strong>State Number:</strong> {currentItem?.state_number}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Код:</strong> {currentItem?.code}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Название:</strong> {currentItem?.name}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Бренд:</strong> {currentItem?.brand}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Цвет:</strong> {currentItem?.color}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Государственный номер:</strong> {currentItem?.state_number}</Typography>
                     </DialogContent>
                     <Divider />
                     <DialogActions>
                         <Button onClick={() => setRowDetailOpen(false)} color="primary">
-                            Close
+                            Закрыть
                         </Button>
                     </DialogActions>
                 </Dialog>

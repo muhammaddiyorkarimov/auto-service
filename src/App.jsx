@@ -43,7 +43,7 @@ function App() {
                     <Route path="/add-order" element={<AddOrder />} />
                     <Route path="/adding-order" element={<AddOrder />} />
                     <Route path="/import-products" element={<Import />} />
-                </Route>import AddOrder from './pages/orders/addOrder/AddOrder';
+                </Route>
 
             </>
         )

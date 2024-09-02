@@ -6,9 +6,9 @@ import Provider from '../../services/landing/provider';
 function AddProvider({ addProvider, onSuccess }) {
     const [open, setOpen] = useState(false);
     const [formConfig] = useState([
-        { type: 'text', label: 'Nomi', name: 'name' },
-        { type: 'text', label: 'Telefon raqam', name: 'phone_number' },
-        { type: 'number', label: 'Debt', name: 'debt' },
+        { type: 'text', label: 'Название', name: 'name' },
+        { type: 'text', label: 'Номер телефона', name: 'phone_number' },
+        { type: 'number', label: 'Долг', name: 'debt' },
     ]);
     const [formData, setFormData] = useState({
         name: '',
@@ -34,7 +34,7 @@ function AddProvider({ addProvider, onSuccess }) {
     const validateForm = () => {
         const errors = {};
         if (!formData.name) {
-            errors.name = 'Ushbu maydoni to\'ldirilishi shart';
+            errors.name = 'Это поле обязательно для заполнения';
         }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
@@ -90,14 +90,14 @@ function AddProvider({ addProvider, onSuccess }) {
                 <div style={{ position: 'fixed', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 1000 }}>
                     {success && (
                         <Alert severity="success" onClose={() => setSuccess(false)}>
-                            <AlertTitle>Muvaffaqiyatli</AlertTitle>
-                            Ta'minotchi muvaffaqiyatli qo'shildi
+                            <AlertTitle>Успешно</AlertTitle>
+                            Поставщик успешно добавлен
                         </Alert>
                     )}
                     {error && (
                         <Alert severity="error" onClose={() => setError(false)}>
-                            <AlertTitle>Xato</AlertTitle>
-                            Ta'minotchini qo'shishda xato yuz berdi
+                            <AlertTitle>Ошибка</AlertTitle>
+                            Ошибка при добавлении поставщика
                         </Alert>
                     )}
                 </div>
@@ -117,11 +117,11 @@ function AddProvider({ addProvider, onSuccess }) {
             )}
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <div className="dialog-wrapper">
-                    <DialogTitle>Ta'minlovchi qo'shish</DialogTitle>
+                    <DialogTitle>Добавить поставщика</DialogTitle>
                     <DialogContent className="dialog-content">{renderFields()}</DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setOpen(false)}>Bekor qilish</Button>
-                        <Button onClick={handleSubmit}>Saqlash</Button>
+                        <Button onClick={() => setOpen(false)}>Отменить</Button>
+                        <Button onClick={handleSubmit}>Сохранить</Button>
                     </DialogActions>
                 </div>
             </Dialog>

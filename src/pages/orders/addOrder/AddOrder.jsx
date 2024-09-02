@@ -129,7 +129,7 @@ function AddOrder() {
         setFormConfig([
             {
                 type: 'select',
-                label: 'Mijoz',
+                label: 'Клиент',
                 name: 'customer',
                 // required: true,
                 options: customers?.map((p) => ({ value: p.id, label: p.first_name })),
@@ -139,7 +139,7 @@ function AddOrder() {
             },
             {
                 type: 'select',
-                label: 'Mashina',
+                label: 'Автомобиль',
                 name: 'car',
                 required: true,
                 options: customerCars.length > 0 ? customerCars : [],
@@ -149,16 +149,16 @@ function AddOrder() {
             },
             {
                 type: 'select',
-                label: 'Boshqaruvchi',
+                label: 'Менеджер',
                 name: 'manager',
                 required: true,
                 options: managers?.map((p) => ({ value: p.id, label: p.first_name + ' ' + p.last_name })),
             },
 
-            { type: 'number', label: 'Yurgan masofasi EV', name: 'car_kilometers_ev' },
-            { type: 'number', label: 'Yurgan masofasi HEV', name: 'car_kilometers_hev' },
-            { type: 'number', label: 'Yurgan masofasi OBO', name: 'car_kilometers_odo' },
-            { type: 'text', label: 'Tavsif', name: 'description' },
+            { type: 'number', label: 'Пробег EV', name: 'car_kilometers_ev' },
+            { type: 'number', label: 'Пробег HEV', name: 'car_kilometers_hev' },
+            { type: 'number', label: 'Пробег OBO', name: 'car_kilometers_odo' },
+            { type: 'text', label: 'Описание', name: 'description' },
         ]);
     };
 
@@ -277,7 +277,7 @@ function AddOrder() {
             const orderId = orderResponse?.id;
 
             if (!orderId) {
-                alert("Order yaratishda xatolik yuz berdi.");
+                alert("Ошибка при создании заказа.");
                 setLoading(false);
                 return;
             }
@@ -290,7 +290,7 @@ function AddOrder() {
             for (const productData of postOrderProductWithId) {
                 const response = await OrderProducts.postOrders(productData);
                 if (!response) {
-                    alert("OrderProduct ma'lumotlarini yuborishda xatolik yuz berdi.");
+                    alert("Ошибка при отправке данных");
                     setLoading(false);
                     return;
                 }
@@ -304,17 +304,17 @@ function AddOrder() {
             for (const serviceData of postOrderServiceWithId) {
                 const response = await OrderServices.postOrders(serviceData);
                 if (!response) {
-                    alert("OrderProduct ma'lumotlarini yuborishda xatolik yuz berdi.");
+                    alert("Ошибка при отправке данных");
                     setLoading(false);
                     return;
                 }
             }
 
-            alert("Buyurtma muvaffaqiyatli qo'shildi.");
+            alert("Заказ успешно добавлен");
             navigate(`/orders/${orderId}`); // Navigate qilish
         } catch (error) {
             console.log(error);
-            alert(`Ma'lumotlarni yuborishda xatolik yuz berdi: ${error.message}`);
+            alert(`Ошибка при отправке данных: ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -328,26 +328,26 @@ function AddOrder() {
         <div className='adding-order'>
             <SideBar />
             <main>
-                <Navbar title='Buyurtma yaratish' />
+                <Navbar title='Создание заказа' />
                 <div className="extra-items">
                     {loading ? <Loader /> : <>
                         <div className="create-btn">
-                            {!createOpen && <AddItemBtn name='Buyurtma yaratish' onClick={handleCreateOpen} />}
+                            {!createOpen && <AddItemBtn name='Создание заказа' onClick={handleCreateOpen} />}
                         </div>
                         {createOpen &&
                             <section className="information">
                                 <div className="created-about">
                                     <div className="header">
-                                        <div className="title">Buyurtma tafsilotlari</div>
-                                        <Button onClick={handleSubmit} variant='contained'>{loading ? 'Yuborilmoqda...' : 'Yuborish'}</Button>
+                                        <div className="title">Детали заказа</div>
+                                        <Button onClick={handleSubmit} variant='contained'>{loading ? 'Отправляется...' : 'Отправить'}</Button>
                                     </div>
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Yaratilgan sana</th>
-                                                <th>To'langan summa</th>
-                                                <th>Qarz</th>
-                                                <th>Umumiy</th>
+                                                <th>Дата создания</th>
+                                                <th>Оплаченная сумма</th>
+                                                <th>Долг</th>
+                                                <th>Общий</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -381,20 +381,20 @@ function AddOrder() {
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Mijoz</th>
-                                                    <th>Mashina</th>
-                                                    <th>Boshqaruvchi</th>
-                                                    {formData.car_kilometers_odo ? <th>Odo bo'yicha yurgan masofa</th> : null}
-                                                    {formData.car_kilometers_ev ? <th>EV bo'yicha yurgan masofa</th> : null}
-                                                    {formData.car_kilometers_hev ? <th>HEV bo'yicha yurgan masofa</th> : null}
-                                                    {formData.description ? <th>Tavsif</th> : null}
+                                                    <th>Клиент</th>
+                                                    <th>Автомобиль</th>
+                                                    <th>Менеджер</th>
+                                                    {formData.car_kilometers_odo ? <th>Пробег по одометру</th> : null}
+                                                    {formData.car_kilometers_ev ? <th>Пробег EV</th> : null}
+                                                    {formData.car_kilometers_hev ? <th>Пробег HEV</th> : null}
+                                                    {formData.description ? <th>Описание</th> : null}
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>{formData.customerName}</td>
                                                     <td>{formData.carName}</td>
-                                                    <td>{managerById.first_name + ' ' + managerById.last_name}</td>
+                                                    <td>{managerById?.first_name + ' ' + managerById?.last_name}</td>
                                                     {formData.car_kilometers_odo ? <td>{formData.car_kilometers_odo}</td> : null}
                                                     {formData.car_kilometers_ev ? <td>{formData.car_kilometers_ev}</td> : null}
                                                     {formData.car_kilometers_hev ? <td>{formData.car_kilometers_hev}</td> : null}

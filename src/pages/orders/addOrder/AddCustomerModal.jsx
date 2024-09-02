@@ -4,14 +4,14 @@ import { Alert, AlertTitle, Button, Dialog, DialogActions, DialogContent, Dialog
 
 function AddCustomerModal({ open, onClose, onSuccess }) {
     const [formConfig, setFormConfig] = useState([
-        { type: 'text', label: 'First Name', name: 'first_name', required: true },
-        { type: 'text', label: 'Last Name', name: 'last_name', required: true },
-        { type: 'text', label: 'Phone Number', name: 'phone_number', required: true },
-        { type: 'text', label: 'Phone Number Extra', name: 'phone_number_extra' },
-        { type: 'text', label: 'Passport Serial Numbers', name: 'passport_serial_numbers' },
-        { type: 'text', label: 'Passport Serial Letters', name: 'passport_serial_letters' },
-        { type: 'text', label: 'Address', name: 'address' },
-        { type: 'number', label: 'Debt', name: 'debt', required: true },
+        { type: 'text', label: 'Имя', name: 'first_name', required: true },
+        { type: 'text', label: 'Фамилия', name: 'last_name', required: true },
+        { type: 'text', label: 'Номер телефона', name: 'phone_number', required: true },
+        { type: 'text', label: 'Дополнительный номер телефона', name: 'phone_number_extra' },
+        { type: 'text', label: 'Серийные номера паспорта', name: 'passport_serial_numbers' },
+        { type: 'text', label: 'Серийные буквы паспорта', name: 'passport_serial_letters' },
+        { type: 'text', label: 'Адрес', name: 'address' },
+        { type: 'number', label: 'Долг', name: 'debt', required: true },
     ]);
 
     const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ function AddCustomerModal({ open, onClose, onSuccess }) {
         const errors = {};
         formConfig.forEach((field) => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `${field.label} to'ldirilishi shart`;
+                errors[field.name] = `${field.label} обязательно к заполнению`;
             }
         });
         setValidationErrors(errors);
@@ -114,25 +114,25 @@ function AddCustomerModal({ open, onClose, onSuccess }) {
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Mijoz qo'shish</DialogTitle>
+            <DialogTitle>Добавить клиента</DialogTitle>
             <DialogContent>
                 {success && (
                     <Alert severity="success" onClose={() => setSuccess(false)}>
-                        <AlertTitle>Muvaffaqiyatli</AlertTitle>
-                        Mijoz muvaffaqiyatli qo'shildi
+                        <AlertTitle>Успешно</AlertTitle>
+                        Клиент успешно добавлен
                     </Alert>
                 )}
                 {error && (
                     <Alert severity="error" onClose={() => setError(false)}>
-                        <AlertTitle>Xato</AlertTitle>
-                        Mijoz qo'shishda xato yuz berdi
+                        <AlertTitle>Ошибка</AlertTitle>
+                        Произошла ошибка при добавлении клиента
                     </Alert>
                 )}
                 {renderFields()}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Bekor qilish</Button>
-                <Button onClick={handleSubmit}>Saqlash</Button>
+                <Button onClick={onClose}>Отмена</Button>
+                <Button onClick={handleSubmit}>Сохранить</Button>
             </DialogActions>
         </Dialog>
     );

@@ -44,24 +44,21 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
     const handleChange = (e, type) => {
         let { name, value } = e.target;
 
-        // Agar input raqam bo'lsa, raqamni formatlaymiz
         if (type === 'number') {
-            const plainNumber = value.replace(/\s/g, ''); // Oldingi probellarni olib tashlaymiz
+            const plainNumber = value.replace(/\s/g, '');
 
             if (/^\d*$/.test(plainNumber)) {
                 const formattedValue = formatNumberWithCommas(plainNumber);
 
-                // Formatlangan qiymatni ko'rsatamiz va asl raqamni saqlaymiz
                 setFormData(prevData => ({
                     ...prevData,
-                    [name]: plainNumber // FormData uchun asl raqamni saqlaymiz
+                    [name]: plainNumber 
                 }));
             }
         } else {
-            // Agar matn bo'lsa, oddiy qiymatni qabul qilamiz
             setFormData(prevData => ({
                 ...prevData,
-                [name]: value // FormData uchun oddiy qiymatni saqlaymiz
+                [name]: value 
             }));
         }
     };
@@ -85,7 +82,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
         const errors = {};
         formConfig.forEach(field => {
             if (field.required && !formData[field.name]) {
-                errors[field.name] = `Kiritish majburiy!`;
+                errors[field.name] = `Обязательно для заполнения!`;
             }
             // Default qiymatlarni formData'ga kiritish
             if (field.name === 'discount' && !formData.hasOwnProperty(field.name)) {
@@ -172,13 +169,13 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
                                 )}
                                 {selectedService && (
                                     <Typography variant="caption" color="textSecondary">
-                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Narx: {formatNumberWithCommas(price)} so'm</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Цена: {formatNumberWithCommas(price)} сум</p>
                                     </Typography>
                                 )}
                                 {selectedProduct && (
                                     <Typography variant="caption" color="textSecondary">
-                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Tannarx: {formatNumberWithCommas(productPrice)} so'm</p>
-                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Mavjud: {productAmount} ta</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Себестоимость: {formatNumberWithCommas(productPrice)} сум</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>В наличии: {productAmount} та</p>
                                     </Typography>
                                 )}
                             </Box>
@@ -194,7 +191,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
         <>
             {renderFields()}
             <div style={{ margin: '10px 0' }}>
-                {formConfig?.length > 0 && <Button variant="contained" color="primary" onClick={handleSave}>Saqlash</Button>}
+                {formConfig?.length > 0 && <Button variant="contained" color="primary" onClick={handleSave}>Сохранить</Button>}
             </div>
         </>
     );
