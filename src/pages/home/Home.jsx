@@ -50,7 +50,7 @@ function Home() {
     <div className="home">
       <SideBar />
       <main>
-        <Navbar title="Базовый" />
+        <Navbar title="Главная" />
         <div className="extra-items">
           <div className="header">
             <div className="items-wrapper">
@@ -61,7 +61,7 @@ function Home() {
                       {topCalculateLoading ? <BiLoader /> : <>
                         <div className="title">{item.title}</div>
                         <div className="description" style={{ color: descriptionColors[index] }}>
-                          UZS {item.value}
+                          СУМ {item.value}
                         </div>
                       </>}
                     </div>
@@ -75,9 +75,9 @@ function Home() {
                 <div className="item">
                   <div className="about">
                     {benefitBranchLoading ? <BiLoader /> : <>
-                      <div className="title">Branch: {benefitBranch?.branch.name}</div>
+                      <div className="title">Филиал: {benefitBranch?.branch.name}</div>
                       <div className="description" style={{ color: 'blue' }}>
-                        Balans {benefitBranch?.branch.balance}
+                        Баланс {formatNumberWithCommas(benefitBranch?.branch.balance)}
                       </div>
                     </>}
                   </div>

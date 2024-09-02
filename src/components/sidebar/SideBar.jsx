@@ -11,6 +11,7 @@ import logo from '../../images/logo.png';
 import { LuWarehouse } from 'react-icons/lu';
 import { CiMoneyBill } from 'react-icons/ci';
 import { TiUploadOutline } from 'react-icons/ti';
+import { FaUsers } from 'react-icons/fa';
 
 function SideBar() {
   const { isOpen } = useSidebar()
@@ -91,40 +92,30 @@ function SideBar() {
             <li>
               <hr />
               <div className="link-title">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <span>Расходы</span>
+              </div>
+              <div className="li-items">
+                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
+                  <span></span>
+                  <NavLink to='/expenses'>
+                    <span>• Расходы</span>
+                  </NavLink>
+                </div>
+              </div>
+            </li>
+            <li>
+              <hr />
+              <div className="link-title">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0 2C0 0.89543 0.89543 0 2 0H16C17.1046 0 18 0.89543 18 2V16C18 17.1046 17.1046 18 16 18H2C0.89543 18 0 17.1046 0 16V2ZM3.8 1.8C2.69543 1.8 1.8 2.69543 1.8 3.8V7.2009C1.8 7.69746 2.20254 8.1 2.6991 8.1H3.5973C3.5978 8.1 3.5982 8.0996 3.5982 8.0991V8.0991C3.5982 8.0986 3.5986 8.0982 3.5991 8.0982H5.4009C5.4014 8.0982 5.4018 8.0986 5.4018 8.0991V8.0991C5.4018 8.0996 5.4022 8.1 5.4027 8.1H14.2C15.3046 8.1 16.2 7.20457 16.2 6.1V3.8C16.2 2.69543 15.3046 1.8 14.2 1.8H3.8ZM16.2 11.9C16.2 10.7954 15.3046 9.9 14.2 9.9H5.4027C5.4022 9.9 5.4018 9.9004 5.4018 9.9009V9.9009C5.4018 9.9014 5.4014 9.9018 5.4009 9.9018H3.5991C3.5986 9.9018 3.5982 9.9014 3.5982 9.9009V9.9009C3.5982 9.9004 3.5978 9.9 3.5973 9.9H2.6991C2.20254 9.9 1.8 10.3025 1.8 10.7991V14.2C1.8 15.3046 2.69543 16.2 3.8 16.2H14.2C15.3046 16.2 16.2 15.3046 16.2 14.2V11.9ZM3.5982 4.9518C3.5982 4.45375 4.00195 4.05 4.5 4.05V4.05C4.99805 4.05 5.4018 4.45375 5.4018 4.9518V4.9518C5.4018 5.44985 4.99805 5.8536 4.5 5.8536V5.8536C4.00195 5.8536 3.5982 5.44985 3.5982 4.9518V4.9518ZM3.5982 13.0518C3.5982 12.5537 4.00195 12.15 4.5 12.15V12.15C4.99805 12.15 5.4018 12.5537 5.4018 13.0518V13.0518C5.4018 13.5498 4.99805 13.9536 4.5 13.9536V13.9536C4.00195 13.9536 3.5982 13.5498 3.5982 13.0518V13.0518Z" fill="black" />
                 </svg>
-
                 <span>Прочие</span>
               </div>
               <div className="li-items">
                 {/* {user?.role === 'Admin' && (
 
                 )} */}
-                <li>
-                  <div className="li-item">
-                    <span></span>
-                    <NavLink to='/employees'>
-                      <span>• Сотрудники</span>
-                    </NavLink>
-                  </div>
-                </li>
-                <li>
-                  <div className="li-item">
-                    <span></span>
-                    <NavLink to='/managers'>
-                      <span>• Менеджер</span>
-                    </NavLink>
-                  </div>
-                </li>
-                <li>
-                  <div className="li-item">
-                    <span></span>
-                    <NavLink to='/workers'>
-                      <span>• Работники</span>
-                    </NavLink>
-                  </div>
-                </li>
                 <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
                   <span></span>
                   <NavLink to='/provider'>
@@ -149,12 +140,39 @@ function SideBar() {
                     <span>• Автомобили</span>
                   </NavLink>
                 </div>
-                <div className={({ isActive }) => isActive ? "active li-item" : "li-item"}>
-                  <span></span>
-                  <NavLink to='/expenses'>
-                    <span>• Расходы</span>
-                  </NavLink>
-                </div>
+              </div>
+            </li>
+            <li>
+              <hr />
+              <div className="link-title">
+                <FaUsers />
+                <span>Пользователи</span>
+              </div>
+              <div className="li-items">
+                <li>
+                  <div className="li-item">
+                    <span></span>
+                    <NavLink to='/employees'>
+                      <span>• Сотрудники</span>
+                    </NavLink>
+                  </div>
+                </li>
+                <li>
+                  <div className="li-item">
+                    <span></span>
+                    <NavLink to='/managers'>
+                      <span>• Менеджер</span>
+                    </NavLink>
+                  </div>
+                </li>
+                <li>
+                  <div className="li-item">
+                    <span></span>
+                    <NavLink to='/workers'>
+                      <span>• Работники</span>
+                    </NavLink>
+                  </div>
+                </li>
               </div>
             </li>
           </ul>
