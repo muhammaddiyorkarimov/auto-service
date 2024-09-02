@@ -162,8 +162,14 @@ hr {
     display: none;
 }
 
+.svg-img {
+    margin-bottom: 1px !important;
+}
+
 .svg-img path {
     fill: var(--text-color);
+    margin-top: 10px !important;
+
 }
 
 @media (max-width: 1120px) {
