@@ -62,7 +62,7 @@ function OurProduct() {
 
     const sortedOptions = [
         { value: 'name', label: 'Название' },
-        { value: 'code', label: 'Код' },
+        { value: 'code', label: 'Артикул' },
         { value: 'amount', label: 'Количество' },
         { value: 'max_discount', label: 'Скидка' }
     ]
@@ -115,14 +115,14 @@ function OurProduct() {
 
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Код', name: 'code' },
+            { type: 'text', label: 'Артикул', name: 'code' },
             { type: 'text', label: 'Название', name: 'name', required: true },
             { type: 'number', label: 'Количество', name: 'amount', required: true },
             { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
             { type: 'select', label: 'Единица', name: 'unit', required: true, options: unitOptions.map(p => ({ value: p.id, label: p.name })) },
-            { type: 'number', label: 'Импортная цена', name: 'import_price', required: true },
-            { type: 'number', label: 'Экспортная цена', name: 'export_price' },
-            { type: 'number', label: 'Скидка', name: 'max_discount', required: true },
+            { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
+            { type: 'number', label: 'Цена продажи', name: 'export_price' },
+            { type: 'number', label: 'Макс. скидка', name: 'max_discount', required: true },
             {
                 type: 'select', label: 'Поставщик', name: 'provider', required: true, options: provider?.map(p => ({ value: p.id, label: p.name }))
             }
@@ -154,13 +154,13 @@ function OurProduct() {
     const handleEdit = (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: 'Код', name: 'code', value: item.code },
+            { type: 'text', label: 'Артикул', name: 'code', value: item.code },
             { type: 'text', label: 'Название', name: 'name', value: item.name },
             { type: 'number', label: 'Количествоr', name: 'min_amount', value: item.min_amount },
             { type: 'number', label: 'Минимальное количество', name: 'amount', value: item.amount },
             { type: 'select', label: 'Единица', name: 'unit', required: true, options: unitOptions.map(p => ({ value: p.id, label: p.name })), value: item.unit },
-            { type: 'number', label: 'Импортная цена', name: 'import_price', value: item.import_price },
-            { type: 'number', label: 'Экспортная цена', name: 'export_price', value: item.export_price },
+            { type: 'number', label: 'Цена покупки', name: 'import_price', value: item.import_price },
+            { type: 'number', label: 'Цена продажи', name: 'export_price', value: item.export_price },
             { type: 'number', label: 'Скидка', name: 'max_discount', value: item.max_discount },
             {
                 type: 'select', label: 'Поставщик', name: 'provider', value: item.provider?.id, options: provider?.map(p => ({ value: p.id, label: p.name }))
@@ -354,9 +354,9 @@ function OurProduct() {
                         <Typography variant="body1"><strong>Код:</strong> {currentItem.code}</Typography>
                         <Typography variant="body1"><strong>Количество:</strong> {currentItem.amount}</Typography>
                         <Typography variant="body1"><strong>Единица:</strong> {currentItem.unit}</Typography>
-                        <Typography variant="body1"><strong>Импортная цена:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
-                        <Typography variant="body1"><strong>Экспортная цена:</strong> {formatNumberWithCommas(currentItem.export_price)}</Typography>
-                        <Typography variant="body1"><strong>Скидка:</strong> {currentItem.max_discount}%</Typography>
+                        <Typography variant="body1"><strong>Цена покупки:</strong> {formatNumberWithCommas(currentItem.import_price)}</Typography>
+                        <Typography variant="body1"><strong>Цена продажи:</strong> {formatNumberWithCommas(currentItem.export_price)}</Typography>
+                        <Typography variant="body1"><strong>Макс. скидка:</strong> {currentItem.max_discount}%</Typography>
                         <Typography variant="body1"><strong>Поставщик:</strong> {currentItem.provider ? currentItem.provider.name : '0'}</Typography>
                         <Typography variant="body1"><strong>Дата создания:</strong> {new Date(currentItem.created_at).toLocaleDateString()}</Typography>
                     </DialogContent>

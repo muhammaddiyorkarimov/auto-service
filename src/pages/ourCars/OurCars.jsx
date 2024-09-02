@@ -42,7 +42,7 @@ function OurCars() {
 
 
     const sortedOptions = [
-        { label: "Код", value: "code" },
+        { label: "Артикул", value: "code" },
         { label: "Название", value: "name" },
         { label: "Государственный номер", value: "state_number" },
     ];
@@ -103,7 +103,7 @@ function OurCars() {
     // handle add
     const handleAdd = () => {
         setFormConfig([
-            { type: 'text', label: 'Код', name: 'code', required: true },
+            { type: 'text', label: 'Артикул', name: 'code', required: true },
             { type: 'text', label: 'Название', name: 'name', required: true },
             { type: 'text', label: 'Бренд', name: 'brand', required: true },
             { type: 'text', label: 'Цвет', name: 'color', required: true },
@@ -133,7 +133,7 @@ function OurCars() {
     const handleEdit = async (item) => {
         setCurrentItem(item);
         setFormConfig([
-            { type: 'text', label: 'Код', name: 'code', value: item.code },
+            { type: 'text', label: 'Артикул', name: 'code', value: item.code },
             { type: 'text', label: 'Название', name: 'name', value: item.name },
             { type: 'text', label: 'Бренд', name: 'brand', value: item.brand },
             { type: 'text', label: 'Цвет', name: 'color', value: item.color },
@@ -298,7 +298,7 @@ function OurCars() {
                         </IconButton>
                     </DialogTitle>
                     <DialogContent dividers>
-                        <Typography variant="body1" gutterBottom><strong>Код:</strong> {currentItem?.code}</Typography>
+                        <Typography variant="body1" gutterBottom><strong>Артикул:</strong> {currentItem?.code}</Typography>
                         <Typography variant="body1" gutterBottom><strong>Название:</strong> {currentItem?.name}</Typography>
                         <Typography variant="body1" gutterBottom><strong>Бренд:</strong> {currentItem?.brand}</Typography>
                         <Typography variant="body1" gutterBottom><strong>Цвет:</strong> {currentItem?.color}</Typography>

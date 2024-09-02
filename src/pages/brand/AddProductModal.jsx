@@ -27,7 +27,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                 const response = await Provider.getProvider();
                 setProvider(response);
                 setFormConfig([
-                    { type: 'text', label: 'Код', name: 'code' },
+                    { type: 'text', label: 'Артикул', name: 'code' },
                     { type: 'text', label: 'Название', name: 'name', required: true },
                     { type: 'number', label: 'Количество', name: 'amount', required: true },
                     { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
