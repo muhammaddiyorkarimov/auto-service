@@ -155,7 +155,7 @@ function AddOrder() {
 
             { type: 'number', label: 'Пробег EV', name: 'car_kilometers_ev' },
             { type: 'number', label: 'Пробег HEV', name: 'car_kilometers_hev' },
-            { type: 'number', label: 'Пробег OBO', name: 'car_kilometers_odo' },
+            { type: 'number', label: 'Пробег OДO', name: 'car_kilometers_odo' },
             { type: 'text', label: 'Описание', name: 'description' },
         ]);
     };
