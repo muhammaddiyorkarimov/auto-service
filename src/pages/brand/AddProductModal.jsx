@@ -32,9 +32,9 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                     { type: 'number', label: 'Количество', name: 'amount', required: true },
                     { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
                     { type: 'select', label: 'Единица измерения', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
-                    { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
-                    { type: 'number', label: 'Цена продажи', name: 'export_price' },
-                    { type: 'number', label: 'Скидка', name: 'max_discount', required: true },
+                    // { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
+                    // { type: 'number', label: 'Цена продажи', name: 'export_price' },
+                    { type: 'number', label: 'Скидка', name: 'max_discount', required: true, value: 0 },
                 ]);
             } catch (error) {
                 alert("Ошибка при получении поставщиков:", error);
@@ -69,6 +69,10 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
     
         try {
             // `providerById` ni `formData` ga qo'shing
+            const postData = {
+                import_price: 0,
+                export_price: 0,
+            }
             const dataToSend = { ...formData, provider: providerById };
             const newProduct = await OurProduct.postProduct(dataToSend);
             onSave(newProduct);
@@ -97,7 +101,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                                 label={field.label}
                                 name={field.name}
                                 type={field.type}
-                                value={formData[field.name] || ''}
+                                value={formData[field.name] || field.value}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
