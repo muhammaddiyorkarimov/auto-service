@@ -76,7 +76,7 @@ function Home() {
                     {benefitBranchLoading ? <BiLoader /> : <>
                       <div className="title">Касса</div>
                       <div className="description" style={{ color: 'blue' }}>
-                         {formatNumberWithCommas(benefitBranch?.branch.balance)} СУМ
+                         {formatNumberWithCommas(benefitBranch?.branch?.balance)} СУМ
                       </div>
                     </>}
                   </div>

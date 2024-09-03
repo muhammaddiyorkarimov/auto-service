@@ -136,7 +136,7 @@ function Workers() {
                 <td>{employee.phone_number}</td>
                 <td>{employee.position}</td>
                 <td>{employee.part}</td>
-                <td>{formatNumberWithCommas(employee.balance)}</td>
+                <td>{formatNumberWithCommas(employee?.balance)}</td>
             </>
         )
     }))
