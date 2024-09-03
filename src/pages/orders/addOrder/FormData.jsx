@@ -175,7 +175,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
                                 {selectedProduct && (
                                     <Typography variant="caption" color="textSecondary">
                                         <p style={{ fontSize: '16px', paddingLeft: '18px' }}>Себестоимость: {formatNumberWithCommas(productPrice)} сум</p>
-                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>В наличии: {productAmount} та</p>
+                                        <p style={{ fontSize: '16px', paddingLeft: '18px' }}>В наличии: {productAmount}</p>
                                     </Typography>
                                 )}
                             </Box>
