@@ -53,16 +53,26 @@ function Home() {
         <div className="extra-items">
           <div className="header">
             <div className="items-wrapper">
-              <div className='items'>
-                {topCalculateError ? <p>{topCalculateError.message}</p> : calculateData?.map((item, index) => (
+              <div className="items">
+                {/* Always render the cards, even if `calculateData` is empty */}
+                {(calculateData && calculateData.length > 0 ? calculateData : [
+                  { title: "Расход", value: "0", img: img1 },
+                  { title: "Приход", value: "0", img: img2 },
+                  { title: "Чистый доход", value: "0", img: img3 },
+                ])?.map((item, index) => (
                   <div className="item" key={index}>
                     <div className="about">
-                      {topCalculateLoading ? <BiLoader /> : <>
-                        <div className="title">{item.title}</div>
-                        <div className="description" style={{ color: descriptionColors[index] }}>
-                           {item.value} СУМ
-                        </div>
-                      </>}
+                      {/* Show loader if data is still loading, otherwise display values */}
+                      {topCalculateLoading ? (
+                        <BiLoader />
+                      ) : (
+                        <>
+                          <div className="title">{item.title}</div>
+                          <div className="description" style={{ color: descriptionColors[index] }}>
+                            {item.value || "0"} СУМ {/* Fallback to "0" if the value is missing */}
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div className="img">
                       <img src={item.img} alt={item.title} />
@@ -70,13 +80,14 @@ function Home() {
                   </div>
                 ))}
               </div>
+
               <div className="benefit-branch">
                 <div className="item">
                   <div className="about">
                     {benefitBranchLoading ? <BiLoader /> : <>
                       <div className="title">Касса</div>
                       <div className="description" style={{ color: 'blue' }}>
-                         {formatNumberWithCommas(benefitBranch?.branch?.balance)} СУМ
+                        {formatNumberWithCommas(benefitBranch?.branch?.balance)} СУМ
                       </div>
                     </>}
                   </div>

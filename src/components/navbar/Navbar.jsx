@@ -20,12 +20,14 @@ function Navbar({ title }) {
       localStorage.setItem('first_name', user.first_name);
       localStorage.setItem('last_name', user.last_name);
       localStorage.setItem('position', user.position);
+      localStorage.setItem('branch_name', user?.branch?.name || '');
     }
   }, [user]);
 
   const firstName = localStorage.getItem('first_name') || '';
   const lastName = localStorage.getItem('last_name') || '';
   const position = localStorage.getItem('position') || '';
+  const branchName = localStorage.getItem('branch_name') || '';
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -45,7 +47,7 @@ function Navbar({ title }) {
     };
   }, []);
 
-  console.log(user)
+  console.log(user);
 
   return (
     <>
@@ -59,7 +61,7 @@ function Navbar({ title }) {
             <div className="location-wrapper">
               <CiLocationOn className='location' />
             </div>
-            <span>{user?.branch?.name}</span>
+            <span>{branchName}</span> {/* Using the branch name from local storage */}
           </div>
           <div className="user-image">
             <CiUser />
