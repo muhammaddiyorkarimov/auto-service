@@ -1,5 +1,5 @@
 // icons
-import { CiUser } from 'react-icons/ci';
+import { CiLocationOn, CiUser } from 'react-icons/ci';
 import { FaSignOutAlt } from 'react-icons/fa';
 // css
 import './navbar.css';
@@ -45,6 +45,8 @@ function Navbar({ title }) {
     };
   }, []);
 
+  console.log(user)
+
   return (
     <>
       <div className='navbar'>
@@ -53,6 +55,12 @@ function Navbar({ title }) {
           <div className="title">{title}</div>
         </div>
         <div className="navbar-in-user" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <div className="user-location">
+            <div className="location-wrapper">
+              <CiLocationOn className='location' />
+            </div>
+            <span>{user?.branch?.name}</span>
+          </div>
           <div className="user-image">
             <CiUser />
           </div>
