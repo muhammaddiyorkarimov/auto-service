@@ -112,7 +112,7 @@ function ProviderC() {
     const handleAdd = () => {
         setFormConfig([
             { type: 'text', label: 'Имя', name: 'name', required: true },
-            { type: 'number', label: 'Номер телефона', name: 'phone_number', required: true },
+            { type: 'text', label: 'Номер телефона', name: 'phone_number', required: true },
             { type: 'number', label: 'Задолженность', name: 'debt', required: true },
         ]);
         setAddOpen(true);
@@ -138,7 +138,7 @@ function ProviderC() {
         setCurrentItem(item);
         setEditFormConfig([
             { type: 'text', label: 'Имя', name: 'name', value: item.name },
-            { type: 'number', label: 'Номер телефона', name: 'phone_number', value: item.phone_number },
+            { type: 'text', label: 'Номер телефона', name: 'phone_number', value: item.phone_number },
             { type: 'number', label: 'Задолженность', name: 'debt', required: true, value: item.debt },
         ]);
         setEditOpen(true);
