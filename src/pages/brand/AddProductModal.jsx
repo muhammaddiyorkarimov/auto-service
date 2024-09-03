@@ -68,16 +68,19 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
         }
     
         try {
-            // `providerById` ni `formData` ga qo'shing
-            const postData = {
-                import_price: 0,
-                export_price: 0,
-            }
-            const dataToSend = { ...formData, provider: providerById };
+            // export_price va import_price ni 0 qilib qo'shamiz
+            const dataToSend = {
+                ...formData,
+                provider: providerById,
+                export_price: 0,  // qo'shilgan qator
+                import_price: 0   // qo'shilgan qator
+            };
+    
             const newProduct = await OurProduct.postProduct(dataToSend);
             onSave(newProduct);
             setSuccessMsg("Успешно добавлено");
             setSnackbarOpen(true);
+    
             const updatedProvider = await Provider.getProvider();
             setProvider(updatedProvider);
         } catch (error) {
@@ -87,6 +90,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
             onClose();
         }
     };
+    
     
 
     const renderFields = () => {
