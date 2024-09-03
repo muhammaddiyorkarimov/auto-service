@@ -34,7 +34,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                     { type: 'select', label: 'Единица измерения', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
                     // { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
                     // { type: 'number', label: 'Цена продажи', name: 'export_price' },
-                    { type: 'number', label: 'Скидка', name: 'max_discount', required: true, value: 0 },
+                    { type: 'number', label: 'Скидка', name: 'max_discount', value: 0 },
                 ]);
             } catch (error) {
                 alert("Ошибка при получении поставщиков:", error);
