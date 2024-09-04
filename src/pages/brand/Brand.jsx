@@ -150,7 +150,7 @@ function Brand() {
         const calculatedTotal = item.import_price * item.amount - item.debt;
 
         setEditFormConfig([
-            { type: 'number', label: 'Количество', name: 'amount', value: item.amount, disabled: true },
+            { type: 'text', label: 'Количество', name: 'amount', value: item.amount, disabled: true },
             { type: 'number', label: 'Сумма закупки', name: 'import_price', value: item.import_price, disabled: true },
             { type: 'number', label: 'Задолженность', name: 'debt', value: item.debt },
             { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results.map(p => ({ value: p.id, label: p.name })), value: item.product.id, disabled: true },
@@ -250,7 +250,7 @@ function Brand() {
                             onEdit={handleEdit}
                             onRowClick={handleRowClick}
                             formConfig={[
-                                { type: 'number', label: 'Количество', name: 'amount', required: true },
+                                { type: 'text', label: 'Количество', name: 'amount', required: true },
                                 { type: 'number', label: 'Сумма закупки', name: 'import_price', required: true },
                                 { type: 'number', label: 'Задолженность', name: 'debt' },
                                 { type: 'select', label: 'Продукт', name: 'product', options: ourProduct && ourProduct?.results?.map(p => ({ value: p.id, label: p.name })), required: true },

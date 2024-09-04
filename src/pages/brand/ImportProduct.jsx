@@ -159,15 +159,17 @@ function Import() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        const plainNumber = value.replace(/\s/g, '');
-
-        if (/^\d*$/.test(plainNumber)) {
+    
+        // Raqamlar va nuqta uchun faqat raqamlar va nuqtani olib tashlash
+        const plainNumber = value.replace(/[^\d.]/g, ''); // Raqam va nuqtadan boshqa barcha belgilarni olib tashlaydi
+    
+        // Faqat raqamlar va bitta nuqtani qabul qilish
+        if (/^\d*\.?\d*$/.test(plainNumber)) {
             setFormData(prevData => ({
                 ...prevData,
-                [name]: plainNumber
+                [name]: plainNumber  // Serverga ketayotgan qiymat
             }));
-
+    
             setValidationErrors(prevErrors => ({
                 ...prevErrors,
                 [name]: ''

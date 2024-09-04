@@ -7,7 +7,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext'
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../features/slice/authSlice';
-import logo from '../../images/logo.png';
+import logo from '../../assets/logo-color.svg';
 import { LuWarehouse } from 'react-icons/lu';
 import { CiMoneyBill } from 'react-icons/ci';
 import { TiUploadOutline } from 'react-icons/ti';
@@ -23,8 +23,8 @@ function SideBar() {
       <div className="sidebar-header">
         <div className="logo">
           <div className="logo-wrapper">
-            <img width={150} src={logo} alt="logo" />
-            <p>автосервис</p>
+            <img width={250} style={{objectFit: 'cover'}} height={50} src={logo} alt="logo" />
+            {/* <p>автосервис</p> */}
           </div>
           <i onClick={toggleSidebar} className="fa-solid fa-bars"></i>
         </div>

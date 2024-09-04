@@ -29,7 +29,7 @@ function AddItemModal({ name, open, onClose, onSave, providerById }) {
                 setFormConfig([
                     { type: 'text', label: 'Артикул', name: 'code' },
                     { type: 'text', label: 'Название', name: 'name', required: true },
-                    { type: 'number', label: 'Количество', name: 'amount', required: true },
+                    { type: 'text', label: 'Количество', name: 'amount', required: true },
                     { type: 'number', label: 'Минимальное количество', name: 'min_amount', required: true },
                     { type: 'select', label: 'Единица измерения', name: 'unit', required: true, options: unitOptions.map(p => ({value: p.id, label: p.name}))},
                     // { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },

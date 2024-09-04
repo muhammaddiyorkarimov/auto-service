@@ -149,7 +149,10 @@ hr {
 }
 
 .logo .logo-wrapper {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -35px;
 }
 
 .logo .logo-wrapper p {
@@ -175,6 +178,12 @@ hr {
 }
 
 @media (max-width: 1120px) {
+    .logo-wrapper img {
+        width: 200px;
+    }
+    .logo .logo-wrapper {
+        margin-left: -35px;
+    }
     .sidebar {
         position: fixed;
         width: 230px;
@@ -183,17 +192,16 @@ hr {
     .logo {
         width: 100%;
         display: flex;
-        gap: 20px;
         align-items: center;
         justify-content: space-between;
     }
-
+    
     .logo i {
         display: flex;
         color: var(--text-color);
         font-size: 18px;
     }
-
+    
     .sidebar .logo h1 {
         font-size: 24px;
         font-weight: 600;

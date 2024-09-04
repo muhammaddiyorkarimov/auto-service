@@ -47,7 +47,6 @@ function Navbar({ title }) {
     };
   }, []);
 
-  console.log(user);
 
   return (
     <>

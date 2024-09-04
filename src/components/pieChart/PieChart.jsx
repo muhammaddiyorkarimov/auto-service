@@ -8,7 +8,6 @@ import { BiLoader, BiPrinter } from 'react-icons/bi'; // Print iconni import qil
 function PieChartC({ startDate, endDate }) {
     const [filteredData, setFilteredData] = useState([]);
 
-    console.log(filteredData)
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
