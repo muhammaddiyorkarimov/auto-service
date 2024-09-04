@@ -38,7 +38,7 @@ function Brand() {
 
     const [params, setQueryParams] = useQueryParams();
     const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(10);
+    const [pageSize] = useState(15);
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
     const [selectedFilter, setSelectedFilter] = useState(params.get('order_by') || 'created_at');
 

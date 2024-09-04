@@ -48,7 +48,7 @@ function OurCars() {
     ];
 
     const [page, setPage] = useState(Number(params.get('page')) || 1);
-    const [pageSize] = useState(10);
+    const [pageSize] = useState(15);
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
 
     const fetchCars = useCallback((query) => {
