@@ -86,16 +86,25 @@ function Import() {
 
 
     useEffect(() => {
-        if (providerData) {
+        if (productData && providerData) {
             setFormConfig([
-                { type: 'select', label: 'Продукт', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
-                { type: 'number', label: 'Количество', name: 'amount', },
+                {
+                    type: 'select',
+                    label: 'Продукт',
+                    name: 'product',
+                    options: product?.length > 0 
+                        ? product.map(p => ({ value: p.id, label: p.name }))
+                        : [{label: 'не существует'}], // Bo'sh massivni qaytaradi
+                    required: true
+                },
+                { type: 'number', label: 'Количество', name: 'amount' },
                 { type: 'number', label: 'Цена покупки', name: 'import_price', required: true },
                 { type: 'number', label: 'Цена продажи', name: 'export_price', required: true },
-                { type: 'number', label: 'Итого', name: 'total', disabled: true },
+                { type: 'number', label: 'Итого', name: 'total', disabled: true }
             ]);
         }
-    }, [providerData]);
+    }, [product, providerData]);
+    
 
 
 
