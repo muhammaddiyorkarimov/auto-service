@@ -282,10 +282,10 @@ function Import() {
     const handleSubmit = async () => {
         const providerId = selectedProvider;
 
-        if (!formData.paidAmount || formData.paidAmount <= 0) {
-            alert("Пожалуйста, введите оплаченную сумму!");
-            return;
-        }
+        // if (!formData.paidAmount || formData.paidAmount <= 0 || formData.paidAmount == 0) {
+        //     alert("Пожалуйста, введите оплаченную сумму!");
+        //     return;
+        // }
 
         setLoading(true);
         const lastProductIndex = selectedProducts.length - 1;
@@ -441,7 +441,7 @@ function Import() {
                                                     margin="dense"
                                                     label="Введите сумму *"
                                                     type="text" // Change to 'text' to allow formatted input
-                                                    value={formatNumberWithCommas(formData.paidAmount || '')}
+                                                    value={formatNumberWithCommas(formData.paidAmount || 0)}
                                                     onChange={handlePaidAmountChange}
                                                     fullWidth
                                                     size="small"
