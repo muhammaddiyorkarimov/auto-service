@@ -17,6 +17,9 @@ function DetailView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [workers, setWorkers] = useState({});
+  const [workerIds, setWorkerIds] = useState([]);
+  const [workersData, setWorkersData] = useState({});
 
   const fetchManagerForOrder = useCallback(() => {
     if (data?.manager) {
@@ -24,12 +27,30 @@ function DetailView() {
     }
   }, [data?.manager]);
   const { data: managerById } = useFetch(fetchManagerForOrder);
-  const fetchWorkerForService = useCallback(() => {
-    if (data?.services?.id) {
-      return OrderServices.getOrdersById(data?.services?.id);
+
+  const fetchWorkersData = useCallback(async () => {
+    if (workerIds?.length > 0) {
+      const workersResponse = await Promise.all(
+        workerIds?.map((id) => OrderServices.getOrdersById(id))
+      );
+      const workers = workersResponse?.reduce((acc, worker) => {
+        acc[worker.id] = worker; // Worker id orqali ma'lumotlarni saqlash
+        return acc;
+      }, {});
+      setWorkersData(workers);
     }
-  }, [data?.services?.id]);
-  const { data: workerById } = useFetch(fetchWorkerForService);
+  }, [workerIds]);
+
+  useEffect(() => {
+    if (data?.services) {
+      const uniqueWorkerIds = [...new Set(data?.services.map((service) => service.id))];
+      setWorkerIds(uniqueWorkerIds);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    fetchWorkersData();
+  }, [workerIds, fetchWorkersData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +87,7 @@ function DetailView() {
   function formatNumberWithCommas(number) {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
+
 
 
   return (
@@ -158,7 +180,7 @@ function DetailView() {
                 <Typography variant="subtitle1"><strong>Комментарий:</strong> {data.description}</Typography>
 
                 <Divider style={{ margin: '10px 0' }} />
-                <Typography variant="subtitle1"><strong>Менеджер:</strong> {managerById?.first_name + ' ' + managerById?.last_name}</Typography>
+                <Typography variant="subtitle1"><strong>Менеджер:</strong> {managerById?.first_name ? managerById?.first_name + ' ' + managerById?.last_name : '_'}</Typography>
                 <table className="oreder-details-wrapper">
                   <thead>
                     <tr>
@@ -167,9 +189,9 @@ function DetailView() {
                     </tr>
                     <tr>
                       <th style={{ border: '1px solid black' }}>Госномер: <p>{data?.car?.state_number}</p></th>
-                        <th style={{ border: '1px solid black' }}>Пробег по одометру: <p>{data?.car_kilometers_odo} км</p></th>
-                        <th style={{ border: '1px solid black' }}>Пробег по EV: <p>{data?.car_kilometers_ev} км</p></th>
-                        <th style={{ border: '1px solid black' }}>Пробег по HEV: <p>{data?.car_kilometers_hev} км</p></th>
+                      <th style={{ border: '1px solid black' }}>Пробег по одометру: <p>{data?.car_kilometers_odo} км</p></th>
+                      <th style={{ border: '1px solid black' }}>Пробег по EV: <p>{data?.car_kilometers_ev} км</p></th>
+                      <th style={{ border: '1px solid black' }}>Пробег по HEV: <p>{data?.car_kilometers_hev} км</p></th>
                     </tr>
                   </thead>
                 </table>
@@ -201,14 +223,19 @@ function DetailView() {
                     <th colspan="4">Услуги</th>
                   </tr>
                   <tr>
-                    {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
+                    <th style={{ border: '1px solid black' }}>Сотрудник</th>
                     <th style={{ border: '1px solid black' }}>Н/Ч</th>
                     <th style={{ border: '1px solid black' }}>Название услуги</th>
                     <th style={{ border: '1px solid black' }}>Общий</th>
                   </tr>
                   {data?.services?.map((service, index) => (
                     <tr key={index}>
-                      {/* <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td> */}
+                      {console.log(workersData[service.id])}
+                      <td style={{ border: '1px solid black' }}>
+                        {workersData[service.id]
+                          ? `${workersData[service.id].worker.first_name} ${workersData[service.id].worker.last_name}`
+                          : '__'}
+                      </td>
                       <td style={{ border: '1px solid black' }}>{service.part}</td>
                       <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
                       <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
@@ -250,7 +277,7 @@ function DetailView() {
                 </tr>
                 <tr>
                   <th style={{ border: '1px solid black' }}>
-                  Госномер: <p>{data?.car?.state_number}</p>
+                    Госномер: <p>{data?.car?.state_number}</p>
                   </th>
 
                   {/* Yurgan kilometrlari shart bo'yicha */}
@@ -302,19 +329,24 @@ function DetailView() {
                 <th style={{ border: '1px solid black' }} colspan="4">Услуги</th>
               </tr>
               <tr>
-                {/* <th style={{ border: '1px solid black' }}>Сотрудник</th> */}
+                <th style={{ border: '1px solid black' }}>Сотрудник</th>
                 <th style={{ border: '1px solid black' }}>Н/Ч</th>
                 <th style={{ border: '1px solid black' }}>Название услуги</th>
                 <th style={{ border: '1px solid black' }}>Общий</th>
               </tr>
               {data?.services?.map((service, index) => (
-                <tr key={index}>
-                  {/* <td style={{ border: '1px solid black' }}>{service.worker.first_name + ' ' + service.worker.last_name}</td> */}
-                  <td style={{ border: '1px solid black' }}>{service.part}</td>
-                  <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
-                  <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
-                </tr>
-              ))}
+                    <tr key={index}>
+                      {console.log(workersData[service.id])}
+                      <td style={{ border: '1px solid black' }}>
+                        {workersData[service.id]
+                          ? `${workersData[service.id].worker.first_name} ${workersData[service.id].worker.last_name}`
+                          : '__'}
+                      </td>
+                      <td style={{ border: '1px solid black' }}>{service.part}</td>
+                      <td style={{ border: '1px solid black' }}>{service.service?.name}</td>
+                      <td style={{ border: '1px solid black' }}>{formatNumberWithCommas(service.total)}</td>
+                    </tr>
+                  ))}
             </table>
           </CardContent>
           <div className="print-info">

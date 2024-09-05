@@ -69,7 +69,7 @@ function Home() {
                         <>
                           <div className="title">{item.title}</div>
                           <div className="description" style={{ color: descriptionColors[index] }}>
-                            {item.value || "0"} СУМ {/* Fallback to "0" if the value is missing */}
+                            {item.value || "0"} СУМ
                           </div>
                         </>
                       )}
