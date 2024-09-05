@@ -66,6 +66,7 @@ function Employees() {
 
     const createStaff = async (item) => {
         try {
+            const staffWithPassword = { ...item, password: '12345678' };
             const newStaff = await EmployeesService.postEmployees(item);
             setEmployeesData([...employessData, newStaff]);
             setSuccessMsg("Сотрудник добавлен");
@@ -74,7 +75,7 @@ function Employees() {
             console.log(error.response.data);
 
             if (error.response && Array.isArray(error.response.data)) {
-                const errorMessages = error?.response.data?.map(err => console.log(err)).join(', ');
+                const errorMessages = error.response.data.map(err => err).join(', ');
                 setErrorMsg(errorMessages);
             } else {
                 setErrorMsg(error.message || "Ошибка при добавлении сотрудника!");

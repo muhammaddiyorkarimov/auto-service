@@ -27,7 +27,7 @@ function Home() {
 
   const productColumns = ["Название", "Количество", "Прибыль"];
 
-  const productData = topProducts ? topProducts.map(product => ({
+  const productData = topProducts ? topProducts?.map(product => ({
     name: product.product.name,
     amount: formatNumberWithCommas(product.product.amount),
     total_benefit: formatNumberWithCommas(product.product.total_benefit),
