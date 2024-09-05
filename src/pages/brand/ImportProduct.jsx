@@ -26,7 +26,6 @@ function Import() {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [loading, setLoading] = useState(false)
     const [addOpen, setAddOpen] = useState(false);
-    console.log(product)
 
     const { data: providerData, loading: providerLoading, error: providerError } = useFetch(Provider.getProvider)
 
