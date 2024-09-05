@@ -87,7 +87,7 @@ function Import() {
 
 
     useEffect(() => {
-        if (productData && providerData) {
+        if (providerData) {
             setFormConfig([
                 { type: 'select', label: 'Продукт', name: 'product', options: product?.map(p => ({ value: p.id, label: p.name })), required: true },
                 { type: 'number', label: 'Количество', name: 'amount', },
@@ -96,7 +96,7 @@ function Import() {
                 { type: 'number', label: 'Итого', name: 'total', disabled: true },
             ]);
         }
-    }, [productData, providerData]);
+    }, [providerData]);
 
 
 
@@ -321,6 +321,9 @@ function Import() {
 
 
     const renderFields = () => {
+        if (productLoading || providerLoading) {
+            return <div>Loading...</div>;
+        }
         return formConfig?.map((field, index) => {
             switch (field.type) {
                 case 'text':
