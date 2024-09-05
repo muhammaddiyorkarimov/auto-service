@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL
-const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'https://autoservicefassco.pythonanywhere.com';
+const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
 // Create an instance of axios
 const api = axios.create({
