@@ -66,8 +66,7 @@ function Employees() {
 
     const createStaff = async (item) => {
         try {
-            const staffWithPassword = { ...item, password: '12345678' };
-            const newStaff = await EmployeesService.postEmployees(staffWithPassword);
+            const newStaff = await EmployeesService.postEmployees(item);
             setEmployeesData([...employessData, newStaff]);
             setSuccessMsg("Сотрудник добавлен");
             setSnackbarOpen(true);
