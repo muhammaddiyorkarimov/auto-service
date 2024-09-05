@@ -167,15 +167,9 @@ function DetailView() {
                     </tr>
                     <tr>
                       <th style={{ border: '1px solid black' }}>Госномер: <p>{data?.car?.state_number}</p></th>
-                      {data?.car_kilometers_odo && (
                         <th style={{ border: '1px solid black' }}>Пробег по одометру: <p>{data?.car_kilometers_odo} км</p></th>
-                      )}
-                      {data?.car_kilometers_ev && (
                         <th style={{ border: '1px solid black' }}>Пробег по EV: <p>{data?.car_kilometers_ev} км</p></th>
-                      )}
-                      {data?.car_kilometers_hev && (
                         <th style={{ border: '1px solid black' }}>Пробег по HEV: <p>{data?.car_kilometers_hev} км</p></th>
-                      )}
                     </tr>
                   </thead>
                 </table>
