@@ -48,7 +48,7 @@ function Home() {
   return (
     <div className="home">
       <SideBar />
-      <main>
+      <main style={{height: '100vh'}}>
         <Navbar title="Главная" />
         <div className="extra-items">
           <div className="header">
