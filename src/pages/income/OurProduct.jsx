@@ -153,8 +153,8 @@ function OurProduct() {
         setFormConfig([
             { type: 'text', label: 'Артикул', name: 'code', value: item.code },
             { type: 'text', label: 'Название', name: 'name', value: item.name },
-            { type: 'number', label: 'Количествоr', name: 'min_amount', value: item.min_amount },
-            { type: 'number', label: 'Минимальное количество', name: 'amount', value: item.amount },
+            { type: 'number', label: 'Количествоr', name: 'min_amount', value: item.amount },
+            { type: 'number', label: 'Минимальное количество', name: 'amount', value: item.min_amount },
             { type: 'select', label: 'Единица', name: 'unit', required: true, options: unitOptions.map(p => ({ value: p.id, label: p.name })), value: item.unit },
             { type: 'number', label: 'Цена покупки', name: 'import_price', value: item.import_price },
             { type: 'number', label: 'Цена продажи', name: 'export_price', value: item.export_price },
