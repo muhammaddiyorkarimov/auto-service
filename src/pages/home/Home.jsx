@@ -96,7 +96,7 @@ function Home() {
                         </div>
                       </>
                     ) : (
-                      <div>No data available</div>
+                      <div>Касса: 0</div>
                     )}
 
                   </div>
