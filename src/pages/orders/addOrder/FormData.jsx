@@ -27,9 +27,17 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
         if (productPrice > 0) {
             const amount = formData?.amount || 0;
             const discount = formData?.discount || 0;
-            const discountValue = ((amount * productPrice * discount) / 100);
-            const total = (productPrice * amount) - discountValue;
-
+            let total = 0;
+    
+            if (discount <= 100) {
+                // Agar chegirma 100 va undan kichik bo'lsa, foiz bo'yicha hisoblash
+                const discountValue = ((amount * productPrice * discount) / 100);
+                total = (productPrice * amount) - discountValue;
+            } else {
+                // Agar chegirma 100 dan katta bo'lsa, to'g'ridan to'g'ri chegirma miqdorini ayirish
+                total = (productPrice * amount) - discount;
+            }
+    
             setFormData(prevData => ({
                 ...prevData,
                 total: isNaN(total) ? 0 : total
