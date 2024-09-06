@@ -86,13 +86,13 @@ function Home() {
               <div className="benefit-branch">
                 <div className="item">
                   <div className="about">
-                    {benefitBranchLoading ? (
+                  {benefitBranchLoading ? (
                       <BiLoader />
-                    ) : benefitBranch?.data ? (
+                    ) : benefitBranch ? ( 
                       <>
                         <div className="title">Касса</div>
                         <div className="description" style={{ color: 'blue' }}>
-                          {formatNumberWithCommas(benefitBranch?.data?.branch?.balance)} СУМ
+                          {formatNumberWithCommas(benefitBranch?.branch?.balance)} СУМ
                         </div>
                       </>
                     ) : (

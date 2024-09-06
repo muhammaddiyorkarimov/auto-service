@@ -35,7 +35,7 @@ function AddItemModal({ name, open, onClose, onSave, formConfig, expensesType })
     if (type === 'text' && formConfig?.find((field) => field.name === name && field.type === 'number')) {
       const rawValue = value.replace(/\s/g, '');
   
-      // Allow numbers with a decimal point (e.g., 7.5)
+      
       if (/^\d*\.?\d*$/.test(rawValue)) {
         const formattedValue = formatNumberWithSpaces(rawValue);
         setFormData({ ...formData, [name]: formattedValue });
