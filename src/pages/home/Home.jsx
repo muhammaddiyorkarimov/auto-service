@@ -23,7 +23,9 @@ function Home() {
 
   const { data: topProducts, loading: topProductsLoading, error: topProductsError } = useFetch(Statistics.getTopProducts);
   const { data: topCalculate, loading: topCalculateLoading, error: topCalculateError } = useFetch(Statistics.getTopCalculate);
-  const { data: benefitBranch, loading: benefitBranchLoading, error: benefitBranchError } = useFetch(getUser)
+  const { data: benefitBranch, loading: benefitBranchLoading, error: benefitBranchError } = useFetch(getUser);
+
+
 
   const productColumns = ["Название", "Количество", "Прибыль"];
 
@@ -48,11 +50,11 @@ function Home() {
   return (
     <div className="home">
       <SideBar />
-      <main style={{height: '100vh'}}>
+      <main style={{ height: '100vh' }}>
         <Navbar title="Главная" />
         <div className="extra-items">
           <div className="header">
-            <div className="items-wrapper">
+            <div className="items-wrapper items-wrapper-2">
               <div className="items">
                 {/* Always render the cards, even if calculateData is empty */}
                 {(calculateData && calculateData.length > 0 ? calculateData : [
@@ -69,7 +71,7 @@ function Home() {
                         <>
                           <div className="title">{item.title}</div>
                           <div className="description" style={{ color: descriptionColors[index] }}>
-                            {item.value || "0"} СУМ
+                            {item.value || "0"} СУМ {/* Fallback to "0" if the value is missing */}
                           </div>
                         </>
                       )}
@@ -84,12 +86,19 @@ function Home() {
               <div className="benefit-branch">
                 <div className="item">
                   <div className="about">
-                    {benefitBranchLoading ? <BiLoader /> : <>
-                      <div className="title">Касса</div>
-                      <div className="description" style={{ color: 'blue' }}>
-                        {formatNumberWithCommas(benefitBranch?.branch?.balance)} СУМ
-                      </div>
-                    </>}
+                    {benefitBranchLoading ? (
+                      <BiLoader />
+                    ) : benefitBranch?.data ? (
+                      <>
+                        <div className="title">Касса</div>
+                        <div className="description" style={{ color: 'blue' }}>
+                          {formatNumberWithCommas(benefitBranch?.data?.branch?.balance)} СУМ
+                        </div>
+                      </>
+                    ) : (
+                      <div>No data available</div>
+                    )}
+
                   </div>
                   <div className="img">
                     <img src={img3} alt='daromad' />
@@ -126,7 +135,13 @@ function Home() {
             <div className="cards">
               <div className="top-products">
                 <div className="title">Топ товары</div>
-                <TopTableComponent loading={topProductsLoading} error={topProductsError} columns={productColumns} data={productData} />
+                <TopTableComponent
+                  loading={topProductsLoading}
+                  error={topProductsError ? topProductsError.message : null} // Pass only the error message or null
+                  columns={productColumns}
+                  data={productData}
+                />
+
               </div>
             </div>
           </div>
