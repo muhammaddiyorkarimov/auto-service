@@ -15,13 +15,18 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
     useEffect(() => {
         if (price > 0) {
             const { part } = formData;
-            const total = price * part;
+            let total = price * part;
+    
+            // Round the total to 3 decimal places
+            total = Math.round(total * 1000) / 1000;
+    
             setFormData(prevData => ({
                 ...prevData,
                 total
             }));
         }
     }, [price, formData?.amount, formData?.discount, formData?.part]);
+    
 
     useEffect(() => {
         if (productPrice > 0) {
@@ -44,6 +49,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
             }));
         }
     }, [productPrice, formData?.amount, formData?.discount]);
+    
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -71,7 +77,6 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
             }));
         }
     };
-    
 
     useEffect(() => {
         if (customerId !== null) {
