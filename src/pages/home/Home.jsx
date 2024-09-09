@@ -31,7 +31,7 @@ function Home() {
 
   const productData = topProducts ? topProducts?.map(product => ({
     name: product.product.name,
-    amount: formatNumberWithCommas(product.product.amount),
+    amount: formatNumberWithCommas(product.product.amount ? Math.round(product.product.amount * 1000) / 1000 : 0),
     total_benefit: formatNumberWithCommas(product.product.total_benefit),
   })) : [];
 
