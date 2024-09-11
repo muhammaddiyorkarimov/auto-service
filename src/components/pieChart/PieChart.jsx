@@ -11,8 +11,8 @@ function PieChartC({ startDate, endDate }) {
 
     function formatNumberWithCommas(number) {
         return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      }
-      
+    }
+
     const { data: pieChartData, loading, error } = useFetch(() =>
         Statistics.pieChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD')), [startDate, endDate]
     );
@@ -119,4 +119,3 @@ function PieChartC({ startDate, endDate }) {
 }
 
 export default PieChartC;
-``
