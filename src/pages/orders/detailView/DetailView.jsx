@@ -231,13 +231,13 @@ function DetailView() {
             <div className="name">
               {branchName ? branchName.split(' ')[0] : 'Unknown Branch'}
             </div>
-            <p>Adpec: {address || 'No address available'}</p>
-            <p> Тел: {phoneNumber || 'No phone number available'}</p>
+            <p>Adpec: {address || 'Нет доступного адреса'}</p>
+            <p> Тел: {phoneNumber || 'Номер телефона недоступен'}</p>
           </div>
         </div>
         <div className="main-details-top">
           <div className="item">
-            <p>Заказ - нарйад № {data?.id}</p>
+            <p>Заказ - наряд № {data?.id}</p>
           </div>
           <div className="item">
             {/* <p>

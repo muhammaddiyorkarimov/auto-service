@@ -11,6 +11,7 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
     const [selectedService, setSelectedService] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [managerId, setManagerId] = useState(null);
+    const [alertShown, setAlertShown] = useState(false);
 
     useEffect(() => {
         if (price > 0) {
@@ -57,6 +58,13 @@ function FormData({ onSave, formConfig, onCustomerIdChange, onManagerIdChange, o
 
     const handleChange = (e, type) => {
         let { name, value } = e.target;
+
+        if (name === 'amount') {
+            if (productAmount === 0 && !alertShown) {
+                alert('Выбранный продукт отсутствует на складе!');
+                setAlertShown(true);
+            }
+        }
     
         if (type === 'number') {
             const plainNumber = value.replace(/\s/g, '');
