@@ -222,7 +222,7 @@ function DetailView() {
         <div className="order-detail-header">
           <div className="branch-logo">
             {branchImages[branchName] ? (
-              <img src={branchImages[branchName]} alt={branchName} />
+              <img width='200px' src={branchImages[branchName]} alt={branchName} />
             ) : (
               ''
             )}
